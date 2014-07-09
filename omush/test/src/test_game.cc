@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "omush/framework/gameinstance.h"
 #include "omush/framework/game.h"
 
 using namespace omush;
@@ -15,6 +16,11 @@ TEST_F(GameTest, DefaultConstructor) {
 }
 
 TEST_F(GameTest, InitializeWillSetIsInitializedToTrue) {
-  EXPECT_EQ(game_.initialize(), true);
+  GameInstance instance;
+
+  ASSERT_TRUE(instance.game == nullptr);
+  EXPECT_EQ(game_.initialize(&instance), true);
+  ASSERT_TRUE(instance.game == &game_);
+
   EXPECT_EQ(game_.isInitialized(), true);
 }

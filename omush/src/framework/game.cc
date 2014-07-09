@@ -5,6 +5,7 @@
  */
 
 #include "omush/framework/game.h"
+#include "omush/framework/gameinstance.h"
 
 namespace omush {
   Game::Game() : initialized_(false) {
@@ -17,7 +18,8 @@ namespace omush {
     return initialized_;
   }
 
-  bool Game::initialize() {
+  bool Game::initialize(IGameInstance* instance) {
+    instance->game = this;
     initialized_ = true;
     return true;
   }

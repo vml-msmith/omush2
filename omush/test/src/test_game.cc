@@ -12,6 +12,7 @@
 using omush::Game;
 using omush::GameInstance;
 using omush::GameBuilder;
+using ::testing::AtLeast;
 
 class GameTest : public testing::Test {
  protected:
@@ -20,15 +21,7 @@ class GameTest : public testing::Test {
 
 class MockBuilder : public GameBuilder {
  public:
-  MockBuilder() {
-    setupNetwork_ = false;
-  }
-
-  bool setupNetwork() {
-    setupNetwork_ = true;
-  }
-
-  bool setupNetwork_;
+  MOCK_CONST_METHOD0(setupNetwork, bool());
 };
 
 
@@ -55,9 +48,17 @@ TEST_F(GameTest, InitializeWithBuilderWillRunBuilderSetupSteps) {
   GameInstance instance;
   MockBuilder builder;
 
-  ASSERT_TRUE(builder.setupNetwork_ == false);
+  EXPECT_CALL(builder, setupNetwork()).Times(1);
+
   game_.initialize(&instance, &builder);
-  ASSERT_TRUE(builder.setupNetwork_ == true);
+}
+
+TEST_F(GameTest, InitalizeWillNotReturnTrueUnlessInstanceHasNoNulls) {
+  GameInstance instance;
+  MockBuilder builder;
+
+  EXPECT_TRUE(instance.network == nullptr);
+  EXPECT_TRUE(game_.initialize(&instance, &builder) == false);
 }
 
 TEST_F(GameTest, LoopShouldReturnTrueOnlyAfterBeingInitalized) {

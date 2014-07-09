@@ -12,6 +12,6 @@
 namespace omush {
   struct GameInstance : public IGameInstance {
   };
-} // omush
+}  // namespace omush
 
-#endif //  OMUSH_HDRS_OMUSH_FRAMEWORK_GAMEINSTANCE_H_
+#endif  // OMUSH_HDRS_OMUSH_FRAMEWORK_GAMEINSTANCE_H_

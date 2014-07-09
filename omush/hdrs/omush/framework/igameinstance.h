@@ -11,6 +11,7 @@ namespace omush {
   class IGame;
   struct IGameInstance {
     IGame* game;
+    INetworkManager* network;
     IGameInstance() : game(nullptr) {}
   };
 }  // namespace omush

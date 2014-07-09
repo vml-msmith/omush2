@@ -17,7 +17,7 @@ namespace omush {
   bool GameBuilder::setupNetwork(IGameInstance* instance) const {
     std::shared_ptr<INetworkManager> ptr(new NetworkManager);
 
-    ptr->addServer(new WebSocketServer());
+    ptr->addServer(new WebSocketServer(1701));
     instance->network = ptr;
 
     return true;

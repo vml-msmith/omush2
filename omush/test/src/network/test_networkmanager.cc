@@ -9,8 +9,11 @@
 #include "gtest/gtest.h"
 #include "omush/network/networkmanager.h"
 #include "omush/network/iserver.h"
+#include "omush/network/common.h"
 
 using omush::IServer;
+using omush::NetworkPacketDescriptorPair;
+using omush::DescriptorID;
 
 class ExposedNetworkManager : public omush::NetworkManager {
  public:
@@ -31,6 +34,13 @@ class NetworkManagerTest : public testing::Test {
 class MockServer : public IServer {
  public:
   MockServer() { polledTimes = 0; }
+
+  MOCK_METHOD0(flush, void());
+  MOCK_METHOD0(shutdown, bool());
+  MOCK_METHOD0(start, bool());
+  MOCK_METHOD1(getNextMessage, bool(NetworkPacketDescriptorPair* message));
+  MOCK_METHOD1(sendMessage, bool(NetworkPacketDescriptorPair message));
+  MOCK_METHOD1(closeConnection, bool(DescriptorID id));
 
   void poll() override {
     ++polledTimes;

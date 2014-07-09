@@ -10,9 +10,11 @@
 #include "omush/framework/igamebuilder.h"
 
 namespace omush {
+
   class GameBuilder : public IGameBuilder {
    public:
     GameBuilder();
+    virtual bool setupNetwork(IGameInstance *instance) const override;
    private:
   };
 }  // namespace omush

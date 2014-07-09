@@ -30,7 +30,7 @@ namespace omush {
   }
 
   bool Game::initialize(IGameInstance* instance, IGameBuilder* builder) {
-    builder->setupNetwork();
+    builder->setupNetwork(instance);
     return initialize(instance);
   }
 

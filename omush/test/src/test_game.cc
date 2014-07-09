@@ -29,7 +29,7 @@ class MockCompleteInstance : public GameInstance {
 
 class MockBuilder : public GameBuilder {
  public:
-  MOCK_CONST_METHOD0(setupNetwork, bool());
+  MOCK_CONST_METHOD1(setupNetwork, bool(omush::IGameInstance* instance));
 };
 
 class MockNetworkManager : public omush::INetworkManager {
@@ -61,7 +61,7 @@ TEST_F(GameTest, InitializeWithBuilderWillRunBuilderSetupSteps) {
   GameInstance instance;
   MockBuilder builder;
 
-  EXPECT_CALL(builder, setupNetwork()).Times(1);
+  EXPECT_CALL(builder, setupNetwork(::testing::_)).Times(1);
 
   game_.initialize(&instance, &builder);
   ASSERT_TRUE(instance.game == &game_);

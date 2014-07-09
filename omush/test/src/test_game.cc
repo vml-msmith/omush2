@@ -10,6 +10,6 @@ class GameTest : public testing::Test {
 };
 
 
-TEST_F(GameTest, DefaulConstructor) {
+TEST_F(GameTest, DefaultConstructor) {
   EXPECT_EQ(game_.isInitialized(), false);
 }

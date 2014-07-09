@@ -11,8 +11,8 @@ namespace omush {
   class IGame;
   struct IGameInstance {
     IGame* game;
-    IGameInstance() : game(nullptr) {};
+    IGameInstance() : game(nullptr) {}
   };
-} // omush
+}  // namespace omush
 
-#endif //  OMUSH_HDRS_OMUSH_FRAMEWORK_IGAMEINSTANCE_H_
+#endif  // OMUSH_HDRS_OMUSH_FRAMEWORK_IGAMEINSTANCE_H_

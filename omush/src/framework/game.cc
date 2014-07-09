@@ -23,4 +23,8 @@ namespace omush {
     initialized_ = true;
     return true;
   }
+
+  bool Game::loop() const {
+    return initialized_;
+  }
 }  // namespace omush

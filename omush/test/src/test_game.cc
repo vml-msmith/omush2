@@ -1,12 +1,18 @@
+/**
+ * \file test_game.cc
+ *
+ * Copyright 2014 Michael Smith
+ */
+
 #include "gtest/gtest.h"
 #include "omush/framework/gameinstance.h"
 #include "omush/framework/game.h"
 
-using namespace omush;
+using omush::Game;
+using omush::GameInstance;
 
 class GameTest : public testing::Test {
  protected:
-  //  virtual void SetUp() {}
   Game game_;
 };
 
@@ -17,10 +23,23 @@ TEST_F(GameTest, DefaultConstructor) {
 
 TEST_F(GameTest, InitializeWillSetIsInitializedToTrue) {
   GameInstance instance;
+  EXPECT_EQ(game_.isInitialized(), false);
+  EXPECT_EQ(game_.initialize(&instance), true);
+  EXPECT_EQ(game_.isInitialized(), true);
+}
+
+TEST_F(GameTest, InitializeWillSetGameInstanceGameToSelf) {
+  GameInstance instance;
 
   ASSERT_TRUE(instance.game == nullptr);
-  EXPECT_EQ(game_.initialize(&instance), true);
+  game_.initialize(&instance);
   ASSERT_TRUE(instance.game == &game_);
+}
 
-  EXPECT_EQ(game_.isInitialized(), true);
+TEST_F(GameTest, LoopShouldReturnTrueOnlyAfterBeingInitalized) {
+  GameInstance instance;
+
+  ASSERT_TRUE(game_.loop() == false);
+  game_.initialize(&instance);
+  ASSERT_TRUE(game_.loop() == true);
 }

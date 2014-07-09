@@ -7,7 +7,7 @@
 #ifndef OMUSH_HDRS_OMUSH_FRAMEWORK_GAME_H_
 #define OMUSH_HDRS_OMUSH_FRAMEWORK_GAME_H_
 
-#include "igame.h"
+#include "omush/framework/igame.h"
 
 namespace omush {
   class Game : public IGame {
@@ -16,10 +16,11 @@ namespace omush {
     virtual ~Game();
     virtual bool isInitialized() const override;
     virtual bool initialize(IGameInstance* instance) override;
+    virtual bool loop() const;
 
    private:
     bool initialized_;
   };
-} // omush
+}  // namespace omush
 
-#endif //  OMUSH_HDRS_OMUSH_FRAMEWORK_GAME_H_
+#endif  // OMUSH_HDRS_OMUSH_FRAMEWORK_GAME_H_

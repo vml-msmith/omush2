@@ -15,8 +15,9 @@ namespace omush {
     virtual ~IGame() {}
     virtual bool isInitialized() const = 0;
     virtual bool initialize(IGameInstance* instance) = 0;
+    virtual bool loop() const = 0;
    private:
   };
-} // omush
+}  // namespace omush
 
-#endif //  OMUSH_HDRS_OMUSH_FRAMEWORK_IGAME_H_
+#endif  // OMUSH_HDRS_OMUSH_FRAMEWORK_IGAME_H_

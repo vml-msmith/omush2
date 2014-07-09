@@ -16,7 +16,8 @@ namespace omush {
     virtual ~Game();
     virtual bool isInitialized() const override;
     virtual bool initialize(IGameInstance* instance) override;
-    virtual bool loop() const;
+    virtual bool initialize(IGameInstance* instance, IGameBuilder* builder);
+    virtual bool loop() const override;
 
    private:
     bool initialized_;

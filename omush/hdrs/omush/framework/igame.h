@@ -9,12 +9,15 @@
 
 namespace omush {
   struct IGameInstance;
+  class IGameBuilder;
+
   class IGame {
    public:
     IGame() {}
     virtual ~IGame() {}
     virtual bool isInitialized() const = 0;
     virtual bool initialize(IGameInstance* instance) = 0;
+    virtual bool initialize(IGameInstance* instance, IGameBuilder* builder) = 0;
     virtual bool loop() const = 0;
    private:
   };

@@ -5,7 +5,8 @@
  */
 
 #include "omush/framework/game.h"
-#include "omush/framework/gameinstance.h"
+#include "omush/framework/igameinstance.h"
+#include "omush/framework/igamebuilder.h"
 
 namespace omush {
   Game::Game() : initialized_(false) {
@@ -24,7 +25,15 @@ namespace omush {
     return true;
   }
 
+  bool Game::initialize(IGameInstance* instance, IGameBuilder* builder) {
+    builder->setupNetwork();
+  }
+
   bool Game::loop() const {
+    // TODO(msmith): Insert game code to be ran on each loop.
+    //               Networking...
+    //               Processing...
+
     return initialized_;
   }
 }  // namespace omush

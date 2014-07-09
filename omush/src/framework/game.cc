@@ -21,12 +21,17 @@ namespace omush {
 
   bool Game::initialize(IGameInstance* instance) {
     instance->game = this;
+
+    if (!instance->isComplete())
+      return false;
+
     initialized_ = true;
     return true;
   }
 
   bool Game::initialize(IGameInstance* instance, IGameBuilder* builder) {
     builder->setupNetwork();
+    return initialize(instance);
   }
 
   bool Game::loop() const {

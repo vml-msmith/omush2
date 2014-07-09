@@ -9,7 +9,7 @@ SET( PROJ_OUT_PATH   ${CMAKE_BINARY_DIR} )
 SET( PROJ_SOURCES    "" )
 SET( PROJ_HEADERS    "" )
 SET( PROJ_INCLUDES   "hdrs" "vendor" "lib" )
-SET( CMAKE_CXX_FLAGS "-std=c++0x -stdlib=libc++" )
+SET( CMAKE_CXX_FLAGS "-O0 -g -std=c++0x -stdlib=libc++ -D_WEBSOCKETPP_CPP11_STL_" )
 SET( PROJ_MAIN       "main.cc" )
 
 FILE( GLOB_RECURSE PROJ_SOURCES src/*.cc )

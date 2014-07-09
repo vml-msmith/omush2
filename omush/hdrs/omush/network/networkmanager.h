@@ -16,6 +16,12 @@ namespace omush {
     NetworkManager();
     virtual bool addServer(IServer* server) override;
     virtual void poll() const override;
+    void flush() const override;
+    bool start();
+    bool shutdown();
+    bool sendMessage(NetworkPacketDescriptorPair message) const override;
+    bool closeConnection(DescriptorID id) const override;
+    bool getNextMessage(NetworkPacketDescriptorPair* message) const override;
    protected:
     typedef std::vector<std::shared_ptr<IServer> > ServerList;
     ServerList servers_;

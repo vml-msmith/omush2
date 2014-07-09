@@ -21,4 +21,57 @@ namespace omush {
       item->poll();
     }
   }
+
+  void NetworkManager::flush() const {
+    for (auto& item : servers_) {
+      item->flush();
+    }
+  }
+
+  bool NetworkManager::start() {
+    for (auto& item : servers_) {
+      item->start();
+    }
+
+    return true;
+  }
+
+  bool NetworkManager::shutdown() {
+    for (auto& item : servers_) {
+      item->shutdown();
+    }
+
+    return true;
+  }
+
+  bool NetworkManager::sendMessage(NetworkPacketDescriptorPair message) const {
+    for (auto& item : servers_) {
+      if (item->sendMessage(message)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool NetworkManager::closeConnection(DescriptorID id) const {
+    for (auto& item : servers_) {
+      if (item->closeConnection(id)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool NetworkManager::getNextMessage(NetworkPacketDescriptorPair* message) const {
+    for (auto& item : servers_) {
+      if (item->getNextMessage(message)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
 }  // namespace omush

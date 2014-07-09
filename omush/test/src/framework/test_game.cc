@@ -14,6 +14,8 @@
 using omush::Game;
 using omush::GameInstance;
 using omush::GameBuilder;
+using omush::NetworkPacketDescriptorPair;
+using omush::DescriptorID;
 using ::testing::AtLeast;
 
 class GameTest : public testing::Test {
@@ -38,6 +40,13 @@ class MockNetworkManager : public omush::INetworkManager {
   MockNetworkManager() {}
   MOCK_METHOD1(addServer, bool(omush::IServer* server));
   MOCK_CONST_METHOD0(poll, void());
+
+  MOCK_CONST_METHOD0(flush, void());
+  MOCK_METHOD0(start, bool());
+  MOCK_METHOD0(shutdown, bool());
+  MOCK_CONST_METHOD1(sendMessage, bool(NetworkPacketDescriptorPair message));
+  MOCK_CONST_METHOD1(closeConnection, bool(DescriptorID id));
+  MOCK_CONST_METHOD1(getNextMessage, bool(NetworkPacketDescriptorPair* message));
 };
 
 TEST_F(GameTest, DefaultConstructor) {

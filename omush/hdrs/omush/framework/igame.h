@@ -13,6 +13,7 @@ namespace omush {
     IGame() {}
     virtual ~IGame() {}
     virtual bool isInitialized() const = 0;
+    virtual bool initialize() = 0;
    private:
   };
 } // omush

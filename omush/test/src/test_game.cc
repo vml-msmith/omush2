@@ -13,3 +13,8 @@ class GameTest : public testing::Test {
 TEST_F(GameTest, DefaultConstructor) {
   EXPECT_EQ(game_.isInitialized(), false);
 }
+
+TEST_F(GameTest, InitializeWillSetIsInitializedToTrue) {
+  EXPECT_EQ(game_.initialize(), true);
+  EXPECT_EQ(game_.isInitialized(), true);
+}

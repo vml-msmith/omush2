@@ -7,13 +7,18 @@
 #include "omush/framework/game.h"
 
 namespace omush {
-  Game::Game() {
+  Game::Game() : initialized_(false) {
   }
 
   Game::~Game() {
   }
 
   bool Game::isInitialized() const {
-    return false;
+    return initialized_;
+  }
+
+  bool Game::initialize() {
+    initialized_ = true;
+    return true;
   }
 }  // namespace omush

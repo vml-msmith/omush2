@@ -15,8 +15,10 @@ namespace omush {
     Game();
     virtual ~Game();
     virtual bool isInitialized() const override;
+    virtual bool initialize() override;
 
-  private:
+   private:
+    bool initialized_;
   };
 } // omush
 

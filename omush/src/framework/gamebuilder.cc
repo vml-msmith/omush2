@@ -8,6 +8,7 @@
 #include <memory>
 #include "omush/framework/igameinstance.h"
 #include "omush/network/networkmanager.h"
+#include "omush/network/websocketserver.h"
 
 namespace omush {
   GameBuilder::GameBuilder() {
@@ -15,6 +16,8 @@ namespace omush {
 
   bool GameBuilder::setupNetwork(IGameInstance* instance) const {
     std::shared_ptr<INetworkManager> ptr(new NetworkManager);
+
+    ptr->addServer(new WebSocketServer());
     instance->network = ptr;
 
     return true;

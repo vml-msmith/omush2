@@ -9,6 +9,7 @@
 #include "omush/framework/game.h"
 #include "omush/framework/gamebuilder.h"
 #include "omush/network/inetworkmanager.h"
+#include "omush/network/iserver.h"
 
 using omush::Game;
 using omush::GameInstance;
@@ -35,6 +36,8 @@ class MockBuilder : public GameBuilder {
 class MockNetworkManager : public omush::INetworkManager {
  public:
   MockNetworkManager() {}
+  MOCK_METHOD1(addServer, bool(omush::IServer* server));
+  MOCK_CONST_METHOD0(poll, void());
 };
 
 TEST_F(GameTest, DefaultConstructor) {

@@ -18,7 +18,9 @@ namespace omush {
     virtual bool isInitialized() const = 0;
     virtual bool initialize(IGameInstance* instance) = 0;
     virtual bool initialize(IGameInstance* instance, IGameBuilder* builder) = 0;
-    virtual bool loop() const = 0;
+    virtual bool loop() = 0;
+    virtual void shutdown() = 0;
+
    private:
   };
 }  // namespace omush

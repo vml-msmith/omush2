@@ -126,7 +126,15 @@ namespace omush {
   }
 
   bool WebSocketServer::closeConnection(DescriptorID id) {
-    return 1;
+    ConnectionHdl hdl;
+    if (!descriptorIDToHdl_(id, &hdl)) {
+      return false;
+    }
+
+    server_.close(hdl,
+                  websocketpp::close::status::going_away,
+                  "Shutdown");
+    return true;
   }
 
   void WebSocketServer::getNewConnections_() {

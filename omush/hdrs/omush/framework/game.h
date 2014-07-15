@@ -11,6 +11,8 @@
 #include <map>
 #include <string>
 #include "omush/network/common.h"
+#include "omush/commands/icommandparser.h"
+
 #include <boost/archive/text_oarchive.hpp>
 
 namespace omush {
@@ -61,6 +63,7 @@ namespace omush {
     bool initialized_;
     bool isRebooting_;
     IGameInstance *instance_;
+    std::shared_ptr<ICommandParser> commandParser_;
   };
 }  // namespace omush
 

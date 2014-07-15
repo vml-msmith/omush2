@@ -10,6 +10,8 @@
 #include "omush/framework/igamebuilder.h"
 #include "omush/network/inetworkmanager.h"
 #include "omush/network/common.h"
+#include "omush/commands/commandparser.h"
+#include "omush/commands/commands/quit.h"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid_io.hpp>
@@ -43,6 +45,11 @@ namespace omush {
 
   bool Game::initialize(IGameInstance* instance, IGameBuilder* builder) {
     builder->setupNetwork(instance);
+
+    // TODO(msmith): Game builder should be doing this.
+    commandParser_ = std::shared_ptr<ICommandParser>(new CommandParser());
+    commandParser_->registerCommand(CommandDefinitionPtr(new command::QuitDefinition()));
+
     return initialize(instance);
   }
 
@@ -55,8 +62,10 @@ namespace omush {
 
     loopNewMessages_();
 
+
     if (isRebooting_)
       return false;
+
     return initialized_;
   }
 

@@ -5,6 +5,8 @@
  */
 
 #include <cstdlib>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/thread/thread.hpp>
 #include "omush/framework/game.h"
 #include "omush/framework/gameinstance.h"
 #include "omush/framework/gamebuilder.h"
@@ -36,7 +38,17 @@ int main(int argc, char** argv) {
 
   game->initialize(&instance, new GameBuilder());
 
+  double loopSeconds_ = .01;
+  double clock_threshhold = CLOCKS_PER_SEC * loopSeconds_;
+  clock_t this_time = clock();
+  clock_t last_time = this_time;
+
   while (game->loop() && !signal.caughtInterupt) {
+    this_time = clock();
+    if (this_time - last_time < clock_threshhold) {
+      boost::this_thread::sleep(boost::posix_time::microseconds(clock_threshhold - (this_time - last_time)));
+    }
+    last_time = this_time;
   }
 
   game->shutdown();

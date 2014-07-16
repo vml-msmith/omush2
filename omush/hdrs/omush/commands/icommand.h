@@ -7,6 +7,7 @@
 #ifndef OMUSH_HDRS_OMUSH_COMMANDS_ICOMMAND_H_
 #define OMUSH_HDRS_OMUSH_COMMANDS_ICOMMAND_H_
 
+#include <memory>
 #include <string>
 
 namespace omush {

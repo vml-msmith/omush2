@@ -46,7 +46,8 @@ class MockNetworkManager : public omush::INetworkManager {
   MOCK_METHOD0(shutdown, bool());
   MOCK_CONST_METHOD1(sendMessage, bool(NetworkPacketDescriptorPair message));
   MOCK_CONST_METHOD1(closeConnection, bool(DescriptorID id));
-  MOCK_CONST_METHOD1(getNextMessage, bool(NetworkPacketDescriptorPair* message));
+  MOCK_CONST_METHOD1(getNextMessage,
+                     bool(NetworkPacketDescriptorPair* message));
 };
 
 TEST_F(GameTest, DefaultConstructor) {

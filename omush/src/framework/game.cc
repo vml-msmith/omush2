@@ -5,6 +5,14 @@
  */
 
 #include "omush/framework/game.h"
+
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/filesystem.hpp>
+
+#include <sys/types.h>
+#include <sys/wait.h>
+
 #include <boost/algorithm/string.hpp>
 #include "omush/framework/igameinstance.h"
 #include "omush/framework/igamebuilder.h"
@@ -12,14 +20,6 @@
 #include "omush/network/common.h"
 #include "omush/commands/commandparser.h"
 #include "omush/commands/commands/quit.h"
-
-#include <boost/lexical_cast.hpp>
-#include <boost/uuid/uuid_io.hpp>
-#include <boost/filesystem.hpp>
-#include <fstream>
-
-#include <sys/types.h>
-#include <sys/wait.h>
 
 namespace omush {
   Game::Game() : initialized_(false) {
@@ -113,13 +113,11 @@ namespace omush {
       sendNetworkMessage(conn, outMessage);
       instance_->network->closeConnection(conn.id);
       return;
-    }
-    else if (boost::iequals(packet.text, "@SHUTDOWN/REBOOT")) {
+    } else if (boost::iequals(packet.text, "@SHUTDOWN/REBOOT")) {
       createRebootFiles_();
       reboot_();
       return;
-    }
-    else {
+    } else {
       outMessage = "Huh?";
     }
 
@@ -174,7 +172,7 @@ namespace omush {
       catch (std::exception &e) {
         printf("Exception\n");
       }
-      }*/
+    }*/
   }
 
   void Game::reboot_() {
@@ -194,7 +192,7 @@ namespace omush {
     default: /* Parent process */
       printf("Process created with pid %i pid\n",  pid);
       int status;
-      printf ("Exited");
+      printf("Exited");
     }
   }
 

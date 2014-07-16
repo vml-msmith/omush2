@@ -115,7 +115,7 @@ namespace omush {
         server_.send(hdl,
                      packet.text,
                      websocketpp::frame::opcode::value::TEXT);
-      } catch (std::__1::error_code &e) {
+      } catch (std::error_code &e) {
         // TODO(msmith): Do some error handling here.
         printf("Error: %s\n", e.message().c_str());
       }

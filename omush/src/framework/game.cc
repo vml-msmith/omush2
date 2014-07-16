@@ -54,6 +54,9 @@ namespace omush {
   }
 
   bool Game::loop() {
+    if (!initialized_)
+      return false;
+
     // TODO(msmith): Insert game code to be ran on each loop.
     //               Networking...
     //               Processing...
@@ -142,6 +145,7 @@ namespace omush {
   }
 
   void Game::createRebootFiles_() {
+    /*
     boost::filesystem::path dir = "reboot";
     if (!exists(dir)) {
       printf("Create directory\n");
@@ -170,7 +174,7 @@ namespace omush {
       catch (std::exception &e) {
         printf("Exception\n");
       }
-    }
+      }*/
   }
 
   void Game::reboot_() {

@@ -55,6 +55,8 @@ TEST_F(GameTest, DefaultConstructor) {
 
 TEST_F(GameTest, InitializeWillSetIsInitializedToTrue) {
   MockCompleteInstance instance;
+  std::shared_ptr<omush::INetworkManager> ptr(new MockNetworkManager);
+  instance.network = ptr;
 
   EXPECT_EQ(game_.isInitialized(), false);
   EXPECT_EQ(game_.initialize(&instance), true);
@@ -100,9 +102,10 @@ TEST_F(GameTest, InitalizeWillNotReturnTrueUnlessInstanceHasNoNulls) {
 
 TEST_F(GameTest, LoopShouldReturnTrueOnlyAfterBeingInitalized) {
   MockCompleteInstance instance;
+  std::shared_ptr<omush::INetworkManager> ptr(new MockNetworkManager);
+  instance.network = ptr;
 
   ASSERT_TRUE(game_.loop() == false);
-  game_.initialize(&instance);
-
-  ASSERT_TRUE(game_.loop() == true);
+  ASSERT_TRUE(game_.initialize(&instance));
+  ASSERT_TRUE(game_.loop());
 }

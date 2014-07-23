@@ -11,12 +11,13 @@
 
 namespace omush {
   class ICommandDefinition;
+  class ICommandMatcher;
   class ICommandParser {
    public:
     ICommandParser() {};
-    virtual bool registerMatcher() = 0;
+    virtual bool registerMatcher(std::unique_ptr<ICommandMatcher> cmdMatcher) = 0;
     virtual bool registerCommand(std::shared_ptr<ICommandDefinition> cmd) = 0;
-
+    virtual bool matchCommand(std::string string, std::shared_ptr<ICommandDefinition> &definition) = 0;
    private:
   };
 } // omush

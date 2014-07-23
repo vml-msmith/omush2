@@ -9,6 +9,7 @@
 #include "omush/framework/igameinstance.h"
 #include "omush/network/networkmanager.h"
 #include "omush/network/websocketserver.h"
+#include "omush/queue/commandqueue.h"
 
 namespace omush {
   GameBuilder::GameBuilder() {
@@ -19,6 +20,9 @@ namespace omush {
 
     ptr->addServer(new WebSocketServer(1701));
     instance->network = ptr;
+
+    std::shared_ptr<ICommandQueue> qptr(new CommandQueue);
+    instance->commandQueue = qptr;
 
     return true;
   }

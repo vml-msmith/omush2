@@ -18,8 +18,7 @@
 #include "omush/framework/igamebuilder.h"
 #include "omush/network/inetworkmanager.h"
 #include "omush/network/common.h"
-#include "omush/commands/commandparser.h"
-#include "omush/commands/commands/quit.h"
+
 
 namespace omush {
   Game::Game() : initialized_(false) {
@@ -46,10 +45,6 @@ namespace omush {
   bool Game::initialize(IGameInstance* instance, IGameBuilder* builder) {
     builder->setupNetwork(instance);
 
-    // TODO(msmith): Game builder should be doing this.
-    commandParser_ = std::shared_ptr<ICommandParser>(new CommandParser());
-    commandParser_->registerCommand(CommandDefinitionPtr(new command::QuitDefinition()));
-
     return initialize(instance);
   }
 
@@ -57,14 +52,10 @@ namespace omush {
     if (!initialized_)
       return false;
 
-    // TODO(msmith): Insert game code to be ran on each loop.
-    //               Networking...
-    //               Processing...
-
     instance_->network->poll();
 
     loopNewMessages_();
-
+    loopQueues_();
 
     if (isRebooting_)
       return false;
@@ -98,30 +89,40 @@ namespace omush {
       Connection conn;
       if (!descriptorIDToConnection_(id, &conn)) {
         newConnection_(id, &conn);
+      } else {
+        processIncommingNetworkPacket_(conn, packet);
       }
 
-      processIncommingNetworkPacket_(conn, packet);
       return;
     }
   }
 
-  void Game::processIncommingNetworkPacket_(Connection conn,
-                                            NetworkPacket packet) {
-    std::string outMessage = packet.text;
-    if (boost::iequals(packet.text, "QUIT")) {
-      outMessage = "Quitting...";
-      sendNetworkMessage(conn, outMessage);
-      instance_->network->closeConnection(conn.id);
-      return;
-    } else if (boost::iequals(packet.text, "@SHUTDOWN/REBOOT")) {
-      createRebootFiles_();
-      reboot_();
-      return;
-    } else {
-      outMessage = "Huh?";
+  void Game::loopQueues_() {
+    QueueObjectQueue discardQueue;
+    descriptorQueue_.loop(instance_, &discardQueue);
+    while (!discardQueue.empty()) {
+      QueueObject object = discardQueue.front();
+      discardQueue.pop();
+
+      if (false) {
+        instance_->commandQueue->addQueueObject(object);
+      }
+      else {
+        sendNetworkMessageByDescriptor(object.descId, "I don't recognize that command.");
+      }
     }
 
-    sendNetworkMessage(conn, outMessage);
+    instance_->commandQueue->loop(instance_, &discardQueue);
+  }
+
+  void Game::processIncommingNetworkPacket_(Connection conn,
+                                            NetworkPacket packet) {
+    QueueObject object;
+    object.gameInstance = instance_;
+    object.descId = conn.id;
+    object.originalString = packet.text;
+
+    descriptorQueue_.addQueueObject(object);
   }
 
   bool Game::descriptorIDToConnection_(DescriptorID id,

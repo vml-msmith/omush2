@@ -11,7 +11,7 @@
 #include <map>
 #include <string>
 #include "omush/network/common.h"
-#include "omush/commands/icommandparser.h"
+#include "omush/queue/descriptorcommandqueue.h"
 
 #include <boost/archive/text_oarchive.hpp>
 
@@ -42,11 +42,12 @@ namespace omush {
     virtual bool loop() override;
     virtual void shutdown() override;
     virtual void sendNetworkMessageByDescriptor(DescriptorID id,
-                                                std::string message);
+                                                std::string message) override;
     virtual void sendNetworkMessage(Connection connection,
                                     std::string message);
    private:
     virtual void loopNewMessages_();
+    virtual void loopQueues_();
     virtual void processIncommingNetworkPacket_(Connection conn,
                                                 NetworkPacket packet);
 
@@ -63,7 +64,7 @@ namespace omush {
     bool initialized_;
     bool isRebooting_;
     IGameInstance *instance_;
-    std::shared_ptr<ICommandParser> commandParser_;
+    DescriptorCommandQueue descriptorQueue_;
   };
 }  // namespace omush
 

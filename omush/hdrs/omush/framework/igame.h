@@ -7,6 +7,8 @@
 #ifndef OMUSH_HDRS_OMUSH_FRAMEWORK_IGAME_H_
 #define OMUSH_HDRS_OMUSH_FRAMEWORK_IGAME_H_
 
+#include "omush/network/common.h"
+
 namespace omush {
   struct IGameInstance;
   class IGameBuilder;
@@ -20,7 +22,8 @@ namespace omush {
     virtual bool initialize(IGameInstance* instance, IGameBuilder* builder) = 0;
     virtual bool loop() = 0;
     virtual void shutdown() = 0;
-
+    virtual void sendNetworkMessageByDescriptor(DescriptorID id,
+                                                std::string message) = 0;
    private:
   };
 }  // namespace omush

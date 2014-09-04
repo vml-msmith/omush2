@@ -15,6 +15,7 @@ namespace omush {
    public:
     GameBuilder();
     virtual bool setupNetwork(IGameInstance *instance) const override;
+    virtual bool setupDatabase(IGameInstance *instance) const override;
    private:
   };
 }  // namespace omush

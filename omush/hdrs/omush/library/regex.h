@@ -11,7 +11,7 @@
 
 namespace omush {
   namespace library {
-    std::string parseRegexErrorCode(std::regex_constants::error_type etype) {
+    inline std::string parseRegexErrorCode(std::regex_constants::error_type etype) {
       using namespace std;
       switch (etype) {
        case regex_constants::error_collate:

@@ -13,11 +13,13 @@ namespace omush {
   class IGame;
   class INetworkManager;
   class ICommandQueue;
+  class IDatabase;
 
   struct IGameInstance {
     IGame* game;
     std::shared_ptr<INetworkManager> network;
     std::shared_ptr<ICommandQueue> commandQueue;
+    std::shared_ptr<IDatabase> database;
 
     IGameInstance() : game(nullptr), network(nullptr) {}
 
@@ -36,7 +38,9 @@ namespace omush {
      */
     virtual bool isComplete() const {
       if (network == nullptr ||
-          game == nullptr)
+          game == nullptr ||
+          commandQueue == nullptr ||
+          database == nullptr)
         return false;
 
       return true;

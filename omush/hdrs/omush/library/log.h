@@ -11,7 +11,7 @@
 
 namespace omush {
   namespace library {
-    void log(std::string str) {
+    inline void log(std::string str) {
       printf("%s\n", str.c_str());
     }
   }  // namespace log

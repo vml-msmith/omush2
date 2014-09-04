@@ -13,17 +13,17 @@ class GameBuilderTest : public testing::Test {
   omush::GameBuilder builder_;
 };
 
-/*
-class MockBuilder : public GameBuilder {
- public:
-  MOCK_CONST_METHOD0(setupNetwork, bool());
-};
-*/
-
 TEST_F(GameBuilderTest, SetupNetworkSetsUpNetwork) {
   omush::GameInstance instance;
 
   ASSERT_TRUE(instance.network == nullptr);
   builder_.setupNetwork(&instance);
   ASSERT_TRUE(instance.network != nullptr);
+}
+
+TEST_F(GameBuilderTest, SetupDatabaseSetsUpDatabase) {
+  omush::GameInstance instance;
+  ASSERT_TRUE(instance.database == nullptr);
+  builder_.setupDatabase(&instance);
+  ASSERT_TRUE(instance.database != nullptr);
 }

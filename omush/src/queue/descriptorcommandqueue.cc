@@ -9,6 +9,7 @@
 #include "omush/commands/commandparser.h"
 #include "omush/commands/commands/quit.h"
 #include "omush/commands/commands/connect.h"
+#include "omush/commands/commands/help.h"
 #include "omush/commands/absolutecommandmatcher.h"
 #include "omush/commands/patterncommandmatcher.h"
 
@@ -17,6 +18,7 @@ namespace omush {
     commandParser_ = std::shared_ptr<ICommandParser>(new CommandParser());
     commandParser_->registerCommand(CommandDefinitionPtr(new command::QuitDefinition));
     commandParser_->registerCommand(CommandDefinitionPtr(new command::ConnectDefinition));
+    commandParser_->registerCommand(CommandDefinitionPtr(new command::HelpDefinition));
 
     commandParser_->registerMatcher(std::move(std::unique_ptr<ICommandMatcher>(new AbsoluteCommandMatcher)));
     commandParser_->registerMatcher(std::move(std::unique_ptr<ICommandMatcher>(new PatternCommandMatcher)));

@@ -50,6 +50,21 @@ class MockNetworkManager : public omush::INetworkManager {
                      bool(NetworkPacketDescriptorPair* message));
 };
 
+class SimpleMockGameInstance : public omush::IGameInstance {
+ public:
+  bool isComplete_;
+  SimpleMockGameInstance() : isComplete_(false) {}
+  virtual bool isComplete() const override {
+    return isComplete_;
+  }
+};
+
+class MockGameInstance : public SimpleMockGameInstance {
+ public:
+  MOCK_CONST_METHOD0(isComplete, bool());
+};
+
+
 TEST_F(GameTest, DefaultConstructor) {
   EXPECT_EQ(game_.isInitialized(), false);
 }
@@ -83,30 +98,37 @@ TEST_F(GameTest, InitializeWithBuilderWillRunBuilderSetupSteps) {
 }
 
 TEST_F(GameTest, InitalizeWillNotReturnTrueUnlessInstanceHasNoNulls) {
+  using ::testing::NiceMock;
   // TODO(msmith): I may want to change this to test if the isComplete method is
   //               actually called rather than if things are null or not. Then
   //               the isComplete method can be tested in testing for the
   //               GameInstance class.
-  GameInstance instance;
-  MockBuilder builder;
+  MockGameInstance instance;
+  NiceMock<MockBuilder> builder;
 
-  EXPECT_TRUE(instance.network == nullptr);
+  EXPECT_CALL(instance, isComplete()).Times(1);
   EXPECT_TRUE(game_.initialize(&instance, &builder) == false);
-  EXPECT_EQ(game_.isInitialized(), false);
 
-  std::shared_ptr<omush::INetworkManager> ptr(new MockNetworkManager);
-  instance.network = ptr;
+  SimpleMockGameInstance simpleInstance;
+  simpleInstance.isComplete_ = true;
 
-  EXPECT_TRUE(game_.initialize(&instance, &builder) == true);
-  EXPECT_EQ(game_.isInitialized(), true);
+  EXPECT_TRUE(game_.initialize(&simpleInstance, &builder) == true);
 }
 
 TEST_F(GameTest, LoopShouldReturnTrueOnlyAfterBeingInitalized) {
-  MockCompleteInstance instance;
-  std::shared_ptr<omush::INetworkManager> ptr(new MockNetworkManager);
+  using ::testing::NiceMock;
+
+  NiceMock<MockBuilder> builder;
+  NiceMock<MockCompleteInstance> instance;
+  std::shared_ptr<omush::INetworkManager> ptr(new NiceMock<MockNetworkManager>);
+
   instance.network = ptr;
 
   ASSERT_TRUE(game_.loop() == false);
-  ASSERT_TRUE(game_.initialize(&instance));
+
+  // Suppress GMock unintersting warnings.
+  EXPECT_CALL(builder, setupNetwork(::testing::_)).Times(1);
+  ASSERT_TRUE(game_.initialize(&instance, &builder));
+
   ASSERT_TRUE(game_.loop());
 }

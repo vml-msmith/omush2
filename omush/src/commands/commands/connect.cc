@@ -8,8 +8,11 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <regex>
 #include "omush/framework/igame.h"
+#include "omush/library/regex.h"
+#include "omush/library/log.h"
+#include "omush/database/databaseobject.h"
+#include "omush/database/databasematcher.h"
 
 namespace omush {
   namespace command {
@@ -35,8 +38,8 @@ namespace omush {
 
     bool Connect::execute(CommandScope scope) {
       ConnectDefinition def;
-std::string userName = "";
-std::string password = "";
+      std::string userName = "";
+      std::string password = "";
 
       std::vector<std::string> patterns = def.patterns();
       for (auto p : patterns) {
@@ -49,17 +52,26 @@ std::string password = "";
               std::string piece = sub_match.str();
               printf("Match %i: %s\n", i, piece.c_str());
             }
-userName = what[1];
-if (what.size() > 2) {
-password = what[2];
-}
+            userName = what[1];
+            if (what.size() > 2) {
+              password = what[2];
+            }
             break;
           }
         } catch (std::regex_error &e) {
-//          printf("%s: %s\n", e.what(), parseCode(e.code()).c_str());
+          library::log(std::string(e.what()) +
+                       " " +
+                       library::parseRegexErrorCode(e.code()));
         }
       }
 
+
+      std::shared_ptr<DatabaseObject> object;
+      DatabaseMatcher::findPlayer(scope.gameInstance->database.get(),
+                                  userName,
+                                  object);
+
+      // Find username in the database?
       scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId, "Hello " + userName + "!");
       return true;
     }

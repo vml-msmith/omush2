@@ -21,7 +21,7 @@
 
 
 namespace omush {
-  Game::Game() : initialized_(false) {
+  Game::Game() : initialized_(false), isRebooting_(false) {
   }
 
   Game::~Game() {
@@ -34,10 +34,16 @@ namespace omush {
   bool Game::initialize(IGameInstance* instance) {
     instance->game = this;
     instance_ = instance;
-    if (!instance->isComplete())
-      return false;
 
-    instance_->network->start();
+    if (!instance->isComplete()) {
+      return false;
+    }
+
+    // isCompelete could theoretically not include a network.
+    // Check to make sure it's there.
+    if (instance_->network != nullptr)
+      instance_->network->start();
+
     initialized_ = true;
     return true;
   }
@@ -49,18 +55,20 @@ namespace omush {
   }
 
   bool Game::loop() {
-    if (!initialized_)
+    if (!isInitialized()) {
       return false;
+    }
 
     instance_->network->poll();
 
     loopNewMessages_();
     loopQueues_();
 
-    if (isRebooting_)
+    if (isRebooting_) {
       return false;
+    }
 
-    return initialized_;
+    return isInitialized();
   }
 
   void Game::sendNetworkMessageByDescriptor(DescriptorID id,
@@ -100,6 +108,7 @@ namespace omush {
   void Game::loopQueues_() {
     QueueObjectQueue discardQueue;
     descriptorQueue_.loop(instance_, &discardQueue);
+
     while (!discardQueue.empty()) {
       QueueObject object = discardQueue.front();
       discardQueue.pop();
@@ -112,7 +121,9 @@ namespace omush {
       }
     }
 
-    instance_->commandQueue->loop(instance_, &discardQueue);
+    if (instance_->commandQueue != nullptr) {
+      instance_->commandQueue->loop(instance_, &discardQueue);
+    }
   }
 
   void Game::processIncommingNetworkPacket_(Connection conn,

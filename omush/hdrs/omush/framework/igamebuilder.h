@@ -13,6 +13,7 @@ namespace omush {
    public:
     IGameBuilder() {}
     virtual bool setupNetwork(IGameInstance *instance) const = 0;
+    virtual bool setupDatabase(IGameInstance *instance) const = 0;
    private:
   };
 }  // omush

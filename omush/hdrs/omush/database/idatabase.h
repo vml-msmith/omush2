@@ -10,8 +10,9 @@
 #include <map>
 #include <memory>
 #include "omush/library/uuid.h"
+
 namespace omush {
-  enum DatabaseObjectType { THING, PLAYER, ROOM };
+  enum DatabaseObjectType { THING = 0, PLAYER = 1, ROOM = 2 };
   class IDatabaseObject;
   typedef std::map<library::uuid,std::shared_ptr<IDatabaseObject>> UuidToDbObjectMap;
 

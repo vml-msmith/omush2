@@ -25,11 +25,8 @@ namespace omush {
   bool CommandParser::matchCommand(std::string string,
                                    std::shared_ptr<ICommandDefinition> &definition) {
     definition = nullptr;
-    printf("Count: %i\n",commandMatchers_.size());
     for (auto& ptr : commandMatchers_) {
-      printf("Try..\n");
       if (ptr->match(string, commands_, definition)) {
-        printf("It's true.");
         return true;
       }
     }

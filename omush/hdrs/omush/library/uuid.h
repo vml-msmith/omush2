@@ -15,7 +15,7 @@ namespace omush {
 
     inline uuid generate_uuid() {
       boost::uuids::random_generator gen;
-      return  gen();
+      return gen();
     }
 
   }  // namespace library

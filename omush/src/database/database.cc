@@ -5,6 +5,7 @@
  */
 
 #include "omush/database/database.h"
+#include "omush/database/databaseobject.h"
 
 namespace omush {
   Database::Database() {
@@ -22,11 +23,25 @@ namespace omush {
     }
 
     map->insert(iter->second.begin(), iter->second.end());
-
     return true;
   }
 
   bool Database::addObject(std::shared_ptr<IDatabaseObject> object) {
+    objectMap_.insert(UuidToObjectMapPair(object->getUuid(), object));
+
+    DatabaseObjectType type = object->getType();
+    TypeToUuidToObjectMap::iterator iter = typedObjectMap_.find(type);
+    if (iter == typedObjectMap_.end()) {
+      this->createNewObjectTypeMap(type);
+      iter = typedObjectMap_.find(type);
+    }
+    iter->second.insert(UuidToObjectMapPair(object->getUuid(), object));
+
+  }
+
+  void Database::createNewObjectTypeMap(const DatabaseObjectType type) {
+    typedObjectMap_.insert(TypeToUuidToObjectMapPair(type,
+                                                     UuidToObjectMap()));
   }
 
 }  // namespace omush

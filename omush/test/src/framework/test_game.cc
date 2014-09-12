@@ -99,10 +99,7 @@ TEST_F(GameTest, InitializeWithBuilderWillRunBuilderSetupSteps) {
 
 TEST_F(GameTest, InitalizeWillNotReturnTrueUnlessInstanceHasNoNulls) {
   using ::testing::NiceMock;
-  // TODO(msmith): I may want to change this to test if the isComplete method is
-  //               actually called rather than if things are null or not. Then
-  //               the isComplete method can be tested in testing for the
-  //               GameInstance class.
+
   MockGameInstance instance;
   NiceMock<MockBuilder> builder;
 

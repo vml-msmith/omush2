@@ -111,9 +111,33 @@ namespace omush {
 
     std::tie(packet, id) = message;
     if (descriptorIDToHdl_(id, &hdl)) {
+      // TODO(msmith): Filter HTML characters since this is a websocket.
+      std::string xml(packet.text);
+
+      // Characters to be transformed.
+      std::map<char, std::string> transformations;
+      transformations['&']  = std::string("&amp;");
+      transformations['\''] = std::string("&apos;");
+      transformations['"']  = std::string("&quot;");
+      transformations['>']  = std::string("&gt;");
+      transformations['<']  = std::string("&lt;");
+
+      // Build list of characters to be searched for.
+      //
+      std::string reserved_chars;
+      for (auto ti = transformations.begin(); ti != transformations.end(); ti++) {
+        reserved_chars += ti->first;
+      }
+
+      size_t pos = 0;
+      while (std::string::npos != (pos = xml.find_first_of(reserved_chars, pos))) {
+        xml.replace(pos, 1, transformations[xml[pos]]);
+        pos++;
+      }
+
       try {
         server_.send(hdl,
-                     packet.text,
+                     xml,
                      websocketpp::frame::opcode::value::TEXT);
       } catch (std::error_code &e) {
         // TODO(msmith): Do some error handling here.

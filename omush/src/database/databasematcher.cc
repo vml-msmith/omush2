@@ -19,6 +19,7 @@ namespace omush {
   bool DatabaseMatcher::findPlayer(IDatabase *db,
                                    std::string lookupString,
                                    std::shared_ptr<IDatabaseObject> object) {
+
     if (db == NULL) {
       return false;
     }

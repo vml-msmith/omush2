@@ -21,9 +21,13 @@ namespace omush {
                                   UuidToDbObjectMap *map) override;
    private:
     typedef std::map<library::uuid,std::shared_ptr<IDatabaseObject>> UuidToObjectMap;
+    typedef std::pair<library::uuid,std::shared_ptr<IDatabaseObject>> UuidToObjectMapPair;
     UuidToObjectMap objectMap_;
     typedef std::map<DatabaseObjectType,UuidToObjectMap> TypeToUuidToObjectMap;
+    typedef std::pair<DatabaseObjectType,UuidToObjectMap> TypeToUuidToObjectMapPair;
     TypeToUuidToObjectMap typedObjectMap_;
+
+    void createNewObjectTypeMap(const DatabaseObjectType type);
   };
 }  // namespace omush
 

@@ -50,7 +50,6 @@ namespace omush {
             for (size_t i = 0; i < what.size(); ++i) {
               std::ssub_match sub_match = what[i];
               std::string piece = sub_match.str();
-              printf("Match %i: %s\n", i, piece.c_str());
             }
             userName = what[1];
             if (what.size() > 2) {
@@ -67,12 +66,17 @@ namespace omush {
 
 
       std::shared_ptr<DatabaseObject> object;
-      DatabaseMatcher::findPlayer(scope.gameInstance->database.get(),
+      if (DatabaseMatcher::findPlayer(scope.gameInstance->database.get(),
                                   userName,
-                                  object);
+                                      object)) {
+        scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId,
+                                                                 "Hello " + userName + "!");
+      }
+      else {
+        scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId,
+                                                                 "Can't find anyone with that name!");
+      }
 
-      // Find username in the database?
-      scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId, "Hello " + userName + "!");
       return true;
     }
 

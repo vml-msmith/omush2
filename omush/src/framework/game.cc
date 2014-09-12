@@ -44,12 +44,14 @@ namespace omush {
     if (instance_->network != nullptr)
       instance_->network->start();
 
+
     initialized_ = true;
     return true;
   }
 
   bool Game::initialize(IGameInstance* instance, IGameBuilder* builder) {
     builder->setupNetwork(instance);
+    builder->setupDatabase(instance);
 
     return initialize(instance);
   }
@@ -117,6 +119,7 @@ namespace omush {
         instance_->commandQueue->addQueueObject(object);
       }
       else {
+        // TODO(msmith): Put this back into the queue as a "HUH" command.
         sendNetworkMessageByDescriptor(object.descId, "I don't recognize that command.");
       }
     }
@@ -150,7 +153,13 @@ namespace omush {
                             Connection* conn) {
     connectedDescriptors_[id] = Connection(id);
     *conn =  connectedDescriptors_[id];
-    sendNetworkMessage(id, "Welcome");
+
+    QueueObject object;
+    object.gameInstance = instance_;
+    object.descId = conn->id;
+    object.originalString = "WELCOME_SCREEN";
+
+    descriptorQueue_.addQueueObject(object);
     return true;
   }
 

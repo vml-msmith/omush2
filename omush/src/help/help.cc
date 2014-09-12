@@ -33,9 +33,9 @@ namespace omush {
     }
 
     std::shared_ptr<HelpLLNode> node(new HelpLLNode());
-    node->entry(entry);
-    node->next(nullptr);
-    node->prev(nullptr)
+    node->entry = entry;
+    node->next = nullptr;
+    node->prev = nullptr;
     node->key = index;
 
     if (llTop_ == nullptr) {
@@ -66,7 +66,6 @@ namespace omush {
       node->prev->next = NULL;
     }
     directory_.erase(node->key);
-    delete node;
     return true;
   }
 
@@ -102,8 +101,33 @@ namespace omush {
 
     // Move it to the front.
     entry = iter->second->entry;
-    moveToFront(iter.second);
+    moveToFront(iter->second);
     return true;
   }
 
+  std::shared_ptr<HelpSystem> MyHelp::getInstance(std::string key) {
+    return MyHelp::getSelfInstance()._getInstance(key);
+  }
+
+  std::shared_ptr<HelpSystem> MyHelp::_getInstance(std::string key) {
+    if (directory_.find(key) == directory_.end())
+      return nullptr;
+
+    return directory_.find(key)->second;
+  }
+
+  std::shared_ptr<HelpSystem> MyHelp::startInstance(std::string key) {
+    return MyHelp::getSelfInstance()._startInstance(key);
+  }
+
+  std::shared_ptr<HelpSystem> MyHelp::_startInstance(std::string key) {
+    if (directory_.find(key) == directory_.end()) {
+      std::shared_ptr<HelpSystem> h(new HelpSystem);
+      directory_.insert(std::pair<std::string,
+                        std::shared_ptr<HelpSystem>>(key,
+                                                     h));
+    }
+
+    return directory_.find(key)->second;
+  }
 }  // namespace omush

@@ -119,8 +119,10 @@ namespace omush {
         instance_->commandQueue->addQueueObject(object);
       }
       else {
-        // TODO(msmith): Put this back into the queue as a "HUH" command.
-        sendNetworkMessageByDescriptor(object.descId, "I don't recognize that command.");
+        object.originalString = "HUH";
+        descriptorQueue_.addQueueObject(object);
+        object.originalString = "WELCOME_SCREEN";
+        descriptorQueue_.addQueueObject(object);
       }
     }
 

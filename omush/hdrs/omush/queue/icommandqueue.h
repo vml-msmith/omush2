@@ -10,6 +10,7 @@
 #include <queue>
 #include "omush/network/common.h"
 #include "omush/framework/igameinstance.h"
+#include "omush/library/uuid.h"
 
 namespace omush {
 class IGameInstance;
@@ -20,12 +21,21 @@ class IGameInstance;
     std::string originalString;
     std::string calledString;
 
+    library::uuid enactor;
+    library::uuid executor;
+    library::uuid caller;
+
     // Message
     // Dbref of object.
     // Init time?
     // Caller
     // Enactor
     // Executor
+    QueueObject() {
+      enactor = library::generate_null_uuid();
+      executor = library::generate_null_uuid();
+      caller = library::generate_null_uuid();
+    }
   };
 
   typedef std::queue<QueueObject> QueueObjectQueue;

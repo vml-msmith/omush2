@@ -11,6 +11,7 @@
 #include <string>
 #include "omush/network/common.h"
 #include "omush/framework/igameinstance.h"
+#include "omush/library/uuid.h"
 
 namespace omush {
   class ICommand;

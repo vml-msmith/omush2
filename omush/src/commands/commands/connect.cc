@@ -65,12 +65,15 @@ namespace omush {
       }
 
 
-      std::shared_ptr<DatabaseObject> object;
+      std::shared_ptr<IDatabaseObject> object;
       if (DatabaseMatcher::findPlayer(scope.gameInstance->database.get(),
-                                  userName,
+                                      userName,
                                       object)) {
+        scope.gameInstance->game->addObjectUUIDForDescriptor(scope.descId,
+                                                             object->getUuid());
+        // Action connect.
         scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId,
-                                                                 "Hello " + userName + "!");
+                                                                 "Hello " + object->getName() + "!");
       }
       else {
         scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId,

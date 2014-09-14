@@ -12,6 +12,7 @@
 #include <string>
 #include "omush/network/common.h"
 #include "omush/queue/descriptorcommandqueue.h"
+#include "omush/library/uuid.h"
 
 #include <boost/archive/text_oarchive.hpp>
 
@@ -45,6 +46,12 @@ namespace omush {
                                                 std::string message) override;
     virtual void sendNetworkMessage(Connection connection,
                                     std::string message);
+    virtual bool getObjectUUIDFromDescriptor(DescriptorID id,
+                                             library::uuid &uid) override;
+    virtual void addObjectUUIDForDescriptor(DescriptorID id,
+                                            library::uuid uid) override;
+    virtual void removeObjectUUIDForDescriptor(DescriptorID id,
+                                               library::uuid uid) override;
    private:
     virtual void loopNewMessages_();
     virtual void loopQueues_();
@@ -55,8 +62,11 @@ namespace omush {
     virtual void reboot_();
 
     typedef std::map<DescriptorID, Connection> DescriptorMap;
+    typedef std::map<DescriptorID, library::uuid> DescriptorToUUIDMap;
 
     DescriptorMap connectedDescriptors_;
+    DescriptorToUUIDMap descriptorsToDb_;
+
     bool descriptorIDToConnection_(DescriptorID id, Connection* connection);
     bool newConnection_(DescriptorID id,
                         Connection* conn);

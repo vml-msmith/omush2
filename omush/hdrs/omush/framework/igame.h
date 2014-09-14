@@ -8,6 +8,7 @@
 #define OMUSH_HDRS_OMUSH_FRAMEWORK_IGAME_H_
 
 #include "omush/network/common.h"
+#include "omush/library/uuid.h"
 
 namespace omush {
   struct IGameInstance;
@@ -24,6 +25,12 @@ namespace omush {
     virtual void shutdown() = 0;
     virtual void sendNetworkMessageByDescriptor(DescriptorID id,
                                                 std::string message) = 0;
+    virtual bool getObjectUUIDFromDescriptor(DescriptorID id,
+                                             library::uuid &uid) = 0;
+    virtual void addObjectUUIDForDescriptor(DescriptorID id,
+                                            library::uuid uid) = 0;
+    virtual void removeObjectUUIDForDescriptor(DescriptorID id,
+                                               library::uuid uid) = 0;
    private:
   };
 }  // namespace omush

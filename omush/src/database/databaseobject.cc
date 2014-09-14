@@ -12,9 +12,11 @@ namespace omush {
   std::string DatabaseObject::getName() const {
     return name_;
   }
+
   void DatabaseObject::setName(std::string name) {
     name_ = name;
   }
+
   library::uuid DatabaseObject::getUuid() const {
     return uuid_;
   }

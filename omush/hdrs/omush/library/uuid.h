@@ -18,6 +18,15 @@ namespace omush {
       return gen();
     }
 
+    inline uuid generate_null_uuid() {
+      boost::uuids::nil_generator gen;
+      return gen();
+    }
+
+    inline bool is_null(uuid u) {
+      return u.is_nil();
+    }
+
   }  // namespace library
 
 } // omush

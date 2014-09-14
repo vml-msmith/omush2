@@ -88,6 +88,35 @@ namespace omush {
   void Game::shutdown() {
   }
 
+  bool Game::getObjectUUIDFromDescriptor(DescriptorID id,
+                                         library::uuid &uid) {
+    DescriptorToUUIDMap::iterator it = descriptorsToDb_.find(id);
+
+    if (it == descriptorsToDb_.end()) {
+      return false;
+    }
+
+    uid = it->second;
+    return true;
+  }
+
+  void Game::addObjectUUIDForDescriptor(DescriptorID id,
+                                        library::uuid uid) {
+    if (descriptorsToDb_.find(id) != descriptorsToDb_.end())
+      return;
+
+    descriptorsToDb_.insert(std::pair<DescriptorID,
+                           library::uuid>(id, uid));
+  }
+
+  void Game::removeObjectUUIDForDescriptor(DescriptorID id,
+                                           library::uuid uid) {
+    if (descriptorsToDb_.find(id) == descriptorsToDb_.end())
+      return;
+
+    descriptorsToDb_.erase(id);
+  }
+
   void Game::loopNewMessages_() {
     NetworkPacketDescriptorPair message;
 
@@ -115,7 +144,7 @@ namespace omush {
       QueueObject object = discardQueue.front();
       discardQueue.pop();
 
-      if (false) {
+      if (!library::is_null(object.enactor)) {
         instance_->commandQueue->addQueueObject(object);
       }
       else {
@@ -126,8 +155,21 @@ namespace omush {
       }
     }
 
+
+
     if (instance_->commandQueue != nullptr) {
+      descriptorQueue_.loop(instance_, &discardQueue);
       instance_->commandQueue->loop(instance_, &discardQueue);
+
+      while (!discardQueue.empty()) {
+        QueueObject object = discardQueue.front();
+        discardQueue.pop();
+
+        if (!library::is_null(object.enactor)) {
+          object.originalString = "HUH";
+          instance_->commandQueue->addQueueObject(object);
+        }
+      }
     }
   }
 
@@ -137,6 +179,13 @@ namespace omush {
     object.gameInstance = instance_;
     object.descId = conn.id;
     object.originalString = packet.text;
+
+    library::uuid uid;
+    if (getObjectUUIDFromDescriptor(conn.id, uid)) {
+      object.enactor = uid;
+      object.caller = uid;
+      object.executor = uid;
+    }
 
     descriptorQueue_.addQueueObject(object);
   }

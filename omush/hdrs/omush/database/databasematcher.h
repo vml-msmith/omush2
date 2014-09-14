@@ -17,7 +17,7 @@ namespace omush {
 
     static bool findPlayer(IDatabase *db,
                            std::string lookupString,
-                           std::shared_ptr<IDatabaseObject> object);
+                           std::shared_ptr<IDatabaseObject> &object);
    private:
   };
 }  // namespace omush

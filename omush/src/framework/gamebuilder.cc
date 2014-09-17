@@ -12,6 +12,9 @@
 #include "omush/queue/commandqueue.h"
 #include "omush/database/database.h"
 #include "omush/database/databaseobject.h"
+#include "omush/database/databasefactory.h"
+#include "omush/database/objectdefinitions/databaseobjectdefinitionplayer.h"
+#include "omush/database/objectdefinitions/databaseobjectdefinitionroom.h"
 
 namespace omush {
   GameBuilder::GameBuilder() {

@@ -7,6 +7,7 @@
 #ifndef OMUSH_HDRS_OMUSH_DATABASE_DATABASEMATCHER_H_
 #define OMUSH_HDRS_OMUSH_DATABASE_DATABASEMATCHER_H_
 
+#include <string>
 #include "omush/database/idatabase.h"
 #include "omush/database/playerobject.h"
 

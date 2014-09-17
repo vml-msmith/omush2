@@ -4,11 +4,14 @@
  * Copyright 2014 Michael Smith
  */
 
-#ifndef HDRS_OMUSH_HDRS_COMMANDS_COMMANDS_CONNECT_H_
-#define HDRS_OMUSH_HDRS_COMMANDS_COMMANDS_CONNECT_H_
 
-#include "omush/commands/icommand.h"
+#ifndef OMUSH_HDRS_OMUSH_COMMANDS_COMMANDS_CONNECT_H_
+#define OMUSH_HDRS_OMUSH_COMMANDS_COMMANDS_CONNECT_H_
+
 #include <memory>
+#include <string>
+#include <vector>
+#include "omush/commands/icommand.h"
 
 namespace omush {
   namespace command {
@@ -28,4 +31,4 @@ namespace omush {
   }  // namespace command
 }  // namespace omush
 
-#endif  // HDRS_OMUSH_HDRS_COMMANDS_COMMANDS_CONNECT_H_
+#endif  // OMUSH_HDRS_OMUSH_COMMANDS_COMMANDS_CONNECT_H_

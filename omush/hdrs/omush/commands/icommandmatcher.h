@@ -15,11 +15,14 @@ namespace omush {
   class ICommandDefinition;
   class ICommandMatcher {
    public:
+    typedef std::vector<std::shared_ptr<ICommandDefinition>>
+      ICommandDefinitionVector;
     ICommandMatcher() {}
-    virtual bool match(std::string, std::vector<std::shared_ptr<ICommandDefinition> > commands,
+    virtual bool match(std::string,
+                       ICommandDefinitionVector commands,
                        std::shared_ptr<ICommandDefinition> &definition) = 0;
    private:
   };
-} // omush
+}  // namespace omush
 
-#endif //  OMUSH_HDRS_OMUSH_COMMANDS_ICOMMANDMATCHER_H_
+#endif  // OMUSH_HDRS_OMUSH_COMMANDS_ICOMMANDMATCHER_H_

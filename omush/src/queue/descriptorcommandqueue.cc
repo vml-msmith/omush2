@@ -48,12 +48,7 @@ namespace omush {
           std::unique_ptr<ICommand> cmd = def->factory();
           std::shared_ptr<CommandScope> scope(new CommandScope());
           scope->queueObject = object;
-/*
-          CommandScope scope;
-          scope.originalString = object.originalString;
-          scope.descId = object.descId;
-          scope.gameInstance = gameInstance;
-*/
+
           cmd->execute(scope);
         }
       } else {

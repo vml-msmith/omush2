@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 #include "omush/network/common.h"
 #include "omush/framework/igameinstance.h"
 #include "omush/library/uuid.h"
@@ -23,8 +24,6 @@ namespace omush {
     virtual std::vector<std::string> patterns() = 0;
   };
 
-  //  typedef Scope CommandScope;
-
   class ICommand {
    public:
     ICommand() {}
@@ -33,6 +32,6 @@ namespace omush {
   };
 
   typedef std::shared_ptr<ICommandDefinition> CommandDefinitionPtr;
-} // omush
+}  // namespace omush
 
-#endif //  OMUSH_HDRS_OMUSH_COMMANDS_ICOMMAND_H_
+#endif  // OMUSH_HDRS_OMUSH_COMMANDS_ICOMMAND_H_

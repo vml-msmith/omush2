@@ -7,16 +7,19 @@
 #ifndef OMUSH_HDRS_OMUSH_COMMANDS_ABSOLUTECOMMANDMATCHER_H_
 #define OMUSH_HDRS_OMUSH_COMMANDS_ABSOLUTECOMMANDMATCHER_H_
 
-#include "omush/commands/icommandmatcher.h"
 #include <memory>
+#include <string>
+#include <vector>
+#include "omush/commands/icommandmatcher.h"
 
 namespace omush {
   class AbsoluteCommandMatcher : public ICommandMatcher {
    public:
     AbsoluteCommandMatcher();
-    virtual bool match(std::string, std::vector<std::shared_ptr<ICommandDefinition> > commands,
-                       std::shared_ptr<ICommandDefinition> &definition) override;
-   private:
+    virtual bool
+      match(std::string,
+            std::vector<std::shared_ptr<ICommandDefinition>> commands,
+            std::shared_ptr<ICommandDefinition> &definition) override;
   };
 }  // namespace omush
 

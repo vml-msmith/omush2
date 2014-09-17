@@ -22,6 +22,6 @@ namespace omush {
       std::shared_ptr<IDatabaseObject> player_;
     };
   }  // namesapce actions
-}  // namesapce omush
+}  // namespace omush
 
 #endif  // OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_CONNECT_H_

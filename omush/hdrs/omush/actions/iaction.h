@@ -12,7 +12,7 @@
 namespace omush {
   namespace actions {
     class IAction {
-    public:
+     public:
       virtual void enact(std::shared_ptr<ActionScope> scope) = 0;
     };
   }  // namesapce actions

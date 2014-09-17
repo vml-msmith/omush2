@@ -23,7 +23,7 @@ namespace omush {
       std::shared_ptr<IDatabaseObject> player_;
       std::shared_ptr<IDatabaseObject> target_;
     };
-  }  // namesapce actions
-}  // namesapce omush
+  }  // namespace actions
+}  // namespace omush
 
 #endif  // OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_LOOK_H_

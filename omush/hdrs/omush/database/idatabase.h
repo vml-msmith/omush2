@@ -20,6 +20,8 @@ namespace omush {
    public:
     IDatabase() {};
     virtual bool addObject(std::shared_ptr<IDatabaseObject> object) = 0;
+    virtual bool getObjectByUUID(library::uuid uuid,
+                                 std::shared_ptr<IDatabaseObject>& object) = 0;
     virtual bool getObjectsByType(DatabaseObjectType type,
                                   UuidToDbObjectMap *map) = 0;
   };

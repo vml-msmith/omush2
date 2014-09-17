@@ -21,7 +21,7 @@ namespace omush {
     class Quit : public ICommand {
      public:
       Quit();
-      virtual bool execute(CommandScope scope) override;
+      virtual bool execute(std::shared_ptr<CommandScope> scope) override;
      private:
     };
   }  // namespace command

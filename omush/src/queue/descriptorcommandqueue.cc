@@ -34,23 +34,26 @@ namespace omush {
   bool DescriptorCommandQueue::loop(IGameInstance* gameInstance,
                                     QueueObjectQueue *discard) {
     while (!queue_.empty()) {
-      QueueObject object = queue_.front();
+      std::shared_ptr<QueueObject> object = queue_.front();
       queue_.pop();
 
       std::shared_ptr<ICommandDefinition> def;
 
-      if (commandParser_->matchCommand(object.originalString, def)) {
+      if (commandParser_->matchCommand(object->originalString, def)) {
         if (def == NULL) {
           if (discard != NULL) {
             discard->push(object);
           }
         } else {
           std::unique_ptr<ICommand> cmd = def->factory();
+          std::shared_ptr<CommandScope> scope(new CommandScope());
+          scope->queueObject = object;
+/*
           CommandScope scope;
           scope.originalString = object.originalString;
           scope.descId = object.descId;
           scope.gameInstance = gameInstance;
-
+*/
           cmd->execute(scope);
         }
       } else {
@@ -63,7 +66,7 @@ namespace omush {
     return false;
   }
 
-  bool DescriptorCommandQueue::addQueueObject(QueueObject object) {
+  bool DescriptorCommandQueue::addQueueObject(std::shared_ptr<QueueObject> object) {
     queue_.push(object);
     return true;
   }

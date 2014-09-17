@@ -26,8 +26,8 @@ namespace omush {
     Quit::Quit() {
     }
 
-    bool Quit::execute(CommandScope scope) {
-      scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId, "Bye bye");
+    bool Quit::execute(std::shared_ptr<CommandScope> scope) {
+      scope->queueObject->gameInstance->game->sendNetworkMessageByDescriptor(scope->queueObject->descId, "Bye bye");
       return true;
     }
 

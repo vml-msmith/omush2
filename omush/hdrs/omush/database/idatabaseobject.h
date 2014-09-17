@@ -19,6 +19,8 @@ namespace omush {
     virtual library::uuid getUuid() const = 0;
     virtual DatabaseObjectType getType() const = 0;
     virtual void setName(std::string name) = 0;
+    virtual void setLocation(std::shared_ptr<IDatabaseObject> location) = 0;
+    virtual void getLocation(std::shared_ptr<IDatabaseObject> &location) = 0;
    private:
   };
 }  // namespace omush

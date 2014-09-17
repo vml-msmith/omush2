@@ -32,7 +32,7 @@ namespace omush {
     WelcomeScreen::WelcomeScreen() {
     }
 
-    bool WelcomeScreen::execute(CommandScope scope) {
+    bool WelcomeScreen::execute(std::shared_ptr<CommandScope> scope) {
 
       std::string lines = "";
       lines += "----------------------------------------------------------------------------\n";
@@ -42,7 +42,7 @@ namespace omush {
       lines += "  HELP..............................................Display the help system.\n";
       lines += "  QUIT.............................................Disconnect from the game.\n";
 
-      scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId, lines);
+      scope->queueObject->gameInstance->game->sendNetworkMessageByDescriptor(scope->queueObject->descId, lines);
       return true;
     }
 

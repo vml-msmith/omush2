@@ -29,11 +29,14 @@ namespace omush {
   }
 
   bool NetworkManager::start() {
+    bool success = true;
     for (auto& item : servers_) {
-      item->start();
+      if (!item->start()) {
+        success = false;
+      }
     }
 
-    return true;
+    return success;
   }
 
   bool NetworkManager::shutdown() {

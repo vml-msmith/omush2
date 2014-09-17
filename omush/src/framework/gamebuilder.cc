@@ -39,12 +39,14 @@ namespace omush {
     std::shared_ptr<DatabaseObject> roomZero;
     factory.buildObject(DatabaseObjectDefinitionRoom::getInstance(),
                         roomZero);
+    roomZero->setName("Room Zero");
     instance->database->addObject(roomZero);
 
     std::shared_ptr<DatabaseObject> playerOne;
     factory.buildObject(DatabaseObjectDefinitionPlayer::getInstance(),
                         playerOne);
     playerOne->setName("One");
+    playerOne->setLocation(roomZero);
     instance->database->addObject(playerOne);
     return true;
   }

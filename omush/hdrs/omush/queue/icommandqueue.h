@@ -10,42 +10,20 @@
 #include <queue>
 #include "omush/network/common.h"
 #include "omush/framework/igameinstance.h"
-#include "omush/library/uuid.h"
+//#include "omush/library/uuid.h"
+#include "omush/scope.h"
 
 namespace omush {
-class IGameInstance;
-  struct QueueObject {
-    // Descriptor ID.
-    IGameInstance* gameInstance;
-    DescriptorID descId;
-    std::string originalString;
-    std::string calledString;
+  class IGameInstance;
 
-    library::uuid enactor;
-    library::uuid executor;
-    library::uuid caller;
-
-    // Message
-    // Dbref of object.
-    // Init time?
-    // Caller
-    // Enactor
-    // Executor
-    QueueObject() {
-      enactor = library::generate_null_uuid();
-      executor = library::generate_null_uuid();
-      caller = library::generate_null_uuid();
-    }
-  };
-
-  typedef std::queue<QueueObject> QueueObjectQueue;
+  typedef std::queue<std::shared_ptr<QueueObject>> QueueObjectQueue;
 
   class ICommandQueue {
    public:
     ICommandQueue() {}
     ~ICommandQueue() {};
     virtual bool loop(IGameInstance* gameInstance, QueueObjectQueue *discard) = 0;
-    virtual bool addQueueObject(QueueObject object) = 0;
+    virtual bool addQueueObject(std::shared_ptr<QueueObject> object) = 0;
   };
 }  // namespace omush
 

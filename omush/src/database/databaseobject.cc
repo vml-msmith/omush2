@@ -25,4 +25,19 @@ namespace omush {
     return type_;
   }
 
+  void DatabaseObject::setLocation(std::shared_ptr<IDatabaseObject> location) {
+    if (location == nullptr)
+      return;
+
+    location_ = location;
+  }
+
+  void DatabaseObject::getLocation(std::shared_ptr<IDatabaseObject> &location) {
+    if (location_ == nullptr)
+      return;
+    else
+      location = location_;
+  }
+
+
 }  // namespace omush

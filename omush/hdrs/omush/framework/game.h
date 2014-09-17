@@ -46,8 +46,10 @@ namespace omush {
                                                 std::string message) override;
     virtual void sendNetworkMessage(Connection connection,
                                     std::string message);
-    virtual bool getObjectUUIDFromDescriptor(DescriptorID id,
-                                             library::uuid &uid) override;
+    virtual bool getObjectUUIDFromDescriptor(library::uuid uid,
+                                             DescriptorID &id) override;
+    virtual bool getDescriptorFromObjectUUID(library::uuid uid,
+                                             DescriptorID &id) override;
     virtual void addObjectUUIDForDescriptor(DescriptorID id,
                                             library::uuid uid) override;
     virtual void removeObjectUUIDForDescriptor(DescriptorID id,

@@ -19,6 +19,8 @@ namespace omush {
     virtual bool addObject(std::shared_ptr<IDatabaseObject> object) override;
     virtual bool getObjectsByType(DatabaseObjectType type,
                                   UuidToDbObjectMap *map) override;
+    virtual bool getObjectByUUID(library::uuid uuid,
+                                 std::shared_ptr<IDatabaseObject>& object) override;
    private:
     typedef std::map<library::uuid,std::shared_ptr<IDatabaseObject>> UuidToObjectMap;
     typedef std::pair<library::uuid,std::shared_ptr<IDatabaseObject>> UuidToObjectMapPair;

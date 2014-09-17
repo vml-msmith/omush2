@@ -23,11 +23,14 @@ namespace omush {
     virtual library::uuid getUuid() const override;
     virtual DatabaseObjectType getType() const override;
     virtual void setName(std::string name) override;
+    virtual void setLocation(std::shared_ptr<IDatabaseObject> location) override;
+    virtual void getLocation(std::shared_ptr<IDatabaseObject> &location) override;
 
    protected:
     std::string name_;
     DatabaseObjectType type_;
     library::uuid uuid_;
+    std::shared_ptr<IDatabaseObject> location_;
    private:
 
   };

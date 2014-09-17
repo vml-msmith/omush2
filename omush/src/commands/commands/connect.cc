@@ -13,6 +13,7 @@
 #include "omush/library/log.h"
 #include "omush/database/databaseobject.h"
 #include "omush/database/databasematcher.h"
+#include "omush/actions/actions/connect.h"
 
 namespace omush {
   namespace command {
@@ -36,8 +37,10 @@ namespace omush {
     Connect::Connect() {
     }
 
-    bool Connect::execute(CommandScope scope) {
+    bool Connect::execute(std::shared_ptr<CommandScope> scope) {
       ConnectDefinition def;
+      std::shared_ptr<QueueObject> queueObject(scope->queueObject);
+
       std::string userName = "";
       std::string password = "";
 
@@ -46,7 +49,7 @@ namespace omush {
         try {
           std::regex rx(p.c_str(), std::regex::icase);
           std::smatch what;
-          if (std::regex_match(scope.originalString, what, rx)) {
+          if (std::regex_match(queueObject->originalString, what, rx)) {
             for (size_t i = 0; i < what.size(); ++i) {
               std::ssub_match sub_match = what[i];
               std::string piece = sub_match.str();
@@ -66,17 +69,17 @@ namespace omush {
 
 
       std::shared_ptr<IDatabaseObject> object;
-      if (DatabaseMatcher::findPlayer(scope.gameInstance->database.get(),
+      if (DatabaseMatcher::findPlayer(queueObject->gameInstance->database.get(),
                                       userName,
                                       object)) {
-        scope.gameInstance->game->addObjectUUIDForDescriptor(scope.descId,
+        queueObject->gameInstance->game->addObjectUUIDForDescriptor(queueObject->descId,
                                                              object->getUuid());
-        // Action connect.
-        scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId,
-                                                                 "Hello " + object->getName() + "!");
+        actions::Connect connectAction;
+        connectAction.setPlayer(object);
+        connectAction.enact(makeActionScope(scope));
       }
       else {
-        scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId,
+        queueObject->gameInstance->game->sendNetworkMessageByDescriptor(queueObject->descId,
                                                                  "Can't find anyone with that name!");
       }
 

@@ -44,7 +44,6 @@ namespace omush {
     if (instance_->network != nullptr)
       instance_->network->start();
 
-
     initialized_ = true;
     return true;
   }
@@ -62,7 +61,6 @@ namespace omush {
     }
 
     instance_->network->poll();
-
     loopNewMessages_();
     loopQueues_();
 
@@ -98,6 +96,18 @@ namespace omush {
 
     uid = it->second;
     return true;
+  }
+
+  bool Game::getDescriptorFromObjectUUID(library::uuid uid,
+                                         DescriptorID &id) {
+    for (auto& it : descriptorsToDb_) {
+      if (it.second == uid) {
+        id = it.first;
+        return true;
+      }
+    }
+
+    return false;
   }
 
   void Game::addObjectUUIDForDescriptor(DescriptorID id,
@@ -141,16 +151,22 @@ namespace omush {
     descriptorQueue_.loop(instance_, &discardQueue);
 
     while (!discardQueue.empty()) {
-      QueueObject object = discardQueue.front();
+      std::shared_ptr<QueueObject> object = discardQueue.front();
       discardQueue.pop();
 
-      if (!library::is_null(object.enactor)) {
+      if (!library::is_null(object->enactor)) {
         instance_->commandQueue->addQueueObject(object);
       }
       else {
-        object.originalString = "HUH";
-        descriptorQueue_.addQueueObject(object);
-        object.originalString = "WELCOME_SCREEN";
+        std::shared_ptr<QueueObject> huh(new QueueObject);
+        huh->gameInstance = object->gameInstance;
+        huh->descId = object->descId;
+        huh->enactor = object->enactor;
+        huh->executor = object->enactor;
+        huh->caller = object->enactor;
+        object->originalString = "WELCOME_SCREEN";
+        huh->originalString = "HUH";
+        descriptorQueue_.addQueueObject(huh);
         descriptorQueue_.addQueueObject(object);
       }
     }
@@ -162,29 +178,30 @@ namespace omush {
       instance_->commandQueue->loop(instance_, &discardQueue);
 
       while (!discardQueue.empty()) {
-        QueueObject object = discardQueue.front();
+        std::shared_ptr<QueueObject> object = discardQueue.front();
         discardQueue.pop();
 
-        if (!library::is_null(object.enactor)) {
-          object.originalString = "HUH";
+        if (!library::is_null(object->enactor)) {
+          object->originalString = "HUH";
           instance_->commandQueue->addQueueObject(object);
         }
+
       }
     }
   }
 
   void Game::processIncommingNetworkPacket_(Connection conn,
                                             NetworkPacket packet) {
-    QueueObject object;
-    object.gameInstance = instance_;
-    object.descId = conn.id;
-    object.originalString = packet.text;
+    std::shared_ptr<QueueObject> object(new QueueObject);
+    object->gameInstance = instance_;
+    object->descId = conn.id;
+    object->originalString = packet.text;
 
     library::uuid uid;
     if (getObjectUUIDFromDescriptor(conn.id, uid)) {
-      object.enactor = uid;
-      object.caller = uid;
-      object.executor = uid;
+      object->enactor = uid;
+      object->caller = uid;
+      object->executor = uid;
     }
 
     descriptorQueue_.addQueueObject(object);
@@ -205,10 +222,10 @@ namespace omush {
     connectedDescriptors_[id] = Connection(id);
     *conn =  connectedDescriptors_[id];
 
-    QueueObject object;
-    object.gameInstance = instance_;
-    object.descId = conn->id;
-    object.originalString = "WELCOME_SCREEN";
+    std::shared_ptr<QueueObject> object(new QueueObject);
+    object->gameInstance = instance_;
+    object->descId = conn->id;
+    object->originalString = "WELCOME_SCREEN";
 
     descriptorQueue_.addQueueObject(object);
     return true;

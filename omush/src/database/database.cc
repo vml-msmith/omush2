@@ -44,4 +44,16 @@ namespace omush {
                                                      UuidToObjectMap()));
   }
 
+
+  bool Database::getObjectByUUID(library::uuid uuid,
+                                 std::shared_ptr<IDatabaseObject>& object)  {
+    UuidToObjectMap::iterator iter = objectMap_.find(uuid);
+    if (iter == objectMap_.end()) {
+      object = nullptr;
+      return false;
+    }
+
+    object = iter->second;
+    return true;
+  }
 }  // namespace omush

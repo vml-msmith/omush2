@@ -15,8 +15,8 @@ namespace omush {
    public:
     DescriptorCommandQueue();
     ~DescriptorCommandQueue();
-    virtual bool loop(IGameInstance* gameInstance, QueueObjectQueue *discard);
-    virtual bool addQueueObject(QueueObject object);
+    virtual bool loop(IGameInstance* gameInstance, QueueObjectQueue *discard) override;
+    virtual bool addQueueObject(std::shared_ptr<QueueObject> object) override;
    private:
     std::shared_ptr<ICommandParser> commandParser_;
     QueueObjectQueue queue_;

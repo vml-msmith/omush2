@@ -34,8 +34,10 @@ namespace omush {
     Help::Help() {
     }
 
-    bool Help::execute(CommandScope scope) {
+    bool Help::execute(std::shared_ptr<CommandScope> scope) {
       HelpDefinition def;
+      std::shared_ptr<QueueObject> queueObject(scope->queueObject);
+
       std::string term = "";
 
       std::vector<std::string> patterns = def.patterns();
@@ -43,7 +45,7 @@ namespace omush {
         try {
           std::regex rx(p.c_str(), std::regex::icase);
           std::smatch what;
-          if (std::regex_match(scope.originalString, what, rx)) {
+          if (std::regex_match(queueObject->originalString, what, rx)) {
             for (size_t i = 0; i < what.size(); ++i) {
               std::ssub_match sub_match = what[i];
               std::string piece = sub_match.str();
@@ -61,10 +63,13 @@ namespace omush {
       std::shared_ptr<HelpEntry> entry;
       if (MyHelp::startInstance("general")->getHelpByIndex(term, entry)) {
         std::string output = entry->index + "\n" + entry->details;
-        scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId, output);
+        queueObject->gameInstance->game->sendNetworkMessageByDescriptor(queueObject->descId, output);
       }
       else {
-        scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId, "Unable to find help on '" + term + "'.");
+        queueObject->
+        gameInstance->
+        game->
+        sendNetworkMessageByDescriptor(queueObject->descId, "Unable to find help on '" + term + "'.");
       }
       return true;
     }

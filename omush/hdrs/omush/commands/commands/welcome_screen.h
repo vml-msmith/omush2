@@ -22,7 +22,7 @@ namespace omush {
     class WelcomeScreen :  public ICommand {
      public:
       WelcomeScreen();
-      virtual bool execute(CommandScope scope) override;
+      virtual bool execute(std::shared_ptr<CommandScope> scope) override;
      private:
     };
   }  // namespace command

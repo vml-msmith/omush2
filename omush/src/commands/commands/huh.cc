@@ -11,6 +11,7 @@
 #include "omush/framework/igame.h"
 #include "omush/library/regex.h"
 #include "omush/library/log.h"
+#include "omush/notifier.h"
 
 namespace omush {
   namespace command {
@@ -32,11 +33,25 @@ namespace omush {
     Huh::Huh() {
     }
 
-    bool Huh::execute(CommandScope scope) {
-
+    bool Huh::execute(std::shared_ptr<CommandScope> scope) {
       std::string lines = "I don't recognize that command.";
 
-      scope.gameInstance->game->sendNetworkMessageByDescriptor(scope.descId, lines);
+      if (library::is_null(scope->queueObject->executor) &&
+          !library::is_null(scope->queueObject->descId)) {
+        scope->queueObject->gameInstance->game->sendNetworkMessageByDescriptor(scope->queueObject->descId,
+                                                                               lines);
+      }
+      else {
+        std::shared_ptr<IDatabaseObject> object;
+        if (scope->queueObject->gameInstance->database->getObjectByUUID(scope->queueObject->executor,
+                                                                        object)) {
+          Notifier::notify(NULL, object, lines, makeActionScope(scope));
+        }
+        else {
+          // TODO: Log this.
+        }
+      }
+
       return true;
     }
 

@@ -12,7 +12,7 @@
 
 namespace omush {
   class DatabaseMatcher {
-  public:
+   public:
     DatabaseMatcher();
 
     static bool findPlayer(IDatabase *db,

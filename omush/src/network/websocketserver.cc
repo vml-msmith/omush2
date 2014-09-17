@@ -49,6 +49,7 @@ namespace omush {
     catch (websocketpp::exception &e) {
       // TODO(msmith): These functions MAY throw exepctions, but I'm not
       //               sure what. They should be handled correctly.
+
       return false;
     }
 
@@ -108,10 +109,8 @@ namespace omush {
     ConnectionHdl hdl;
     DescriptorID id;
     NetworkPacket packet;
-
     std::tie(packet, id) = message;
     if (descriptorIDToHdl_(id, &hdl)) {
-      // TODO(msmith): Filter HTML characters since this is a websocket.
       std::string xml(packet.text);
 
       // Characters to be transformed.
@@ -133,6 +132,23 @@ namespace omush {
       while (std::string::npos != (pos = xml.find_first_of(reserved_chars, pos))) {
         xml.replace(pos, 1, transformations[xml[pos]]);
         pos++;
+      }
+
+      std::map<std::string, std::string> subs;
+      subs["x1lt|"]  = std::string("<");
+      subs["x1gt|"]  = std::string(">");
+      subs["x1bs|"]  = std::string("/");
+      subs["x1qt|"]  = std::string("\"");
+      for (auto ti = subs.begin(); ti != subs.end(); ti++) {
+        pos = pos = xml.find(ti->first);
+        if (pos == std::string::npos) {
+          continue;
+        }
+
+        while (pos != std::string::npos) {
+          xml.replace(pos, ti->first.length(), ti->second);
+          pos = xml.find(ti->first);
+        }
       }
 
       try {

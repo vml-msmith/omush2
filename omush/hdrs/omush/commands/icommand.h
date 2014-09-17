@@ -12,6 +12,7 @@
 #include "omush/network/common.h"
 #include "omush/framework/igameinstance.h"
 #include "omush/library/uuid.h"
+#include "omush/scope.h"
 
 namespace omush {
   class ICommand;
@@ -22,16 +23,12 @@ namespace omush {
     virtual std::vector<std::string> patterns() = 0;
   };
 
-  struct CommandScope {
-    std::string originalString;
-    DescriptorID descId;
-    IGameInstance *gameInstance;
-  };
+  //  typedef Scope CommandScope;
 
   class ICommand {
    public:
     ICommand() {}
-    virtual bool execute(CommandScope scope) = 0;
+    virtual bool execute(std::shared_ptr<CommandScope> scope) = 0;
    private:
   };
 

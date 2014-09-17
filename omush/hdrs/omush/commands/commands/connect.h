@@ -22,7 +22,7 @@ namespace omush {
     class Connect : public ICommand {
      public:
       Connect();
-      virtual bool execute(CommandScope scope) override;
+      virtual bool execute(std::shared_ptr<CommandScope> scope) override;
      private:
     };
   }  // namespace command

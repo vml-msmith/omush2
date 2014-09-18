@@ -20,8 +20,9 @@ namespace omush {
     virtual DatabaseObjectType getType() const = 0;
     virtual void setName(std::string name) = 0;
     virtual void setLocation(std::shared_ptr<IDatabaseObject> location) = 0;
+    virtual void addContent(std::shared_ptr<IDatabaseObject> content) = 0;
     virtual void getLocation(std::shared_ptr<IDatabaseObject> &location) = 0;
-   private:
+    virtual void getContents(std::vector<std::shared_ptr<IDatabaseObject>> &contents) = 0;
   };
 }  // namespace omush
 

@@ -13,6 +13,7 @@
 #include "omush/library/string.h"
 
 #include "omush/actions/actions/look.h"
+#include <boost/bind.hpp>
 
 namespace omush {
   namespace actions {
@@ -23,23 +24,29 @@ namespace omush {
       player_ = object;
     }
 
+
+    library::OString Connect::connectString(std::shared_ptr<IDatabaseObject> object) {
+      if (object == player_)
+        return library::OString("You have connected...");
+
+      // TODO(msmith): Format this name.
+      return library::OString(player_->getName() + " has connected.");
+    }
+
     void Connect::enact(std::shared_ptr<ActionScope> scope) {
-      //      scope->queueObject->gameInstance->game->sendNetworkMessageByDescriptor(scope->queueObject->descId,
-      //                                                                     "Hello " + player_->getName() + "!");
-      // Notify player he's connected.
-      // Notify other objects in room he's connected.
-      // Notify room he's connected.
       // Trigger aconnect on object.
       // Trigger aconnect on room
       // Trigger aconnect on global objects?
-      // Action Look
-      Notifier::notify(NULL, player_, library::string::OString("You have connected..."), scope);
-
+      Notifier::notifySurroundings(NULL,
+                                   player_,
+                                   boost::bind(&omush::actions::Connect::connectString,
+                                               this,
+                                                 ::_1),
+                                   scope);
 
       // Get the room.
       std::shared_ptr<IDatabaseObject> object = nullptr;
       player_->getLocation(object);
-      //      if (scope->queueObject->gameInstance->database->getObjectByUUID(scope->queueObject->executor,
       actions::Look lookAction;
       lookAction.setPlayer(player_);
       lookAction.setTarget(object);

@@ -49,8 +49,22 @@ namespace omush {
     factory.buildObject(DatabaseObjectDefinitionPlayer::getInstance(),
                         playerOne);
     playerOne->setName("One");
+
+// TODO(msmith): Abstract to a databasemove function.
     playerOne->setLocation(roomZero);
+    roomZero->addContent(playerOne);
     instance->database->addObject(playerOne);
+
+
+    std::shared_ptr<DatabaseObject> playerTwo;
+    factory.buildObject(DatabaseObjectDefinitionPlayer::getInstance(),
+                        playerTwo);
+    playerTwo->setName("Two");
+
+// TODO(msmith): Abstract to a databasemove function.
+    playerTwo->setLocation(roomZero);
+    roomZero->addContent(playerTwo);
+    instance->database->addObject(playerTwo);
     return true;
   }
 }  // namespace omush

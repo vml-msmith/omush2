@@ -127,6 +127,12 @@ namespace omush {
     descriptorsToDb_.erase(id);
   }
 
+  void Game::getDescriptorList(std::vector<DescriptorID> &descriptors) {
+    for (auto &it : connectedDescriptors_) {
+      descriptors.push_back(it.first);
+    }
+  }
+
   void Game::loopNewMessages_() {
     NetworkPacketDescriptorPair message;
 

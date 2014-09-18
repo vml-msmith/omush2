@@ -27,14 +27,17 @@ namespace omush {
     virtual void setName(std::string name) override;
     virtual void setLocation(std::shared_ptr<IDatabaseObject> location)
       override;
+    virtual void addContent(std::shared_ptr<IDatabaseObject> content)
+      override;
     virtual void getLocation(std::shared_ptr<IDatabaseObject> &location)
       override;
-
+    virtual void getContents(std::vector<std::shared_ptr<IDatabaseObject>> &contents) override;
    protected:
     std::string name_;
     DatabaseObjectType type_;
     library::uuid uuid_;
     std::shared_ptr<IDatabaseObject> location_;
+    std::map<library::uuid,std::shared_ptr<IDatabaseObject>> contents_;
   };
 
 

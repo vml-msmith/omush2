@@ -70,7 +70,6 @@ namespace omush {
       }
 
   OString::OString(const OString& other) {
-    //    nodes = other.makeNodeCopy();
     reset();
     for (std::deque<OStringNode*>::const_iterator i = other.nodes.begin();
          i != other.nodes.end();
@@ -162,6 +161,7 @@ namespace omush {
   }
 
   std::string OString::outString() {
+    printf("Inside.\n");
     std::string str;
     for (int i = 0; i < nodes.size(); ++i) {
 

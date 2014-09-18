@@ -1,11 +1,11 @@
 /**
- * \file connect.h
+ * \file say.h
  *
  * Copyright 2014 Michael Smith
  */
 
-#ifndef OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_CONNECT_H_
-#define OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_CONNECT_H_
+#ifndef OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_SAY_H_
+#define OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_SAY_H_
 
 #include "omush/actions/iaction.h"
 #include "omush/scope.h"
@@ -14,17 +14,19 @@
 
 namespace omush {
   namespace actions {
-    class Connect : public IAction {
+    class Say : public IAction {
      public:
-      Connect();
+      Say();
       void setPlayer(std::shared_ptr<IDatabaseObject> object);
+      void setText(std::string text);
+      library::OString makeString(std::shared_ptr<IDatabaseObject> object);
       void enact(std::shared_ptr<ActionScope> scope) override;
-
-      library::OString connectString(std::shared_ptr<IDatabaseObject> object);
      private:
       std::shared_ptr<IDatabaseObject> player_;
+      std::string text_;
+      std::shared_ptr<ActionScope> scope_;
     };
-  }  // namesapce actions
+  }  // namespace actions
 }  // namespace omush
 
-#endif  // OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_CONNECT_H_
+#endif  // OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_SAY_H_

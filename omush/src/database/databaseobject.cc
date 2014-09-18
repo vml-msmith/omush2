@@ -30,6 +30,15 @@ namespace omush {
       return;
 
     location_ = location;
+
+  }
+
+  void DatabaseObject::addContent(std::shared_ptr<IDatabaseObject> content) {
+    if (contents_.find(content->getUuid()) != contents_.end()) {
+      return;
+    }
+
+    contents_[content->getUuid()] = content;
   }
 
   void DatabaseObject::getLocation(std::shared_ptr<IDatabaseObject> &location) {
@@ -37,6 +46,12 @@ namespace omush {
       return;
     else
       location = location_;
+  }
+
+  void DatabaseObject::getContents(std::vector<std::shared_ptr<IDatabaseObject>> &contents) {
+    for (auto &item : contents_) {
+      contents.push_back(item.second);
+    }
   }
 
 

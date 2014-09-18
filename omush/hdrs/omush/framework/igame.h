@@ -33,6 +33,7 @@ namespace omush {
                                             library::uuid uid) = 0;
     virtual void removeObjectUUIDForDescriptor(DescriptorID id,
                                                library::uuid uid) = 0;
+    virtual void getDescriptorList(std::vector<DescriptorID> &descriptors) = 0;
    private:
   };
 }  // namespace omush

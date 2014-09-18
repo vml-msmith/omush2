@@ -54,6 +54,7 @@ namespace omush {
                                             library::uuid uid) override;
     virtual void removeObjectUUIDForDescriptor(DescriptorID id,
                                                library::uuid uid) override;
+    virtual void getDescriptorList(std::vector<DescriptorID> &descriptors) override;
    private:
     virtual void loopNewMessages_();
     virtual void loopQueues_();

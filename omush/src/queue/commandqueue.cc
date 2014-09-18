@@ -12,6 +12,10 @@
 
 #include "omush/commands/commands/help.h"
 #include "omush/commands/commands/huh.h"
+#include "omush/commands/commands/say.h"
+#include "omush/commands/commands/pose.h"
+#include "omush/commands/commands/semipose.h"
+#include "omush/commands/commands/who.h"
 
 namespace omush {
   CommandQueue::CommandQueue() {
@@ -19,6 +23,11 @@ namespace omush {
     commandParser_ = std::shared_ptr<ICommandParser>(new CommandParser());
     commandParser_->registerCommand(CommandDefinitionPtr(new command::HelpDefinition));
     commandParser_->registerCommand(CommandDefinitionPtr(new command::HuhDefinition));
+    commandParser_->registerCommand(CommandDefinitionPtr(new command::SayDefinition));
+    commandParser_->registerCommand(CommandDefinitionPtr(new command::PoseDefinition));
+    commandParser_->registerCommand(CommandDefinitionPtr(new command::SemiPoseDefinition));
+    commandParser_->registerCommand(CommandDefinitionPtr(new command::WhoDefinition));
+
 
     commandParser_->registerMatcher(std::move(std::unique_ptr<ICommandMatcher>(new AbsoluteCommandMatcher)));
     commandParser_->registerMatcher(std::move(std::unique_ptr<ICommandMatcher>(new PatternCommandMatcher)));

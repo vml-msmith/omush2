@@ -1,44 +1,47 @@
 /**
- * \file help.cc
+ * \file pose.cc
  *
  * Copyright 2014 Michael Smith
  */
 
-#include "omush/commands/commands/help.h"
+#include "omush/commands/commands/pose.h"
 #include <memory>
 #include <string>
 #include <vector>
-#include "omush/framework/igame.h"
+#include "omush/database/databaseobject.h"
+
 #include "omush/library/regex.h"
 #include "omush/library/log.h"
-#include "omush/help/help.h"
+#include "omush/actions/actions/pose.h"
 
 namespace omush {
   namespace command {
 
-    std::string HelpDefinition::name() {
-      return "HELP";
+    std::string PoseDefinition::name() {
+      return "POSE";
     }
 
-    std::unique_ptr<ICommand> HelpDefinition::factory() {
-      return std::unique_ptr<ICommand>(new Help);
+    std::unique_ptr<ICommand> PoseDefinition::factory() {
+      return std::unique_ptr<ICommand>(new Pose);
     }
 
-    std::vector<std::string> HelpDefinition::patterns() {
+    std::vector<std::string> PoseDefinition::patterns() {
       std::vector<std::string> patterns;
-      patterns.push_back("help[[:space:]]?(.+)?");
+      patterns.push_back("pose (.+)");
+      patterns.push_back(": (.+)");
+      patterns.push_back(":(.+)");
+
       return patterns;
     }
 
-    Help::Help() {
+    Pose::Pose() {
     }
 
-    bool Help::execute(std::shared_ptr<CommandScope> scope) {
-      HelpDefinition def;
+    bool Pose::execute(std::shared_ptr<CommandScope> scope) {
+      PoseDefinition def;
       std::shared_ptr<QueueObject> queueObject(scope->queueObject);
 
-      std::string term = "";
-
+      std::string say;
       std::vector<std::string> patterns = def.patterns();
       for (auto p : patterns) {
         try {
@@ -49,7 +52,7 @@ namespace omush {
               std::ssub_match sub_match = what[i];
               std::string piece = sub_match.str();
             }
-            term = what[1];
+            say = what[1];
             break;
           }
         } catch (std::regex_error &e) {
@@ -59,17 +62,21 @@ namespace omush {
         }
       }
 
-      std::shared_ptr<HelpEntry> entry;
-      if (MyHelp::startInstance("general")->getHelpByIndex(term, entry)) {
-        std::string output = entry->index + "\n" + entry->details;
-        queueObject->gameInstance->game->sendNetworkMessageByDescriptor(queueObject->descId, output);
+
+
+      std::shared_ptr<IDatabaseObject> object;
+      if (scope->queueObject->gameInstance->database->getObjectByUUID(scope->queueObject->executor,
+                                                                      object)) {
+
+        actions::Pose poseAction;
+        poseAction.setPlayer(object);
+        poseAction.setText(say);
+        poseAction.enact(makeActionScope(scope));
       }
       else {
-        queueObject->
-        gameInstance->
-        game->
-        sendNetworkMessageByDescriptor(queueObject->descId, "Unable to find help on '" + term + "'.");
+        // TODO: Log this.
       }
+
       return true;
     }
 

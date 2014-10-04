@@ -13,16 +13,16 @@
 #include "omush/network/common.h"
 #include "omush/queue/descriptorcommandqueue.h"
 #include "omush/library/uuid.h"
-
+#include "omush/library/time.h"
 #include <boost/archive/text_oarchive.hpp>
-
+  #include "boost/date_time/gregorian/gregorian.hpp"
 namespace omush {
+    using namespace boost::gregorian;
   class IGameInstance;
   class Game : public IGame {
-   protected:
-    struct Connection {
-      DescriptorID id;
-      std::string rebootId;
+   public:
+    struct Connection :  IGame::Connection {
+
       friend class boost::serialization::access;
       // When the class Archive corresponds to an output archive, the
       // & operator is defined similar to <<.  Likewise, when the class Archive
@@ -30,11 +30,28 @@ namespace omush {
       template<class Archive>
       void serialize(Archive & ar, const unsigned int version);
 
-      Connection() {}
-      Connection(DescriptorID id) : id(id) {}
+      Connection() {
+        connectTime = library::currentTime();
+        lastActiveTime = connectTime;
+        boost::posix_time::ptime time_t_epoch(date(1970,1,1));
+        boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
+        boost::posix_time::time_duration diff = connectTime - time_t_epoch;
+        std::cout << "other create: " << diff.total_milliseconds() << std::endl;
+      }
+      Connection(DescriptorID id) {
+        this->id = id;
+        connectTime = library::currentTime();
+        lastActiveTime = connectTime;
+      }
+
+      Connection( const Connection& other ) {
+        id= other.id;
+        rebootId = other.rebootId;
+        connectTime = other.connectTime;
+        lastActiveTime = other.lastActiveTime;
+      }
     };
 
-   public:
     Game();
     virtual ~Game();
     virtual bool isInitialized() const override;
@@ -44,7 +61,7 @@ namespace omush {
     virtual void shutdown() override;
     virtual void sendNetworkMessageByDescriptor(DescriptorID id,
                                                 std::string message) override;
-    virtual void sendNetworkMessage(Connection connection,
+    virtual void sendNetworkMessage(std::shared_ptr<Connection> connection,
                                     std::string message);
     virtual bool getObjectUUIDFromDescriptor(library::uuid uid,
                                              DescriptorID &id) override;
@@ -55,24 +72,24 @@ namespace omush {
     virtual void removeObjectUUIDForDescriptor(DescriptorID id,
                                                library::uuid uid) override;
     virtual void getDescriptorList(std::vector<DescriptorID> &descriptors) override;
+    bool descriptorIDToConnection_(DescriptorID id, std::shared_ptr<IGame::Connection> &connection);
    private:
     virtual void loopNewMessages_();
     virtual void loopQueues_();
-    virtual void processIncommingNetworkPacket_(Connection conn,
+    virtual void processIncommingNetworkPacket_(std::shared_ptr<IGame::Connection> conn,
                                                 NetworkPacket packet);
 
     virtual void createRebootFiles_();
     virtual void reboot_();
 
-    typedef std::map<DescriptorID, Connection> DescriptorMap;
+    typedef std::map<DescriptorID, std::shared_ptr<Connection>> DescriptorMap;
     typedef std::map<DescriptorID, library::uuid> DescriptorToUUIDMap;
 
     DescriptorMap connectedDescriptors_;
     DescriptorToUUIDMap descriptorsToDb_;
 
-    bool descriptorIDToConnection_(DescriptorID id, Connection* connection);
     bool newConnection_(DescriptorID id,
-                        Connection* conn);
+                        std::shared_ptr<IGame::Connection> &conn);
 
     bool initialized_;
     bool isRebooting_;

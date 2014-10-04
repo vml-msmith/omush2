@@ -41,7 +41,7 @@ namespace omush {
       lines += "  CONNECT <name> <password>...............Connect to a pre-existing account.\n";
       lines += "  HELP..............................................Display the help system.\n";
       lines += "  QUIT.............................................Disconnect from the game.\n";
-
+      std::cout <<"Adn here" << std::endl;
       scope->queueObject->gameInstance->game->sendNetworkMessageByDescriptor(scope->queueObject->descId, lines);
       return true;
     }

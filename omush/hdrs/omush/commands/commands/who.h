@@ -13,6 +13,7 @@
 #include <vector>
 #include "omush/commands/icommand.h"
 #include "omush/library/string.h"
+#include "omush/library/time.h"
 
 namespace omush {
   namespace command {
@@ -30,33 +31,13 @@ namespace omush {
      private:
       struct WhoColumn {
         size_t length;
-        std::string value;
-      WhoColumn(std::string val, size_t size) : length(size), value(val) {}
+        library::OString value;
+      WhoColumn(library::OString val, size_t size) : length(size), value(val) {}
       };
 
-
-      library::OString formatColumns(std::vector<WhoColumn> columns) {
-        std::string line = "";
-
-        for (std::vector<WhoColumn>::iterator it = columns.begin();
-             it != columns.end();
-             ++it) {
-          std::string val = (*it).value;
-          size_t size = (*it).length;
-
-          if (val.length() > size - 1) {
-            val = val.substr(0, size - 1);
-          }
-
-          line += val;
-          for (int i = 0; i < size - val.length(); ++i) {
-            line += " ";
-          }
-        }
-
-        return library::OString(line);
-      }
-
+      library::OString formatOnFor(library::time_duration time);
+      library::OString formatIdle(library::time_duration time);
+      library::OString formatColumns(std::vector<WhoColumn> columns);
     };
   }  // namespace command
 }  // namespace omush

@@ -8,6 +8,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "omush/framework/strings.h"
 #include "omush/framework/igame.h"
 #include "omush/library/regex.h"
 #include "omush/library/log.h"
@@ -34,7 +35,7 @@ namespace omush {
     }
 
     bool Huh::execute(std::shared_ptr<CommandScope> scope) {
-      std::string lines = "I don't recognize that command.";
+      std::string lines = Strings::get("COMMAND_NOT_FOUND");
 
       if (library::is_null(scope->queueObject->executor) &&
           !library::is_null(scope->queueObject->descId)) {

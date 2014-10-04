@@ -9,6 +9,7 @@
 
 #include "omush/network/common.h"
 #include "omush/library/uuid.h"
+#include "omush/library/time.h"
 
 namespace omush {
   struct IGameInstance;
@@ -16,6 +17,14 @@ namespace omush {
 
   class IGame {
    public:
+    struct Connection {
+     public:
+      DescriptorID id;
+      std::string rebootId;
+      library::time connectTime;
+      library::time lastActiveTime;
+    };
+
     IGame() {}
     virtual ~IGame() {}
     virtual bool isInitialized() const = 0;
@@ -34,6 +43,8 @@ namespace omush {
     virtual void removeObjectUUIDForDescriptor(DescriptorID id,
                                                library::uuid uid) = 0;
     virtual void getDescriptorList(std::vector<DescriptorID> &descriptors) = 0;
+    virtual bool descriptorIDToConnection_(DescriptorID id,
+                                           std::shared_ptr<IGame::Connection> &connection) = 0;
    private:
   };
 }  // namespace omush

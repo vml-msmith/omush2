@@ -19,6 +19,9 @@
 #include "omush/network/inetworkmanager.h"
 #include "omush/network/common.h"
 
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
 
 namespace omush {
   Game::Game() : initialized_(false), isRebooting_(false) {
@@ -78,9 +81,9 @@ namespace omush {
                                                                 id));
   }
 
-  void Game::sendNetworkMessage(Connection conn,
+  void Game::sendNetworkMessage(std::shared_ptr<Connection> conn,
                                 std::string message) {
-    sendNetworkMessageByDescriptor(conn.id, message);
+    sendNetworkMessageByDescriptor(conn->id, message);
   }
 
   void Game::shutdown() {
@@ -141,9 +144,11 @@ namespace omush {
       NetworkPacket packet;
       std::tie(packet, id)  = message;
 
-      Connection conn;
-      if (!descriptorIDToConnection_(id, &conn)) {
-        newConnection_(id, &conn);
+      std::shared_ptr<IGame::Connection> conn;
+      const std::string tmp = boost::lexical_cast<std::string>(id);
+
+      if (!descriptorIDToConnection_(id, conn)) {
+        newConnection_(id, conn);
       } else {
         processIncommingNetworkPacket_(conn, packet);
       }
@@ -177,8 +182,6 @@ namespace omush {
       }
     }
 
-
-
     if (instance_->commandQueue != nullptr) {
       descriptorQueue_.loop(instance_, &discardQueue);
       instance_->commandQueue->loop(instance_, &discardQueue);
@@ -196,15 +199,15 @@ namespace omush {
     }
   }
 
-  void Game::processIncommingNetworkPacket_(Connection conn,
+  void Game::processIncommingNetworkPacket_(std::shared_ptr<IGame::Connection> conn,
                                             NetworkPacket packet) {
     std::shared_ptr<QueueObject> object(new QueueObject);
     object->gameInstance = instance_;
-    object->descId = conn.id;
+    object->descId = conn->id;
     object->originalString = packet.text;
 
     library::uuid uid;
-    if (getObjectUUIDFromDescriptor(conn.id, uid)) {
+    if (getObjectUUIDFromDescriptor(conn->id, uid)) {
       object->enactor = uid;
       object->caller = uid;
       object->executor = uid;
@@ -214,23 +217,24 @@ namespace omush {
   }
 
   bool Game::descriptorIDToConnection_(DescriptorID id,
-                                       Connection* connection) {
+                                       std::shared_ptr<IGame::Connection> &connection) {
     if (connectedDescriptors_.find(id) == connectedDescriptors_.end()) {
       return false;
     }
 
-    *connection = connectedDescriptors_[id];
+    connection = connectedDescriptors_[id];
     return true;
   }
 
   bool Game::newConnection_(DescriptorID id,
-                            Connection* conn) {
-    connectedDescriptors_[id] = Connection(id);
-    *conn =  connectedDescriptors_[id];
+                            std::shared_ptr<IGame::Connection>& conn) {
+    connectedDescriptors_[id] = std::shared_ptr<Connection>(new Connection(id));
+    conn = connectedDescriptors_[id];
 
     std::shared_ptr<QueueObject> object(new QueueObject);
     object->gameInstance = instance_;
     object->descId = conn->id;
+    const std::string tmp = boost::lexical_cast<std::string>(connectedDescriptors_[id]->id);
     object->originalString = "WELCOME_SCREEN";
 
     descriptorQueue_.addQueueObject(object);

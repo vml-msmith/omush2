@@ -17,6 +17,66 @@ namespace omush {
         return boost::iequals(left, right);
       }
 
+      enum SplitStringOptions {
+        leftToRight,
+        rightToLeft,
+      };
+
+      inline std::vector<std::string> splitIntoSegments(std::string str,
+                                                       std::string sep,
+                                                       int segments,
+                                                       SplitStringOptions direction) {
+        if (segments < 0)
+          segments = 1000;
+
+        std::vector<std::string> result;
+        int i = 0;
+        std::size_t pos;
+        if (direction == leftToRight) {
+          pos = str.find(sep);
+        }
+        else {
+          pos = str.rfind(sep);
+        }
+
+        while (i < (segments - 1) && pos != std::string::npos) {
+          result.push_back(str.substr(0,pos));
+          str = str.substr(pos + 1, str.length() - pos + 1);
+
+          if (direction == leftToRight) {
+            pos = str.find(sep);
+          }
+          else {
+            pos = str.rfind(sep);
+          }
+
+          ++i;
+        }
+
+        result.push_back(str);
+        /*
+          if (direction == rightToLeft) {
+          std::vector<std::string> newResult;
+          for (int i = result.size() - 1; i >= 0; --i) {
+          newResult.push_back(result[i]);
+          }
+          return newResult;
+          }*/
+        return result;
+      }
+
+      inline std::vector<std::string> splitIntoSegments(std::string str,
+                                                        std::string sep,
+                                                        int segments) {
+        return splitIntoSegments(str, sep, segments, leftToRight);
+      }
+
+      inline std::vector<std::string> splitIntoSegments(std::string str,
+                                                        std::string sep) {
+        return  splitIntoSegments(str, sep, -1);
+      }
+
+
       class OString {
       private:
         class ColorSequence {

@@ -10,12 +10,16 @@
 #include <vector>
 #include "omush/database/databaseobject.h"
 #include "omush/framework/igame.h"
+#include "omush/framework/game.h"
 #include "omush/library/regex.h"
 #include "omush/library/log.h"
 #include "omush/notifier.h"
+#include <boost/lexical_cast.hpp>
+  #include "boost/date_time/gregorian/gregorian.hpp"
 
 namespace omush {
   namespace command {
+    using namespace boost::gregorian;
 
     std::string WhoDefinition::name() {
       return "WHO";
@@ -33,6 +37,69 @@ namespace omush {
     }
 
     Who::Who() {
+    }
+
+    library::OString Who::formatOnFor(library::time_duration time) {
+      int t = time.ticks() / 1000000;
+
+      int hours = t / 3600;
+      int minutes = (t - (hours * 3600)) / 60;
+
+      std::string sHours = boost::lexical_cast<std::string>(hours);
+      if (sHours.length() <= 1)
+        sHours = "0" + sHours;
+
+      std::string sMinutes = boost::lexical_cast<std::string>(minutes);
+      if (sMinutes.length() <= 1)
+        sMinutes= "0" + sMinutes;
+
+      return library::OString(sHours + ":" + sMinutes);
+    }
+
+    library::OString Who::formatIdle(library::time_duration time) {
+      int t = time.ticks() / 1000000;
+
+      int hours = t/ 3600;
+      if (hours > 0) {
+        std::string sHours = boost::lexical_cast<std::string>(hours);
+        sHours += "h";
+        return sHours;
+      }
+
+      int minutes = t / 60;
+      if (minutes > 0) {
+        std::string sHours = boost::lexical_cast<std::string>(minutes);
+        sHours += "m";
+        return sHours;
+      }
+
+      int secs = t;
+      return library::OString(boost::lexical_cast<std::string>(t) + "s");
+    }
+
+    library::OString Who::formatColumns(std::vector<WhoColumn> columns) {
+      std::string line = "";
+
+      for (std::vector<WhoColumn>::iterator it = columns.begin();
+           it != columns.end();
+           ++it) {
+
+        // TODO(msmith): Fix this to use the correct OString manipulation
+        // methods.
+        std::string val = (*it).value.outString();
+        size_t size = (*it).length;
+
+        if (val.length() > size - 1) {
+          val = val.substr(0, size - 1);
+        }
+
+        line += val;
+        for (int i = 0; i < size - val.length(); ++i) {
+          line += " ";
+        }
+      }
+
+      return library::OString(line);
     }
 
     bool Who::execute(std::shared_ptr<CommandScope> scope) {
@@ -69,26 +136,68 @@ namespace omush {
       size_t doingSize = 15;
 
       std::vector<WhoColumn> columns;
-      columns.push_back(WhoColumn("Name", nameSize));
-      columns.push_back(WhoColumn("Flags", flagSize));
-      columns.push_back(WhoColumn("OnFor", onForSize));
-      columns.push_back(WhoColumn("Idle", idleSize));
-      columns.push_back(WhoColumn("Class/Pos", classSize));
-      columns.push_back(WhoColumn("Emp", empireSize));
-      columns.push_back(WhoColumn("Doing", doingSize));
+      columns.push_back(WhoColumn(library::OString("Name"), nameSize));
+      columns.push_back(WhoColumn(library::OString("Flags"), flagSize));
+      columns.push_back(WhoColumn(library::OString("OnFor"), onForSize));
+      columns.push_back(WhoColumn(library::OString("Idle"), idleSize));
+      columns.push_back(WhoColumn(library::OString("Class/Pos"), classSize));
+      columns.push_back(WhoColumn(library::OString("Emp"), empireSize));
+      columns.push_back(WhoColumn(library::OString("Doing"), doingSize));
 
 
       library::OString output = formatColumns(columns);
 
       std::vector<DescriptorID> descs;
       scope->queueObject->gameInstance->game->getDescriptorList(descs);
+      // TODO(msmith): Possibly sort the entries in descs.
+      library::time currentTime = library::currentTime();
       for (auto iter : descs) {
-        columns[0].value = "...";
-        columns[1].value = "...";
-        columns[2].value = "...";
-        columns[3].value = "...";
-        columns[4].value = "...";
-        columns[5].value = "...";
+        library::uuid uuid;
+        if (!scope->queueObject->gameInstance->game->getObjectUUIDFromDescriptor(iter,
+                                                                                uuid)) {
+          continue;
+        }
+
+        std::shared_ptr<IDatabaseObject> object;
+        if (!scope->queueObject->gameInstance->database->getObjectByUUID(uuid,
+                                                                        object)) {
+          continue;
+        }
+
+        std::shared_ptr<IGame::Connection> conn;
+        if (!scope->queueObject->gameInstance->game->descriptorIDToConnection_(iter, conn)) {
+          continue;
+        }
+
+        //        library::time myEpoch(boost::posix_time::date(1970,Jan,1))
+        boost::posix_time::ptime time_t_epoch(date(1970,1,1));
+        boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
+        boost::posix_time::time_duration diff = conn->connectTime - time_t_epoch;
+        std::cout << "Out: " <<  diff.total_milliseconds() << std::endl;
+
+        // Get the logged in user.
+        // Name
+        columns[0].value = library::OString(object->getName());
+
+        // Flags
+        columns[1].value = library::OString("...");
+
+        // OnFor
+        columns[2].value = formatOnFor(currentTime - conn->connectTime);
+
+        // Idle
+        columns[3].value = formatIdle(currentTime - conn->lastActiveTime);
+
+        // Class/Pos
+        columns[4].value = library::OString("...");
+
+        // Emp
+        columns[5].value = library::OString("...");
+
+        // Doing
+        columns[6].value = library::OString("...");
+
+        output += library::OString("\n") + formatColumns(columns);
       }
 
 
@@ -107,19 +216,6 @@ namespace omush {
           // TODO: Log this.
         }
       }
-      /*
-      std::shared_ptr<IDatabaseObject> object;
-      if (scope->queueObject->gameInstance->database->getObjectByUUID(scope->queueObject->executor,
-                                                                      object)) {
-
-        actions::Who sayAction;
-        sayAction.setPlayer(object);
-        sayAction.setText(say);
-        sayAction.enact(makeActionScope(scope));
-      }
-      else {
-        // TODO: Log this.
-        }*/
 
       return true;
     }

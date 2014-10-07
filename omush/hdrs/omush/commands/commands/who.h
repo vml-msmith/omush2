@@ -14,6 +14,7 @@
 #include "omush/commands/icommand.h"
 #include "omush/library/string.h"
 #include "omush/library/time.h"
+#include "omush/database/databaseobject.h"
 
 namespace omush {
   namespace command {
@@ -38,6 +39,8 @@ namespace omush {
       library::OString formatOnFor(library::time_duration time);
       library::OString formatIdle(library::time_duration time);
       library::OString formatColumns(std::vector<WhoColumn> columns);
+      library::OString formatFlagListForObject(const std::shared_ptr<IDatabase>& db,
+                                               const std::shared_ptr<IDatabaseObject>& object);
     };
   }  // namespace command
 }  // namespace omush

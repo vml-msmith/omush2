@@ -36,6 +36,14 @@ namespace omush {
 
   bool GameBuilder::setupDatabase(IGameInstance* instance) const {
     std::shared_ptr<IDatabase> dptr(new Database);
+
+    dptr->flags.addFlag(Flag("Director", 'D'));
+    dptr->flags.addFlag(Flag("Admin", 'A'));
+    dptr->flags.addFlag(Flag("Hidden", 'h'));
+    dptr->flags.addFlag(Flag("No_Walls", 'W'));
+    dptr->flags.addFlag(Flag("No_Gossip", 'G'));
+    dptr->flags.addFlag(Flag("Haven", 'H'));
+
     instance->database = dptr;
     DatabaseFactory factory;
 

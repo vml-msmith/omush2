@@ -15,7 +15,7 @@
 #include "omush/library/log.h"
 #include "omush/notifier.h"
 #include <boost/lexical_cast.hpp>
-  #include "boost/date_time/gregorian/gregorian.hpp"
+ #include "boost/date_time/gregorian/gregorian.hpp"
 
 namespace omush {
   namespace command {
@@ -180,7 +180,7 @@ namespace omush {
         columns[0].value = library::OString(object->getName());
 
         // Flags
-        columns[1].value = library::OString("...");
+        columns[1].value = formatFlagListForObject(scope->queueObject->gameInstance->database, object);
 
         // OnFor
         columns[2].value = formatOnFor(currentTime - conn->connectTime);
@@ -220,5 +220,25 @@ namespace omush {
       return true;
     }
 
+    library::OString Who::formatFlagListForObject(const std::shared_ptr<IDatabase>& db,
+                                                  const std::shared_ptr<IDatabaseObject>& object) {
+      std::vector<std::string> f;
+      f.push_back("Hidden");
+      f.push_back("Haven");
+      f.push_back("No_Walls");
+      f.push_back("No_Gossip");
+
+      std::string out = "";
+      for (auto name : f) {
+        Flag* flag = db->flags.getFlag(name);
+        if (flag != NULL && object->hasFlagByBit(flag->bit)) {
+          out += flag->letter;
+          continue;
+        }
+
+        out += " ";
+      }
+      return library::OString(out);
+    }
   }  // namespace command
 }  // namespace omush

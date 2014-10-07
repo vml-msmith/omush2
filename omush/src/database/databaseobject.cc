@@ -9,6 +9,17 @@
 #include "omush/library/uuid.h"
 
 namespace omush {
+  bool hasFlag(std::shared_ptr<IDatabase> &db,
+               std::shared_ptr<IDatabaseObject> &object,
+               std::string name) {
+    Flag* f = db->flags.getFlag(name);
+    if (f == NULL) {
+      return false;
+    }
+
+    return object->hasFlagByBit(f->bit);
+  }
+
   std::string DatabaseObject::getName() const {
     return name_;
   }
@@ -55,4 +66,17 @@ namespace omush {
   }
 
 
+  bool DatabaseObject::hasFlagByBit(uint64_t bit) const {
+    return (flags_ & bit) == bit;
+  }
+
+  void DatabaseObject::addFlagByBit(uint64_t bit) {
+    flags_ = (flags_ | bit);
+  }
+
+  void DatabaseObject::removeFlagByBit(uint64_t bit) {
+    if (hasFlagByBit(bit)) {
+        flags_ = (flags_ ^ bit);
+    }
+  }
 }  // namespace omush

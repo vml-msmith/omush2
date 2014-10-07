@@ -13,6 +13,10 @@
 namespace omush {
   namespace library {
     namespace string {
+      inline void to_upper(std::string str) {
+        return boost::to_upper(str);
+      }
+
       inline bool iequals(std::string left, std::string right) {
         return boost::iequals(left, right);
       }

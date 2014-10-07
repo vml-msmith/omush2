@@ -50,7 +50,6 @@ namespace omush {
           std::unique_ptr<ICommand> cmd = def->factory();
           std::shared_ptr<CommandScope> scope(new CommandScope());
           scope->queueObject = object;
-          std::cout << "Execute" << std::endl;
           cmd->execute(scope);
         }
       } else {

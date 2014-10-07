@@ -12,6 +12,7 @@
 #include <utility>
 #include "omush/database/idatabase.h"
 #include "omush/library/uuid.h"
+#include "omush/database/flag.h"
 
 namespace omush {
   class Database : public IDatabase {
@@ -23,6 +24,7 @@ namespace omush {
     virtual bool getObjectByUUID(library::uuid uuid,
                                  std::shared_ptr<IDatabaseObject>& object)
       override;
+
    private:
     typedef std::map<library::uuid, std::shared_ptr<IDatabaseObject>>
       UuidToObjectMap;

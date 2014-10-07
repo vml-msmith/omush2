@@ -10,6 +10,7 @@
 #include <map>
 #include <memory>
 #include "omush/library/uuid.h"
+#include "omush/database/flag.h"
 
 namespace omush {
   enum DatabaseObjectType { THING = 0, PLAYER = 1, ROOM = 2 };
@@ -24,6 +25,7 @@ namespace omush {
                                  std::shared_ptr<IDatabaseObject>& object) = 0;
     virtual bool getObjectsByType(DatabaseObjectType type,
                                   UuidToDbObjectMap *map) = 0;
+    FlagDirectory flags;
   };
 }  // namespace omush
 

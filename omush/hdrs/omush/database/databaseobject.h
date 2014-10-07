@@ -15,6 +15,9 @@
 #include "omush/library/uuid.h"
 
 namespace omush {
+  bool hasFlag(std::shared_ptr<IDatabase> &db,
+               std::shared_ptr<IDatabaseObject> &object,
+               std::string name);
 
   class DatabaseObject : public IDatabaseObject {
     friend class DatabaseObjectDefinition;
@@ -32,7 +35,12 @@ namespace omush {
     virtual void getLocation(std::shared_ptr<IDatabaseObject> &location)
       override;
     virtual void getContents(std::vector<std::shared_ptr<IDatabaseObject>> &contents) override;
+    virtual bool hasFlagByBit(uint64_t bit) const override;
+    virtual void addFlagByBit(uint64_t bit) override;
+    virtual void removeFlagByBit(uint64_t bit) override;
+
    protected:
+    uint64_t flags_;
     std::string name_;
     DatabaseObjectType type_;
     library::uuid uuid_;

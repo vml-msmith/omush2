@@ -23,6 +23,9 @@ namespace omush {
     virtual void addContent(std::shared_ptr<IDatabaseObject> content) = 0;
     virtual void getLocation(std::shared_ptr<IDatabaseObject> &location) = 0;
     virtual void getContents(std::vector<std::shared_ptr<IDatabaseObject>> &contents) = 0;
+    virtual bool hasFlagByBit(uint64_t bit) const = 0;
+    virtual void addFlagByBit(uint64_t bit) = 0;
+    virtual void removeFlagByBit(uint64_t bit) = 0;
   };
 }  // namespace omush
 

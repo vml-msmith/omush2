@@ -118,7 +118,6 @@ namespace omush {
         try {
           std::cmatch what;
           if (std::regex_match(item.second->getName().c_str(), what, rx)) {
-            std::cout << "Partial match" << std::endl;
             partial->push_back(item.second);
           }
         } catch (std::regex_error &e) {

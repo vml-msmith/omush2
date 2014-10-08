@@ -8,6 +8,20 @@
 #include <boost/algorithm/string/replace.hpp>
 
 namespace omush {
+  void Strings::addStringIfNotPresent(std::string key,
+                             library::OString value) {
+    Strings &s = Strings::getInstance();
+    s.addStringIfNotPresent_(key, value);
+  }
+
+  void Strings::addStringIfNotPresent_(std::string key,
+                                       library::OString value) {
+    if (map_.find(key) != map_.end())
+      return;
+
+    map_.insert(std::pair<std::string,library::OString>(key, value));
+  }
+
   library::OString Strings::get(std::string key,
                                 std::shared_ptr<ActionScope> scope) {
     ReplaceMap replacements;
@@ -25,7 +39,7 @@ namespace omush {
   library::OString Strings::get(std::string key,
                                 ReplaceMap replacements) {
     Strings &s = Strings::getInstance();
-    library::OString outString = s._get(key);
+    library::OString outString = s.get_(key);
     std::string internalString = outString.internalString();
     for (auto& item : replacements) {
       boost::algorithm::replace_all(internalString,
@@ -42,19 +56,19 @@ namespace omush {
     return Strings::get(key, replacements);
   }
 
-  library::OString Strings::_get(std::string key) {
-    if (_map.find(key) == _map.end())
+  library::OString Strings::get_(std::string key) {
+    if (map_.find(key) == map_.end())
       return "STRING_NOT_FOUND: " + key;
 
     // TODO(msmith): Updates.
     // Count it?
     // Maybe look to see if it's soft coded.
-    return _map.find(key)->second;
+    return map_.find(key)->second;
   }
 
   Strings::Strings() {
     // TODO(msmith): Localize 'em.
-    _map.insert(std::pair<std::string,std::string>("COMMAND_NOT_FOUND", "I don't recognize that command."));
+    map_.insert(std::pair<std::string,std::string>("COMMAND_NOT_FOUND", "I don't recognize that command."));
   }
 
 }  // namespace omush

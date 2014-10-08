@@ -18,17 +18,29 @@ namespace omush {
    public:
     typedef std::map<std::string,library::OString> ReplaceMap;
 
-    static library::OString get(std::string key, std::shared_ptr<ActionScope> scope);
-    static library::OString get(std::string key, std::shared_ptr<ActionScope> scope, ReplaceMap replacements);
-    static library::OString get(std::string key, ReplaceMap replacements);
+    static library::OString get(std::string key,
+                                  std::shared_ptr<ActionScope> scope);
+    static library::OString get(std::string key,
+                                  std::shared_ptr<ActionScope> scope,
+                                  ReplaceMap replacements);
+    static library::OString get(std::string key,
+                                  ReplaceMap replacements);
     static library::OString get(std::string key);
+
+    static void addStringIfNotPresent(std::string key,
+                                      library::OString value);
+
     static Strings& getInstance() {
       static Strings instance;
       return instance;
     }
-    library::OString _get(std::string key);
+
+    library::OString get_(std::string key);
+    void addStringIfNotPresent_(std::string key,
+                                library::OString value);
+
    private:
-    std::map<std::string, library::OString> _map;
+    std::map<std::string, library::OString> map_;
 
     Strings();
     Strings(Strings const&);

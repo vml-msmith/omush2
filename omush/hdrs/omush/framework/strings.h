@@ -9,26 +9,30 @@
 
 #include <string>
 #include <map>
+#include <memory>
+#include "omush/scope.h"
+#include "omush/library/string.h"
 
 namespace omush {
   class Strings {
    public:
-    static std::string get(std::string key);
+    typedef std::map<std::string,library::OString> ReplaceMap;
+
+    static library::OString get(std::string key, std::shared_ptr<ActionScope> scope);
+    static library::OString get(std::string key, std::shared_ptr<ActionScope> scope, ReplaceMap replacements);
+    static library::OString get(std::string key, ReplaceMap replacements);
+    static library::OString get(std::string key);
     static Strings& getInstance() {
-      static Strings    instance; // Guaranteed to be destroyed.
-                                  // Instantiated on first use.
+      static Strings instance;
       return instance;
     }
-    std::string _get(std::string key);
+    library::OString _get(std::string key);
    private:
-    std::map<std::string, std::string> _map;
+    std::map<std::string, library::OString> _map;
 
     Strings();
-    // Dont forget to declare these two. You want to make sure they
-    // are unaccessable otherwise you may accidently get copies of
-    // your singleton appearing.
-    Strings(Strings const&);              // Don't Implement
-    void operator=(Strings const&); // Don't implement
+    Strings(Strings const&);
+    void operator=(Strings const&);
   };
 }  // namespace omush
 

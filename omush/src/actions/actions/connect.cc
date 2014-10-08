@@ -15,7 +15,7 @@
 #include "omush/actions/actions/look.h"
 #include "omush/library/log.h"
 #include "omush/library/string.h"
-#include <iostream>
+
 namespace omush {
   namespace actions {
     Connect::Connect() {
@@ -23,8 +23,10 @@ namespace omush {
 
       if (hasAddedStrings == false) {
         Strings::ReplaceMap items;
-        items["ACTION_CONNECT__YOU_HAVE_CONNECTED"] = "You have connected...";
-        items["ACTION_CONNECT__OTHER_HAS_CONNECTED"] = "!playerName has connected.";
+        items["ACTION_CONNECT__YOU_HAVE_CONNECTED"] =
+          "You have connected...";
+        items["ACTION_CONNECT__OTHER_HAS_CONNECTED"] =
+          "!playerName has connected.";
         registerStrings_(items);
       }
     }
@@ -44,7 +46,8 @@ namespace omush {
       // TODO(msmith): Format this name.
       Strings::ReplaceMap replacements;
       replacements["!playerName"] = player_->getName();
-      return Strings::get("ACTION_CONNECT__OTHER_HAS_CONNECTED", replacements);
+      return Strings::get("ACTION_CONNECT__OTHER_HAS_CONNECTED",
+                          replacements);
     }
 
     void Connect::enact(std::shared_ptr<ActionScope> scope) {
@@ -52,6 +55,7 @@ namespace omush {
         library::log("action::Connect called without an enactor.");
         return;
       }
+
       scope_ = scope;
 
       doTriggerAConnectObject_(scope);

@@ -22,7 +22,10 @@ namespace omush {
     class Connect : public Action {
      public:
       /**
-       * Default constructor. Nothing special is setup.
+       * Default constructor.
+       *
+       * Will register strings used in this action with the Strings library the
+       * first time a Connect action is used.
        */
       Connect();
 

@@ -7,14 +7,14 @@
 #ifndef OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_POSE_H_
 #define OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_POSE_H_
 
-#include "omush/actions/iaction.h"
+#include "omush/actions/action.h"
 #include "omush/scope.h"
 #include "omush/database/databaseobject.h"
 #include "omush/library/string.h"
 
 namespace omush {
   namespace actions {
-    class Pose : public IAction {
+    class Pose : public Action {
      public:
       Pose();
       void setPlayer(std::shared_ptr<IDatabaseObject> object);

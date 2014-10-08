@@ -90,7 +90,7 @@ namespace omush {
         else {
           // Found one.
           actions::Look lookAction;
-          lookAction.setPlayer(looker);
+          lookAction.setEnactor(looker);
           lookAction.setTarget(targetObjects->front());
           lookAction.enact(makeActionScope(scope));
         }

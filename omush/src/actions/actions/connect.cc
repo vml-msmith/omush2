@@ -18,7 +18,7 @@
 
 namespace omush {
   namespace actions {
-    Connect::Connect() {
+    Connect::Connect() : player_(nullptr) {
       static bool hasAddedStrings = false;
 
       if (hasAddedStrings == false) {
@@ -47,6 +47,7 @@ namespace omush {
       Strings::ReplaceMap replacements;
       replacements["!playerName"] = player_->getName();
       return Strings::get("ACTION_CONNECT__OTHER_HAS_CONNECTED",
+                          scope_,
                           replacements);
     }
 
@@ -95,7 +96,7 @@ namespace omush {
       std::shared_ptr<IDatabaseObject> object = nullptr;
       player_->getLocation(object);
       actions::Look lookAction;
-      lookAction.setPlayer(player_);
+      lookAction.setEnactor(player_);
       lookAction.setTarget(object);
       lookAction.enact(scope);
     }

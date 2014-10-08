@@ -11,14 +11,23 @@
 #include "omush/library/string.h"
 #include "omush/notifier.h"
 #include "omush/library/log.h"
+#include "omush/database/nameformatter.h"
 
 namespace omush {
   namespace actions {
-    Look::Look() : player_(nullptr), target_(nullptr) {
-    }
-
-    void Look::setPlayer(std::shared_ptr<IDatabaseObject> object) {
-      player_ = object;
+    Look::Look() : target_(nullptr) {
+      static bool hasAddedStrings = false;
+      setEnactor(nullptr);
+      if (hasAddedStrings == false) {
+        Strings::ReplaceMap items;
+        /*
+        items["ACTION_CONNECT__YOU_HAVE_CONNECTED"] =
+          "You have connected...";
+        items["ACTION_CONNECT__OTHER_HAS_CONNECTED"] =
+          "!playerName has connected.";
+        */
+        registerStrings_(items);
+      }
     }
 
     void Look::setTarget(std::shared_ptr<IDatabaseObject> object) {
@@ -26,25 +35,66 @@ namespace omush {
     }
 
     void Look::enact(std::shared_ptr<ActionScope> scope) {
-      if (player_ == NULL || player_ == nullptr) {
+      if (enactor_ == NULL || enactor_ == nullptr) {
         library::log("action::Look called without an enactor.");
         return;
       }
 
-      if (target_ == NULL || player_ == nullptr) {
+      if (target_ == NULL || target_ == nullptr) {
         library::log("action::Look called without a target.");
         return;
       }
 
       library::string::OString lines;
-      lines = library::string::OString("You look around...\n");
+
+      lines += nameLine_(scope);
+      lines += descriptionLine_(scope);
+      lines += exitsLine_(scope);
+      lines += contentsLine_(scope);
+
+      Notifier::notify(NULL, enactor_, lines, scope);
+
+      //      lines += typeLine_();
+      //lines +=
+
       // TODO(msmith): This red is wrong.
+      /*
       Strings::ReplaceMap replacements;
       replacements["!name"] = library::OString::color(target_->getName(), "red");
       lines += Strings::get("You look at .. !name",
                             replacements);
-lines += "\n" + library::string::OString::color(target_->getName(), "red");
-      Notifier::notify(NULL, player_, lines, scope);
+      lines += "\n" + library::string::OString::color(target_->getName(), "red");
+      Notifier::notify(NULL, enactor_, lines, scope);*/
+    }
+
+    library::OString Look::nameLine_(
+        std::shared_ptr<ActionScope> scope) {
+      library::OString name;
+      NameFormatter::format(scope,
+                            enactor_,
+                            target_,
+                            NameFormatter::Flags::COLORED,
+                            name);
+      return name;
+    }
+
+    library::OString Look::descriptionLine_(
+      std::shared_ptr<ActionScope> scope) {
+      std::string attribute;
+      if (target_->getAttribute("description", attribute)) {
+        return std::string("\n" + attribute);
+      }
+      return std::string("");
+    }
+
+    library::OString Look::exitsLine_(
+      std::shared_ptr<ActionScope> scope) {
+      return std::string("");
+    }
+
+    library::OString Look::contentsLine_(
+      std::shared_ptr<ActionScope> scope) {
+      return std::string("");
     }
 
   }  // namespace actions

@@ -7,14 +7,14 @@
 #ifndef OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_SAY_H_
 #define OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_SAY_H_
 
-#include "omush/actions/iaction.h"
+#include "omush/actions/action.h"
 #include "omush/scope.h"
 #include "omush/database/databaseobject.h"
 #include "omush/library/string.h"
 
 namespace omush {
   namespace actions {
-    class Say : public IAction {
+    class Say : public Action {
      public:
       Say();
       void setPlayer(std::shared_ptr<IDatabaseObject> object);

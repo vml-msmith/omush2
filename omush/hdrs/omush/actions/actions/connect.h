@@ -129,11 +129,13 @@ namespace omush {
 
       /**
        * A shared pointer to the DatabaseObject of the connecting player.
-       *
-       * @param scope - ActionScope for the action.
        */
       std::shared_ptr<IDatabaseObject> player_;
 
+      /**
+       * ActionScope passed into enact. Saved her so it may be used in
+       * playerHasConnectedString.
+       */
       std::shared_ptr<ActionScope> scope_;
     };
   }  // namespace actions

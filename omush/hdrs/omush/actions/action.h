@@ -19,6 +19,14 @@ namespace omush {
      * Takes care of common code that all actions will need to use.
      */
     class Action : public IAction {
+     public:
+      /**
+       * Set the object that is doing the "looking".
+       *
+       * @param Object - Shared pointer to the DatabaseObject that is looking.
+       */
+      virtual void setEnactor(std::shared_ptr<IDatabaseObject> object) override;
+
      protected:
       /**
        * Register a map of std::string => library::OString with Strings library.
@@ -30,6 +38,13 @@ namespace omush {
           Strings::addStringIfNotPresent(item.first, item.second);
         }
       }
+
+    protected:
+      /**
+       * A shared pointer to the DatabaseObject of the enacting object.
+       */
+      std::shared_ptr<IDatabaseObject> enactor_;
+
     };
   }  // namespace actions
 }  // namespace omush

@@ -7,7 +7,7 @@
 #ifndef OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_SETFLAG_H_
 #define OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_SETFLAG_H_
 
-#include "omush/actions/iaction.h"
+#include "omush/actions/action.h"
 #include <string>
 #include "omush/scope.h"
 #include "omush/database/databaseobject.h"
@@ -16,7 +16,7 @@
 
 namespace omush {
   namespace actions {
-    class SetFlag : public IAction {
+    class SetFlag : public Action {
      public:
       SetFlag();
       void setPlayer(std::shared_ptr<IDatabaseObject> object);

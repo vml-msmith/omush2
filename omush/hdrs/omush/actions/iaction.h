@@ -8,6 +8,7 @@
 #define OMUSH_HDRS_OMUSH_ACTIONS_IACTION_H_
 
 #include "omush/scope.h"
+#include "omush/database/idatabaseobject.h"
 
 namespace omush {
   namespace actions {
@@ -25,6 +26,13 @@ namespace omush {
        * @param scope - ActionScope for the action.
        */
       virtual void enact(std::shared_ptr<ActionScope> scope) = 0;
+
+      /**
+       * Set the object that is doing the "looking".
+       *
+       * @param Object - Shared pointer to the DatabaseObject that is looking.
+       */
+      virtual void setEnactor(std::shared_ptr<IDatabaseObject> object) = 0;
     };
   }  // namespace actions
 }  // namespace omush

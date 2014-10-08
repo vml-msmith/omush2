@@ -40,7 +40,7 @@ namespace omush {
     virtual bool hasFlagByBit(uint64_t bit) const override;
     virtual void addFlagByBit(uint64_t bit) override;
     virtual void removeFlagByBit(uint64_t bit) override;
-
+    virtual bool getAttribute(std::string attribute, std::string &str) override;
    protected:
     uint64_t flags_;
     std::string name_;

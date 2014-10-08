@@ -14,7 +14,7 @@ namespace omush {
    public:
     virtual void postSetup(std::shared_ptr<DatabaseObject> &object) override {
       DatabaseObjectDefinition::postSetup(object);
-      DatabaseObjectDefinition::setType(object, PLAYER);
+      DatabaseObjectDefinition::setType(object, ROOM);
     }
     static DatabaseObjectDefinitionRoom& getInstance() {
       static DatabaseObjectDefinitionRoom instance;

@@ -77,4 +77,10 @@ namespace omush {
         flags_ = (flags_ ^ bit);
     }
   }
+
+  bool DatabaseObject::getAttribute(std::string attribute, std::string &str) {
+    str = "";
+    return false;
+  }
+
 }  // namespace omush

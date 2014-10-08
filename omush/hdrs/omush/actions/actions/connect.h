@@ -7,7 +7,7 @@
 #ifndef OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_CONNECT_H_
 #define OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_CONNECT_H_
 
-#include "omush/actions/iaction.h"
+#include "omush/actions/action.h"
 #include "omush/scope.h"
 #include "omush/database/databaseobject.h"
 #include "omush/library/string.h"
@@ -19,7 +19,7 @@ namespace omush {
      * Action class to connect a player to the game and run any actions
      * associated with logging in.
      */
-    class Connect : public IAction {
+    class Connect : public Action {
      public:
       /**
        * Default constructor. Nothing special is setup.
@@ -130,6 +130,8 @@ namespace omush {
        * @param scope - ActionScope for the action.
        */
       std::shared_ptr<IDatabaseObject> player_;
+
+      std::shared_ptr<ActionScope> scope_;
     };
   }  // namespace actions
 }  // namespace omush

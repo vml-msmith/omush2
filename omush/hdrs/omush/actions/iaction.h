@@ -15,7 +15,7 @@ namespace omush {
      public:
       virtual void enact(std::shared_ptr<ActionScope> scope) = 0;
     };
-  }  // namesapce actions
+  }  // namespace actions
 }  // namesapce omush
 
 #endif  // OMUSH_HDRS_OMUSH_ACTIONS_IACTION_H_

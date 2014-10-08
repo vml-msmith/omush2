@@ -5,15 +5,16 @@
  */
 
 #include "omush/actions/actions/connect.h"
+// TODO(msmith): remove boost dependency.
+#include <boost/bind.hpp>
+
 #include "omush/framework/igame.h"
 #include "omush/framework/igameinstance.h"
-#include <boost/lexical_cast.hpp>
-#include <boost/uuid/uuid_io.hpp>
+
 #include "omush/notifier.h"
 #include "omush/library/string.h"
 
 #include "omush/actions/actions/look.h"
-#include <boost/bind.hpp>
 
 namespace omush {
   namespace actions {
@@ -25,8 +26,9 @@ namespace omush {
     }
 
 
-    library::OString Connect::connectString(std::shared_ptr<IDatabaseObject> object) {
-      if (object == player_)
+    library::OString Connect::playerHasConnectedString(
+        std::shared_ptr<IDatabaseObject> object) {
+     if (object == player_)
         return library::OString("You have connected...");
 
       // TODO(msmith): Format this name.
@@ -34,17 +36,43 @@ namespace omush {
     }
 
     void Connect::enact(std::shared_ptr<ActionScope> scope) {
-      // Trigger aconnect on object.
-      // Trigger aconnect on room
-      // Trigger aconnect on global objects?
-      Notifier::notifySurroundings(NULL,
-                                   player_,
-                                   boost::bind(&omush::actions::Connect::connectString,
-                                               this,
-                                                 ::_1),
-                                   scope);
+      if (player_ == NULL || player_ == nullptr)
+        return;
 
-      // Get the room.
+      doTriggerAConnectObject_(scope);
+      doTriggerAConnectLocation_(scope);
+      doTriggerAConnectGlobal_(scope);
+      doConnectNotify_(scope);
+      doLook_(scope);
+    }
+
+    void Connect::doTriggerAConnectObject_(
+        std::shared_ptr<ActionScope> scope) {
+      // TODO(msmith): Implement.
+    }
+
+    void Connect::doTriggerAConnectLocation_(
+        std::shared_ptr<ActionScope> scope) {
+      // TODO(msmith): Implement.
+    }
+
+    void Connect::doTriggerAConnectGlobal_(
+        std::shared_ptr<ActionScope> scope) {
+      // TODO(msmith): Implement.
+    }
+
+    void Connect::doConnectNotify_(
+        std::shared_ptr<ActionScope> scope) {
+      Notifier::notifySurroundings(
+          NULL,
+          player_,
+          boost::bind(&omush::actions::Connect::playerHasConnectedString,
+                      this,
+                      ::_1),
+          scope);
+    }
+
+    void Connect::doLook_(std::shared_ptr<ActionScope> scope) {
       std::shared_ptr<IDatabaseObject> object = nullptr;
       player_->getLocation(object);
       actions::Look lookAction;

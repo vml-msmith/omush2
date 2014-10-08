@@ -5,7 +5,7 @@
  */
 
 #ifndef OMUSH_HDRS_OMUSH_DATABASE_NAMEFORMATTER_H_
-#define OMUSH_HDRS_OMUSH_DATABASE_NAMEFORMATTERS_H_
+#define OMUSH_HDRS_OMUSH_DATABASE_NAMEFORMATTER_H_
 
 #include "omush/scope.h"
 #include "omush/library/string.h"

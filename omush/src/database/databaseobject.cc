@@ -9,17 +9,6 @@
 #include "omush/library/uuid.h"
 
 namespace omush {
-  bool hasFlag(std::shared_ptr<IDatabase> &db,
-               std::shared_ptr<IDatabaseObject> &object,
-               std::string name) {
-    Flag* f = db->flags.getFlag(name);
-    if (f == NULL) {
-      return false;
-    }
-
-    return object->hasFlagByBit(f->bit);
-  }
-
   std::string DatabaseObject::getName() const {
     return name_;
   }
@@ -53,10 +42,19 @@ namespace omush {
   }
 
   void DatabaseObject::getLocation(std::shared_ptr<IDatabaseObject> &location) {
-    if (location_ == nullptr)
+    if (location_ == nullptr) {
       return;
-    else
-      location = location_;
+    }
+
+    location = location_;
+  }
+
+  void DatabaseObject::getOwner(std::shared_ptr<IDatabaseObject> &owner) {
+    if (owner_ == nullptr) {
+      return;
+    }
+
+    owner = owner_;
   }
 
   void DatabaseObject::getContents(std::vector<std::shared_ptr<IDatabaseObject>> &contents) {

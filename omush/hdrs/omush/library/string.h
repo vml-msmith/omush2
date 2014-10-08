@@ -9,11 +9,12 @@
 
 #include <boost/algorithm/string.hpp>
 #include <string>
+#include <vector>
 
 namespace omush {
   namespace library {
     namespace string {
-      inline void to_upper(std::string str) {
+      inline void to_upper(std::string &str) {
         return boost::to_upper(str);
       }
 

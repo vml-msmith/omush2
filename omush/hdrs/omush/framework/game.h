@@ -10,12 +10,16 @@
 #include "omush/framework/igame.h"
 #include <map>
 #include <string>
+#include <vector>
 #include "omush/network/common.h"
 #include "omush/queue/descriptorcommandqueue.h"
 #include "omush/library/uuid.h"
 #include "omush/library/time.h"
+
+// TODO: Why are these here?
 #include <boost/archive/text_oarchive.hpp>
-  #include "boost/date_time/gregorian/gregorian.hpp"
+#include "boost/date_time/gregorian/gregorian.hpp"
+
 namespace omush {
     using namespace boost::gregorian;
   class IGameInstance;

@@ -5,7 +5,7 @@
  */
 
 #ifndef OMUSH_HDRS_OMUSH_HELP_HELP_H_
-#define OMUSH_HDRS_OMUSH_HELP_HELP_H
+#define OMUSH_HDRS_OMUSH_HELP_HELP_H_
 
 #include <string>
 #include <map>
@@ -104,4 +104,4 @@ namespace omush {
 
 }  // namespace omush
 
-#endif  // OMUSH_HDRS_OMUSH_HELP_HELP_H
+#endif  // OMUSH_HDRS_OMUSH_HELP_HELP_H_

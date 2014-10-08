@@ -7,6 +7,7 @@
 #ifndef OMUSH_HDRS_OMUSH_FRAMEWORK_IGAME_H_
 #define OMUSH_HDRS_OMUSH_FRAMEWORK_IGAME_H_
 
+#include <vector>
 #include "omush/network/common.h"
 #include "omush/library/uuid.h"
 #include "omush/library/time.h"

@@ -34,6 +34,8 @@ namespace omush {
       override;
     virtual void getLocation(std::shared_ptr<IDatabaseObject> &location)
       override;
+    virtual void getOwner(std::shared_ptr<IDatabaseObject> &owner)
+      override;
     virtual void getContents(std::vector<std::shared_ptr<IDatabaseObject>> &contents) override;
     virtual bool hasFlagByBit(uint64_t bit) const override;
     virtual void addFlagByBit(uint64_t bit) override;
@@ -45,6 +47,7 @@ namespace omush {
     DatabaseObjectType type_;
     library::uuid uuid_;
     std::shared_ptr<IDatabaseObject> location_;
+    std::shared_ptr<IDatabaseObject> owner_;
     std::map<library::uuid,std::shared_ptr<IDatabaseObject>> contents_;
   };
 

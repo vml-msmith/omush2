@@ -19,6 +19,7 @@ namespace omush {
         return false;
       }
 
+      newObject->owner_ = newObject;
       newObject->uuid_ = library::generate_uuid();
       definition.postSetup(newObject);
 

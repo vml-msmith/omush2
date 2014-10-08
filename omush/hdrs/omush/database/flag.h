@@ -26,6 +26,7 @@ namespace omush {
 
   class FlagDirectory {
    public:
+    FlagDirectory();
     typedef std::map<std::string, Flag> FlagMap;
     typedef std::map<FlagBit, Flag> BitFlagMap;
     typedef std::map<FlagBit, Flag*> BitFlagPtrMap;

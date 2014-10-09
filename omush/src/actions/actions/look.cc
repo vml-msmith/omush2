@@ -53,22 +53,13 @@ namespace omush {
       lines += contentsLine_(scope);
 
       Notifier::notify(NULL, enactor_, lines, scope);
-
-      //      lines += typeLine_();
-      //lines +=
-
-      // TODO(msmith): This red is wrong.
-      /*
-      Strings::ReplaceMap replacements;
-      replacements["!name"] = library::OString::color(target_->getName(), "red");
-      lines += Strings::get("You look at .. !name",
-                            replacements);
-      lines += "\n" + library::string::OString::color(target_->getName(), "red");
-      Notifier::notify(NULL, enactor_, lines, scope);*/
     }
 
     library::OString Look::nameLine_(
         std::shared_ptr<ActionScope> scope) {
+      // TODO(msmith): Add @nameformat here.
+      //               That can be a flag to NameFormatter::
+
       library::OString name;
       NameFormatter::format(scope,
                             enactor_,
@@ -80,6 +71,8 @@ namespace omush {
 
     library::OString Look::descriptionLine_(
       std::shared_ptr<ActionScope> scope) {
+      // TODO(msmith): Add @descformat.
+
       std::string attribute;
       if (target_->getAttribute("description", attribute)) {
         return std::string("\n" + attribute);
@@ -89,11 +82,15 @@ namespace omush {
 
     library::OString Look::exitsLine_(
       std::shared_ptr<ActionScope> scope) {
+      // TODO(msmith): Add @exitformat.
+
       return std::string("");
     }
 
     library::OString Look::contentsLine_(
       std::shared_ptr<ActionScope> scope) {
+      // TODO(msmith): Add @conformat.
+
       return std::string("");
     }
 

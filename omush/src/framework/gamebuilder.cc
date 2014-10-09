@@ -51,6 +51,8 @@ namespace omush {
     factory.buildObject(DatabaseObjectDefinitionRoom::getInstance(),
                         roomZero);
     roomZero->setName("Room Zero");
+    roomZero->setAttribute("description",
+                           "This is the global room. Hah.");
     instance->database->addObject(roomZero);
 
     std::shared_ptr<DatabaseObject> playerOne;

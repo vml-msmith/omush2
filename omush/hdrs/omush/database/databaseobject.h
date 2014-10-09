@@ -41,6 +41,7 @@ namespace omush {
     virtual void addFlagByBit(uint64_t bit) override;
     virtual void removeFlagByBit(uint64_t bit) override;
     virtual bool getAttribute(std::string attribute, std::string &str) override;
+    virtual void setAttribute(std::string attributeName, std::string attributeValue) override;
    protected:
     uint64_t flags_;
     std::string name_;
@@ -49,6 +50,7 @@ namespace omush {
     std::shared_ptr<IDatabaseObject> location_;
     std::shared_ptr<IDatabaseObject> owner_;
     std::map<library::uuid,std::shared_ptr<IDatabaseObject>> contents_;
+    std::map<std::string,std::string> attributes_;
   };
 
 

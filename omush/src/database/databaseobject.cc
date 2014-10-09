@@ -79,8 +79,23 @@ namespace omush {
   }
 
   bool DatabaseObject::getAttribute(std::string attribute, std::string &str) {
-    str = "";
-    return false;
+    if (attributes_.find(attribute) == attributes_.end()) {
+      return false;
+    }
+
+
+    str = attributes_[attribute];
+    return true;
   }
 
+  void DatabaseObject::setAttribute(std::string attributeName,
+                                    std::string attributeValue)  {
+    if (attributes_.find(attributeName) == attributes_.end()) {
+      attributes_[attributeName] = attributeValue;
+      return;
+    }
+
+    attributes_.insert(std::pair<std::string,std::string>(attributeName,
+                                                          attributeValue));
+  }
 }  // namespace omush

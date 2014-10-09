@@ -9,7 +9,7 @@
 
 #include "omush/scope.h"
 #include "omush/library/string.h"
-#include <iostream>
+#include "omush/database/IDatabaseObject.h"
 
 namespace omush {
   class NameFormatter {
@@ -25,6 +25,7 @@ namespace omush {
                              std::shared_ptr<IDatabaseObject> looker,
                              std::shared_ptr<IDatabaseObject> target,
                              library::OString &string) {
+      NameFormatter::format(scope, looker, target, 0, string);
       string = library::OString(target->getName());
     }
 
@@ -32,42 +33,7 @@ namespace omush {
                        std::shared_ptr<IDatabaseObject> looker,
                        std::shared_ptr<IDatabaseObject> target,
                        uint64_t flags,
-                       library::OString &string) {
-      std::string tempString;
-      tempString = target->getName();
-
-
-      std::string endString = "";
-      if ((flags && DBREF) == DBREF) {
-        endString += "#0";
-      }
-
-      if ((flags && FLAGS) == FLAGS) {
-        endString += "P";
-      }
-
-      if (endString.length() > 0) {
-        endString = "(" + endString + ")";
-      }
-      std::cout << tempString << std::endl;
-      string = library::OString(tempString + endString);
-
-      if ((flags && COLORED) == COLORED) {
-        // Get the color.
-        std::string color = "";
-        switch (target->getType()) {
-        case DatabaseObjectType::PLAYER:
-          color = "red";
-          break;
-        case DatabaseObjectType::ROOM:
-          color = "green";
-          break;
-        default:
-          color = "blue";
-        }
-        string = library::OString::color(tempString + endString, color);
-      }
-    }
+                       library::OString &string);
   };
 }  // namespace omush
 

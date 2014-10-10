@@ -24,8 +24,8 @@ namespace omush {
       highBit = highBit << 1;
       f.bit = highBit;
       flagMap.insert(std::pair<std::string,Flag>(name, f));
-      flagBitMap.insert(std::pair<FlagBit, Flag*>(highBit, &(flagMap[name])));
-      std::cout << "Added flag " << name << " = " << flagMap[name].bit  << std::endl;
+      flagBitMap.insert(std::pair<FlagBit, Flag*>(highBit,
+                                                  &(flagMap[name])));
     }
 
     return flagMap[name].bit;
@@ -46,12 +46,10 @@ namespace omush {
     std::string name = f;
     library::string::to_upper(name);
 
-    std::cout << "Find " << name << std::endl;
     if (flagMap.find(name) == flagMap.end()) {
-    std::cout << "not foundn " << name << std::endl;
       return NULL;
     }
-    std::cout << "Found " << name << std::endl;
+
     return &(flagMap[name]);
   }
 

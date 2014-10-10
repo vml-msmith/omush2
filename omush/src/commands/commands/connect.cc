@@ -67,13 +67,13 @@ namespace omush {
         }
       }
 
-
       std::shared_ptr<IDatabaseObject> object;
       if (DatabaseMatcher::findPlayer(queueObject->gameInstance->database.get(),
                                       userName,
                                       object)) {
         queueObject->gameInstance->game->addObjectUUIDForDescriptor(queueObject->descId,
                                                              object->getUuid());
+        scope->queueObject->executor = object->getUuid();
         actions::Connect connectAction;
         connectAction.setPlayer(object);
         connectAction.enact(makeActionScope(scope));

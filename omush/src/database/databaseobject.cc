@@ -25,15 +25,16 @@ namespace omush {
     return type_;
   }
 
-  void DatabaseObject::setLocation(std::shared_ptr<IDatabaseObject> location) {
+  void DatabaseObject::setLocation(
+      std::shared_ptr<IDatabaseObject> location) {
     if (location == nullptr)
       return;
 
     location_ = location;
-
   }
 
-  void DatabaseObject::addContent(std::shared_ptr<IDatabaseObject> content) {
+  void DatabaseObject::addContent(
+      std::shared_ptr<IDatabaseObject> content) {
     if (contents_.find(content->getUuid()) != contents_.end()) {
       return;
     }
@@ -41,7 +42,8 @@ namespace omush {
     contents_[content->getUuid()] = content;
   }
 
-  void DatabaseObject::getLocation(std::shared_ptr<IDatabaseObject> &location) {
+  void DatabaseObject::getLocation(
+      std::shared_ptr<IDatabaseObject> &location) {
     if (location_ == nullptr) {
       return;
     }
@@ -49,7 +51,8 @@ namespace omush {
     location = location_;
   }
 
-  void DatabaseObject::getOwner(std::shared_ptr<IDatabaseObject> &owner) {
+  void DatabaseObject::getOwner(
+      std::shared_ptr<IDatabaseObject> &owner) {
     if (owner_ == nullptr) {
       return;
     }
@@ -57,12 +60,12 @@ namespace omush {
     owner = owner_;
   }
 
-  void DatabaseObject::getContents(std::vector<std::shared_ptr<IDatabaseObject>> &contents) {
+  void DatabaseObject::getContents(
+      std::vector<std::shared_ptr<IDatabaseObject>> &contents) {
     for (auto &item : contents_) {
       contents.push_back(item.second);
     }
   }
-
 
   bool DatabaseObject::hasFlagByBit(uint64_t bit) const {
     return (flags_ & bit) == bit;
@@ -78,7 +81,8 @@ namespace omush {
     }
   }
 
-  bool DatabaseObject::getAttribute(std::string attribute, std::string &str) {
+  bool DatabaseObject::getAttribute(std::string attribute,
+                                    std::string &str) {
     if (attributes_.find(attribute) == attributes_.end()) {
       return false;
     }
@@ -95,7 +99,8 @@ namespace omush {
       return;
     }
 
-    attributes_.insert(std::pair<std::string,std::string>(attributeName,
-                                                          attributeValue));
+    attributes_.insert(
+        std::pair<std::string,std::string>(attributeName,
+                                           attributeValue));
   }
 }  // namespace omush

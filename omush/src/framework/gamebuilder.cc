@@ -10,6 +10,7 @@
 #include "omush/network/networkmanager.h"
 #include "omush/network/websocketserver.h"
 #include "omush/queue/commandqueue.h"
+#include "omush/functions/expressionengine.h"
 #include "omush/database/database.h"
 #include "omush/database/databaseobject.h"
 #include "omush/database/databasefactory.h"
@@ -31,6 +32,10 @@ namespace omush {
     std::shared_ptr<ICommandQueue> qptr(new CommandQueue);
     instance->commandQueue = qptr;
 
+
+    // Setup Expression Engine.
+    std::shared_ptr<IExpressionEngine> eptr(new ExpressionEngine);
+    instance->expressionEngine = eptr;
     return true;
   }
 
@@ -52,7 +57,7 @@ namespace omush {
                         roomZero);
     roomZero->setName("Room Zero");
     roomZero->setAttribute("description",
-                           "This is the global room. Hah.");
+                           "This is the global room. Hah%R%n%R%B--.");
     instance->database->addObject(roomZero);
 
     std::shared_ptr<DatabaseObject> playerOne;

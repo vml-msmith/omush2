@@ -20,6 +20,7 @@ namespace omush {
       virtual std::string name() override;
       virtual std::unique_ptr<ICommand> factory() override;
       virtual std::vector<std::string> patterns() override;
+      virtual std::vector<std::string> getAliasList() override;
     };
 
     class Look : public ICommand {

@@ -22,6 +22,10 @@ namespace omush {
         return boost::iequals(left, right);
       }
 
+      inline void replace_all(std::string &in, std::string search, std::string replace) {
+        return boost::replace_all(in, search, replace);
+      }
+
       enum SplitStringOptions {
         leftToRight,
         rightToLeft,

@@ -10,6 +10,12 @@
 //#include "omush/framework/igameinstance.h"
 #include "omush/network/common.h"
 #include "omush/library/uuid.h"
+#include "omush/database/idatabaseobject.h"
+#include "omush/framework/gameinstance.h"
+
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <iostream>
 
 namespace omush {
   class IGameInstance;
@@ -40,6 +46,14 @@ namespace omush {
     library::uuid enactor;
     library::uuid executor;
     library::uuid caller;
+
+    bool getExecutorObject(std::shared_ptr<IDatabaseObject>& object) {
+      const std::string tmp = boost::lexical_cast<std::string>(executor);
+      std::cout << "Find: " << tmp << std::endl;
+
+      return gameInstance->database->getObjectByUUID(executor, object);
+    }
+
     QueueObject() {
       enactor = library::generate_null_uuid();
       executor = library::generate_null_uuid();
@@ -64,17 +78,30 @@ namespace omush {
 
   struct FunctionScope {
     std::shared_ptr<ActionScope> actionScope;
+    std::shared_ptr<CommandScope> commandScope;
+    std::shared_ptr<QueueObject> queueObject;
   };
 
   struct FunctionResponse {
   };
 
 
-  inline std::shared_ptr<ActionScope> makeActionScope(std::shared_ptr<CommandScope> scope) {
+  inline std::shared_ptr<ActionScope>
+    makeActionScope(std::shared_ptr<CommandScope> scope) {
     std::shared_ptr<ActionScope> aScope(new ActionScope());
     aScope->commandScope = scope;
     aScope->queueObject = scope->queueObject;
     return aScope;
+  }
+
+  inline std::shared_ptr<FunctionScope>
+    makeFunctionScope(std::shared_ptr<ActionScope> scope) {
+    std::shared_ptr<FunctionScope> fScope(new FunctionScope());
+    fScope->actionScope = scope;
+    fScope->commandScope = scope->commandScope;
+    fScope->queueObject = scope->queueObject;
+
+    return fScope;
   }
 }  // namesapce omush
 

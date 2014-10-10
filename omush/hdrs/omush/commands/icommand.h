@@ -22,6 +22,9 @@ namespace omush {
     virtual std::string name() = 0;
     virtual std::unique_ptr<ICommand> factory() = 0;
     virtual std::vector<std::string> patterns() = 0;
+    virtual std::vector<std::string> getAliasList() {
+      return std::vector<std::string>();
+    }
   };
 
   class ICommand {

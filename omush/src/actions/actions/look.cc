@@ -8,6 +8,7 @@
 #include "omush/framework/igame.h"
 #include "omush/framework/igameinstance.h"
 #include "omush/framework/strings.h"
+#include "omush/functions/iexpressionengine.h"
 #include "omush/library/string.h"
 #include "omush/notifier.h"
 #include "omush/library/log.h"
@@ -75,7 +76,12 @@ namespace omush {
 
       std::string attribute;
       if (target_->getAttribute("description", attribute)) {
-        return std::string("\n" + attribute);
+        library::OString parsedAttribute;
+        scope->queueObject
+          ->gameInstance
+          ->expressionEngine
+          ->parse(attribute, makeFunctionScope(scope), parsedAttribute);
+        return library::OString(std::string("\n") + parsedAttribute);
       }
       return std::string("");
     }

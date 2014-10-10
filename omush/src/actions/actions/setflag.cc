@@ -37,11 +37,16 @@ namespace omush {
         value_ = value_.substr(1);
       }
 
-      Flag* flag = scope->queueObject->gameInstance->database->flags.getFlag(value_);
+      Flag* flag = scope
+        ->queueObject
+        ->gameInstance
+        ->database
+        ->flags.getFlag(value_);
+
       if (flag == NULL) {
         Notifier::notify(NULL,
                          player_,
-                         library::OString(Strings::get("Flag unknown.")),
+                         Strings::get("Flag unknown."),
                          scope);
         return;
       }

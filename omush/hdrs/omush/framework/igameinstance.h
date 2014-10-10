@@ -14,12 +14,14 @@ namespace omush {
   class INetworkManager;
   class ICommandQueue;
   class IDatabase;
+  class IExpressionEngine;
 
   struct IGameInstance {
     IGame* game;
     std::shared_ptr<INetworkManager> network;
     std::shared_ptr<ICommandQueue> commandQueue;
     std::shared_ptr<IDatabase> database;
+    std::shared_ptr<IExpressionEngine> expressionEngine;
 
     IGameInstance() : game(nullptr), network(nullptr) {}
 

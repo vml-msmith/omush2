@@ -9,7 +9,6 @@
 #include <vector>
 #include <map>
 #include "omush/library/string.h"
-#include <iostream>
 
 namespace omush {
   FlagDirectory::FlagDirectory() {

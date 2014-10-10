@@ -8,7 +8,6 @@
 #include "omush/database/nameformatter.h"
 #include "omush/framework/igameinstance.h"
 #include "omush/database/idatabase.h"
-#include <iostream>
 
 namespace omush {
   ExpressionEngine::ExpressionEngine() {

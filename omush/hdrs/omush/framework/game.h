@@ -40,7 +40,6 @@ namespace omush {
         boost::posix_time::ptime time_t_epoch(date(1970,1,1));
         boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
         boost::posix_time::time_duration diff = connectTime - time_t_epoch;
-        std::cout << "other create: " << diff.total_milliseconds() << std::endl;
       }
       Connection(DescriptorID id) {
         this->id = id;
@@ -75,8 +74,11 @@ namespace omush {
                                             library::uuid uid) override;
     virtual void removeObjectUUIDForDescriptor(DescriptorID id,
                                                library::uuid uid) override;
-    virtual void getDescriptorList(std::vector<DescriptorID> &descriptors) override;
-    bool descriptorIDToConnection_(DescriptorID id, std::shared_ptr<IGame::Connection> &connection);
+    virtual void getDescriptorList(std::vector<DescriptorID> &descriptors)
+      override;
+    virtual bool descriptorIDToConnection_(
+        DescriptorID id,
+        std::shared_ptr<IGame::Connection> &connection);
    private:
     virtual void loopNewMessages_();
     virtual void loopQueues_();

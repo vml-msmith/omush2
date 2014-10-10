@@ -6,8 +6,6 @@
 
 #include "omush/database/database.h"
 #include "omush/database/databaseobject.h"
-#include <iostream>
-#include <sstream>
 #include <boost/uuid/uuid_io.hpp>
 
 namespace omush {

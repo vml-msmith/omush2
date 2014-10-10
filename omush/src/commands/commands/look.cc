@@ -18,7 +18,6 @@
 #include "omush/notifier.h"
 #include "omush/actions/actions/look.h"
 #include "omush/functions/iexpressionengine.h"
-#include <iostream>
 
 namespace omush {
   namespace command {
@@ -88,9 +87,7 @@ namespace omush {
         ->expressionEngine
         ->parse(tempTarget, makeFunctionScope(aScope), tempTarget);
 
-      std::cout << "target: " << target << std::endl;
       target = tempTarget.plainText();
-      std::cout << "target: " << target << std::endl;
 
       std::shared_ptr<IDatabaseObject> looker;
 

@@ -13,9 +13,6 @@
 #include "omush/database/idatabaseobject.h"
 #include "omush/framework/gameinstance.h"
 
-#include <boost/lexical_cast.hpp>
-#include <boost/uuid/uuid_io.hpp>
-#include <iostream>
 
 namespace omush {
   class IGameInstance;
@@ -48,9 +45,6 @@ namespace omush {
     library::uuid caller;
 
     bool getExecutorObject(std::shared_ptr<IDatabaseObject>& object) {
-      const std::string tmp = boost::lexical_cast<std::string>(executor);
-      std::cout << "Find: " << tmp << std::endl;
-
       return gameInstance->database->getObjectByUUID(executor, object);
     }
 

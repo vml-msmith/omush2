@@ -25,6 +25,7 @@ namespace omush {
     virtual std::vector<std::string> getAliasList() {
       return std::vector<std::string>();
     }
+
   };
 
   class ICommand {

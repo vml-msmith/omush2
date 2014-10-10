@@ -43,6 +43,8 @@ int main(int argc, char** argv) {
   clock_t this_time = clock();
   clock_t last_time = this_time;
 
+  printf("Game setup...\n");
+
   while (game->loop() && !signal.caughtInterupt) {
     this_time = clock();
     if (this_time - last_time < clock_threshhold) {

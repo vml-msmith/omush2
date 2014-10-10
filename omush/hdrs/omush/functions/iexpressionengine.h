@@ -12,11 +12,13 @@
 #include "omush/scope.h"
 
 namespace omush {
+  class IFunctionDefinition;
   class IExpressionEngine {
    public:
     virtual void parse(library::OString in,
                        std::shared_ptr<FunctionScope> scope,
                        library::OString& out) = 0;
+    virtual bool registerFunction(std::shared_ptr<IFunctionDefinition> fun) = 0;
    private:
   };
 }  // namespace omush

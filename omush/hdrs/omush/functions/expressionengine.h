@@ -19,10 +19,15 @@ namespace omush {
     virtual void parse(library::OString in,
                        std::shared_ptr<FunctionScope> scope,
                        library::OString& out) override;
+    virtual bool registerFunction(std::shared_ptr<IFunctionDefinition> fun) override;
    private:
+    void processExpression_(library::OString in,
+                            std::shared_ptr<FunctionScope> scope,
+                            library::OString& out);
     void replaceStandardTokens_(library::OString in,
                                 std::shared_ptr<FunctionScope> scope,
                                 library::OString& out);
+    std::map<std::string,std::shared_ptr<IFunctionDefinition>> functions_;
   };
 }  // namespace omush
 

@@ -14,6 +14,27 @@
 namespace omush {
   namespace library {
     namespace string {
+// trim from start
+      static inline std::string &ltrim(std::string &s, const std::string &chars) {
+        s.erase(s.begin(), std::find_if(s.begin(), s.end(), [&](char c){
+              return chars.find(c) != std::string::npos;
+            }));
+        return s;
+      }
+
+// trim from end
+      static inline std::string &rtrim(std::string &s, const std::string &chars) {
+        s.erase(std::find_if(s.rbegin(), s.rend(),  [&](char c){
+              return chars.find(c) != std::string::npos;
+            }).base(), s.end());
+        return s;
+      }
+
+      // trim from both ends
+      //      static inline std::string &trim(std::string &s) {
+        //  return ltrim(rtrim(s));
+      //}
+
       inline void to_upper(std::string &str) {
         return boost::to_upper(str);
       }

@@ -17,6 +17,8 @@
 #include "omush/database/objectdefinitions/databaseobjectdefinitionplayer.h"
 #include "omush/database/objectdefinitions/databaseobjectdefinitionroom.h"
 
+#include "omush/functions/functions/add.h"
+
 namespace omush {
   GameBuilder::GameBuilder() {
   }
@@ -35,6 +37,7 @@ namespace omush {
 
     // Setup Expression Engine.
     std::shared_ptr<IExpressionEngine> eptr(new ExpressionEngine);
+    eptr->registerFunction(std::shared_ptr<IFunctionDefinition>(new functions::AddDefinition));
     instance->expressionEngine = eptr;
     return true;
   }

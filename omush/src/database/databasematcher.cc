@@ -85,6 +85,8 @@ namespace omush {
       return false;
     }
 
+
+    return false;
     // Search *playerName.
 
     // Get the room, add it to the listeners.

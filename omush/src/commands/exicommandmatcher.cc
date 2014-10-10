@@ -5,6 +5,7 @@
  */
 
 namespace omush {
+  /*
   ExitCommandMatcher::ExitCommandMatcher() {
   }
 
@@ -14,5 +15,5 @@ namespace omush {
       std::shared_ptr<ICommandDefinition> &definition) {
     return false;
   }
-
+  */
 }  // namespace omush

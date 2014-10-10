@@ -74,6 +74,10 @@ namespace omush {
     std::shared_ptr<ActionScope> actionScope;
     std::shared_ptr<CommandScope> commandScope;
     std::shared_ptr<QueueObject> queueObject;
+
+    int depth;
+    bool trace;
+  FunctionScope() : depth(0) {}
   };
 
   struct FunctionResponse {

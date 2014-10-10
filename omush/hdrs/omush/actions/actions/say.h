@@ -18,12 +18,12 @@ namespace omush {
      public:
       Say();
       void setPlayer(std::shared_ptr<IDatabaseObject> object);
-      void setText(std::string text);
+      void setText(library::OString text);
       library::OString makeString(std::shared_ptr<IDatabaseObject> object);
       void enact(std::shared_ptr<ActionScope> scope) override;
      private:
       std::shared_ptr<IDatabaseObject> player_;
-      std::string text_;
+      library::OString text_;
       std::shared_ptr<ActionScope> scope_;
     };
   }  // namespace actions

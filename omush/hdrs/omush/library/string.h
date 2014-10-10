@@ -14,38 +14,21 @@
 namespace omush {
   namespace library {
     namespace string {
-// trim from start
-      static inline std::string &ltrim(std::string &s, const std::string &chars) {
-        s.erase(s.begin(), std::find_if(s.begin(), s.end(), [&](char c){
-              return chars.find(c) != std::string::npos;
-            }));
-        return s;
-      }
+      class OString;
+      std::string &ltrim(std::string &s, const std::string &chars);
+      std::string &rtrim(std::string &s, const std::string &chars);
+      std::string &trim(std::string &s, const std::string &chars);
 
-// trim from end
-      static inline std::string &rtrim(std::string &s, const std::string &chars) {
-        s.erase(std::find_if(s.rbegin(), s.rend(),  [&](char c){
-              return chars.find(c) != std::string::npos;
-            }).base(), s.end());
-        return s;
-      }
+      inline OString &ltrim(OString &s, const std::string &chars);
+      inline OString &rtrim(OString &s, const std::string &chars);
+      inline OString &trim(OString &s, const std::string &chars);
 
-      // trim from both ends
-      //      static inline std::string &trim(std::string &s) {
-        //  return ltrim(rtrim(s));
-      //}
-
-      inline void to_upper(std::string &str) {
-        return boost::to_upper(str);
-      }
-
-      inline bool iequals(std::string left, std::string right) {
-        return boost::iequals(left, right);
-      }
-
-      inline void replace_all(std::string &in, std::string search, std::string replace) {
-        return boost::replace_all(in, search, replace);
-      }
+      void to_upper(std::string &str);
+      void to_lower(std::string &str);
+      bool iequals(std::string left, std::string right);
+      void replace_all(std::string &in,
+                       std::string search,
+                       std::string replace);
 
       enum SplitStringOptions {
         leftToRight,
@@ -53,11 +36,12 @@ namespace omush {
       };
 
       inline std::vector<std::string> splitIntoSegments(std::string str,
-                                                       std::string sep,
-                                                       int segments,
-                                                       SplitStringOptions direction) {
-        if (segments < 0)
+                                                        std::string sep,
+                                                        int segments,
+                                                        SplitStringOptions direction) {
+        if (segments < 0) {
           segments = 1000;
+        }
 
         std::vector<std::string> result;
         int i = 0;
@@ -134,7 +118,11 @@ namespace omush {
           OStringNode(ColorSequence c) : seq(c), isSequence(true), isEnd(false) {  }
           OStringNode() :  isSequence(false) {  }
         };
-      public:
+       public:
+        void rtrim(const std::string chars);
+        void ltrim(const std::string chars);
+        void trim(const std::string chars);
+
         std::deque<OStringNode*> nodes;
         OString() {}
         OString(const OString& other);

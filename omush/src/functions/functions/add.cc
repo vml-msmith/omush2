@@ -7,6 +7,7 @@
 #include "omush/functions/functions/add.h"
 #include "omush/functions/expressionengine.h"
 #include "omush/library/string.h"
+#include <iostream>
 
 namespace omush {
   namespace functions {

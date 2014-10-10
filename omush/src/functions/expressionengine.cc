@@ -9,6 +9,7 @@
 #include "omush/database/nameformatter.h"
 #include "omush/framework/igameinstance.h"
 #include "omush/database/idatabase.h"
+#include "omush/library/string.h"
 #include <iostream>
 
 namespace omush {
@@ -16,17 +17,15 @@ namespace omush {
   }
 
   bool ExpressionEngine::registerFunction(std::shared_ptr<IFunctionDefinition> fun)  {
-
-functions_.insert(std::pair<std::string, std::shared_ptr<IFunctionDefinition>>(fun->name(), fun));
+    std::string name = fun->name();
+    library::string::to_lower(name);
+    functions_.insert(std::pair<std::string, std::shared_ptr<IFunctionDefinition>>(name, fun));
     return true;
   }
   void ExpressionEngine::parse(library::OString in,
                                std::shared_ptr<FunctionScope> scope,
                                library::OString& out) {
-    //    scope.trace = true;
-    std::cout << "parse " << in.plainText() << std::endl;
     processExpression_(in, scope, out);
-    std::cout << "End: " << out.plainText() << std::endl;
     replaceStandardTokens_(out, scope, out);
   }
 
@@ -154,7 +153,51 @@ functions_.insert(std::pair<std::string, std::shared_ptr<IFunctionDefinition>>(f
     }
 
     for (auto item : sections) {
+      std::size_t pos = item.find_first_of("([");
+      if (pos != std::string::npos) {
+        if (item[pos] == '(') {
 
+          // cut off any spaces, add to finished.
+          // lowercase it just in case.
+          std::string methodName = item.substr(0,pos);
+          std::size_t spacePos = methodName.find_last_of(' ');
+          if (spacePos != std::string::npos) {
+            finished += item.substr(0, spacePos + 1);
+            methodName = methodName.substr(spacePos + 1);
+          }
+
+          library::string::to_lower(methodName);
+          if (functions_.find(methodName) == functions_.end()) {
+            item = "#-1 FUNCTION NOT FOUND";
+          }
+          else {
+            std::unique_ptr<IFunction> fun = functions_[methodName]->factory();
+
+            std::string theRest = item.substr(pos + 1, item.length() - pos - 2);
+            std::vector<std::string> args = splitArgs_(theRest);
+            for (auto a : args) {
+              printStr("Arg: " + a, scope);
+            }
+            library::OString bit;
+            fun->execute(args, scope, bit);
+            item = bit.plainText();
+          }
+        }
+        else if (item[pos] == '[') {
+          if (pos != 0) {
+            finished += item.substr(0,pos);
+            item = item.substr(pos);
+            pos = 0;
+          }
+          item = item.substr(1, item.length() - 2);
+          processExpression_(item, scope,out);
+          item = out.internalString();
+        }
+      }
+      finished += item;
+    }
+
+    /*
       if (item.substr(0,1).c_str()[0] == '[') {
         item = item.substr(1, item.length() - 2);
         // Strip the braces and run it again!
@@ -164,7 +207,7 @@ functions_.insert(std::pair<std::string, std::shared_ptr<IFunctionDefinition>>(f
       }
       else {
         // Find the first occurance of ( or [.
-        std::size_t pos = item.find_first_of("(");
+        std::size_t pos = item.find_first_of("([");
         if (pos != std::string::npos) {
           if (item[pos] == '(') {
             // cut off any spaces, add to finished.
@@ -196,7 +239,7 @@ functions_.insert(std::pair<std::string, std::shared_ptr<IFunctionDefinition>>(f
 
       finished += item;
     }
-
+    */
 
     //    if (self
     --scope->depth;

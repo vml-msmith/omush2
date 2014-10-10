@@ -13,6 +13,7 @@
 #include "omush/library/regex.h"
 #include "omush/library/log.h"
 #include "omush/actions/actions/say.h"
+#include "omush/functions/iexpressionengine.h"
 
 namespace omush {
   namespace command {
@@ -63,6 +64,14 @@ namespace omush {
       }
 
 
+      std::shared_ptr<ActionScope> aScope = makeActionScope(scope);
+      library::OString tempTarget = library::OString(say);
+      scope->queueObject
+        ->gameInstance
+        ->expressionEngine
+        ->parse(tempTarget, makeFunctionScope(aScope), tempTarget);
+
+      //      what = t.plainText();
 
       std::shared_ptr<IDatabaseObject> object;
       if (scope->queueObject->gameInstance->database->getObjectByUUID(scope->queueObject->executor,
@@ -70,7 +79,7 @@ namespace omush {
 
         actions::Say sayAction;
         sayAction.setPlayer(object);
-        sayAction.setText(say);
+        sayAction.setText(tempTarget);
         sayAction.enact(makeActionScope(scope));
       }
       else {

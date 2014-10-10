@@ -20,20 +20,20 @@ namespace omush {
       player_ = object;
     }
 
-    void Say::setText(std::string text) {
+    void Say::setText(library::OString text) {
       text_ = text;
     }
 
     library::OString Say::makeString(std::shared_ptr<IDatabaseObject> object) {
       if (object == player_)
-        return library::OString("You say, \"" + text_ + "\"");
+        return library::OString("You say, \"") + text_ + library::OString("\"");
 
       library::OString name;
       NameFormatter::inlineFormat(scope_,
                                   object,
                                   player_,
                                   name);
-      return name + library::OString(" says, \"" + text_ + "\"");
+      return name + library::OString(" says, \"") + text_ + library::OString("\"");
     }
 
     void Say::enact(std::shared_ptr<ActionScope> scope) {

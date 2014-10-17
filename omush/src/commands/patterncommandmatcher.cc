@@ -37,11 +37,11 @@ namespace omush {
         for (auto n : names) {
           try {
             std::string pat = p;
+            std::map<std::string,std::string> matches;
             library::string::replace_all(pat, "COMMAND_NAME", n);
-
-            std::regex rx(pat.c_str(), std::regex::icase);
-            std::cmatch what;
-            if (std::regex_match(string.c_str(), what, rx)) {
+            if (library::regex_named_match(string,
+                                           pat.c_str(),
+                                           matches)) {
               definition = ptr;
               return true;
             }

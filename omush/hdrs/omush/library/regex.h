@@ -8,6 +8,9 @@
 #define OMUSH_HDRS_OMUSH_LIBRARY_REGEX_H_
 
 #include <regex>
+#include <iostream>
+#include <map>
+#include <string>
 
 namespace omush {
   namespace library {
@@ -44,6 +47,11 @@ namespace omush {
         return "";
       }
     }
+
+
+    bool regex_named_match(std::string str,
+                           std::string matchString,
+                           std::map<std::string,std::string>& matches);
   }  // namespace library
 }  // namespace omush
 

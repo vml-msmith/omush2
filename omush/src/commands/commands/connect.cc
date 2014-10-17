@@ -44,6 +44,8 @@ namespace omush {
       std::string userName = "";
       std::string password = "";
 
+      std::size_t pos;
+
       std::vector<std::string> patterns = def.patterns();
       for (auto p : patterns) {
         try {

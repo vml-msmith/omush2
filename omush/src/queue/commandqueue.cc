@@ -16,7 +16,7 @@
 #include "omush/commands/commands/pose.h"
 #include "omush/commands/commands/semipose.h"
 #include "omush/commands/commands/who.h"
-
+#include "omush/commands/commands/think.h"
 #include "omush/commands/commands/look.h"
 #include "omush/commands/commands/set.h"
 
@@ -32,6 +32,7 @@ namespace omush {
     commandParser_->registerCommand(CommandDefinitionPtr(new command::WhoDefinition));
     commandParser_->registerCommand(CommandDefinitionPtr(new command::LookDefinition));
     commandParser_->registerCommand(CommandDefinitionPtr(new command::SetDefinition));
+    commandParser_->registerCommand(CommandDefinitionPtr(new command::ThinkDefinition));
 
 
     commandParser_->registerMatcher(std::move(std::unique_ptr<ICommandMatcher>(new AbsoluteCommandMatcher)));

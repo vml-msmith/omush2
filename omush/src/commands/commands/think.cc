@@ -26,7 +26,7 @@ namespace omush {
 
     std::vector<std::string> ThinkDefinition::getAliasList() {
       std::vector<std::string> alias;
-      alias.push_back("th");
+      alias.push_back("THINK");
       return alias;
     }
 

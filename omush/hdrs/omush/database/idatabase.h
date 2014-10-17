@@ -11,6 +11,7 @@
 #include <memory>
 #include "omush/library/uuid.h"
 #include "omush/database/flag.h"
+#include "omush/database/power.h"
 
 namespace omush {
   enum DatabaseObjectType { THING = 0, PLAYER = 1, ROOM = 2 };
@@ -26,6 +27,7 @@ namespace omush {
     virtual bool getObjectsByType(DatabaseObjectType type,
                                   UuidToDbObjectMap *map) = 0;
     FlagDirectory flags;
+    PowerDirectory powers;
   };
 }  // namespace omush
 

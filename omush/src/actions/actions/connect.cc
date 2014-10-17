@@ -15,6 +15,7 @@
 #include "omush/actions/actions/look.h"
 #include "omush/library/log.h"
 #include "omush/library/string.h"
+#include "omush/database/nameformatter.h"
 
 namespace omush {
   namespace actions {
@@ -35,7 +36,6 @@ namespace omush {
       player_ = object;
     }
 
-
     library::OString Connect::playerHasConnectedString(
       std::shared_ptr<IDatabaseObject> object) {
       if (object == player_) {
@@ -45,7 +45,14 @@ namespace omush {
 
       // TODO(msmith): Format this name.
       Strings::ReplaceMap replacements;
-      replacements["!playerName"] = player_->getName();
+      library::OString name;
+      NameFormatter::format(scope_,
+                            object,
+                            player_,
+                            0,
+                            name);
+
+      replacements["!playerName"] = name;
       return Strings::get("ACTION_CONNECT__OTHER_HAS_CONNECTED",
                           scope_,
                           replacements);

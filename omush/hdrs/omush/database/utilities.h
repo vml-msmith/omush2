@@ -16,65 +16,69 @@ namespace omush {
 
   bool hasFlag(std::shared_ptr<IDatabase> db,
                std::shared_ptr<IDatabaseObject> object,
-               std::string name) {
-    Flag* f = db->flags.getFlag(name);
-    if (f == NULL) {
-      return false;
-    }
-
-    return object->hasFlagByBit(f->bit);
-  }
+               std::string name);
 
   bool hasFlagByBit(std::shared_ptr<IDatabaseObject> object,
-                    uint64_t bit) {
-    return object->hasFlagByBit(bit);
-  }
+                    uint64_t bit);
 
   void addFlag(std::shared_ptr<IDatabase> db,
                std::shared_ptr<IDatabaseObject> object,
-               std::string name) {
-    Flag* f = db->flags.getFlag(name);
-    if (f == NULL) {
-      return;
-    }
-
-    return object->addFlagByBit(f->bit);
-  }
+               std::string name);
 
   void addFlagByBit(std::shared_ptr<IDatabaseObject> object,
-                    uint64_t bit) {
-    return object->addFlagByBit(bit);
-  }
+                    uint64_t bit);
 
   void removeFlagByBit(std::shared_ptr<IDatabaseObject> object,
-                       uint64_t bit) {
-    return object->removeFlagByBit(bit);
-  }
+                       uint64_t bit);
 
   void removeFlag(std::shared_ptr<IDatabase> db,
                   std::shared_ptr<IDatabaseObject> object,
-                  std::string name) {
-    Flag* f = db->flags.getFlag(name);
-    if (f == NULL) {
-      return;
-    }
+                  std::string name);
 
-    return object->removeFlagByBit(f->bit);
-  }
+  bool hasPower(std::shared_ptr<IDatabase> db,
+                std::shared_ptr<IDatabaseObject> object,
+                std::string name,
+                int level);
+
+  bool hasPower(std::shared_ptr<IDatabase> db,
+                std::shared_ptr<IDatabaseObject> object,
+                std::string name);
+
+  bool hasPowerByBit(std::shared_ptr<IDatabase> db,
+                     std::shared_ptr<IDatabaseObject> object,
+                     uint64_t bit,
+                     int level);
+
+  void addPower(std::shared_ptr<IDatabase> db,
+                std::shared_ptr<IDatabaseObject> object,
+                std::string name,
+                int level);
+
+  void addPower(std::shared_ptr<IDatabase> db,
+                std::shared_ptr<IDatabaseObject> object,
+                std::string name);
+
+  void addPowerByBit(std::shared_ptr<IDatabaseObject> object,
+                     uint64_t bit,
+                     int level);
+
+  void addPowerByBit(std::shared_ptr<IDatabaseObject> object,
+                     uint64_t bit);
+
+  void removePowerByBit(std::shared_ptr<IDatabaseObject> object,
+                        uint64_t bit);
+
+  void removePower(std::shared_ptr<IDatabase> db,
+                   std::shared_ptr<IDatabaseObject> object,
+                   std::string name);
 
   bool hasOwnershipOfObject(std::shared_ptr<IDatabaseObject> caller,
-                            std::shared_ptr<IDatabaseObject> target) {
-    if (caller == target)
-      return true;
+                            std::shared_ptr<IDatabaseObject> target);
 
-    std::shared_ptr<IDatabaseObject> owner;
-    target->getOwner(owner);
-    if (owner == caller)
-      return true;
-
-    return false;
-  }
-
+  bool hasPowerOver(std::shared_ptr<IDatabase> db,
+                    std::shared_ptr<IDatabaseObject> object,
+                    std::shared_ptr<IDatabaseObject> object2,
+                    std::string name);
 }  // namespace omush
 
 

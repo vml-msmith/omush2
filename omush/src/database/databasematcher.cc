@@ -51,7 +51,6 @@ namespace omush {
     UuidToDbObjectMap map;
     db->getObjectsByType(PLAYER, &map);
 
-
     for (auto iter : map) {
       std::string name = iter.second->getName();
       if (library::string::iequals(name, lookupString)) {
@@ -85,8 +84,7 @@ namespace omush {
       return false;
     }
 
-
-    return false;
+    //    return false;
     // Search *playerName.
 
     // Get the room, add it to the listeners.

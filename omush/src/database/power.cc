@@ -73,7 +73,7 @@ namespace omush {
     if (level < 0 || level > 6)
       return p->name;
 
-    return p->name + powerLevels_[level];
+    return p->description + powerLevels_[level] + ". (" + p->name + ")";
   }
 
   Power* PowerDirectory::getPower(std::string p) {

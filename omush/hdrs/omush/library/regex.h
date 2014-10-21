@@ -48,7 +48,6 @@ namespace omush {
       }
     }
 
-
     bool regex_named_match(std::string str,
                            std::string matchString,
                            std::map<std::string,std::string>& matches);

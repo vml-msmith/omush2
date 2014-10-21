@@ -21,6 +21,8 @@
 #include "omush/database/databaseobject.h"
 #include "omush/database/databasematcher.h"
 
+#include <iostream>
+
 namespace omush {
   namespace command {
 
@@ -35,7 +37,7 @@ namespace omush {
     std::vector<std::string> PowersDefinition::patterns() {
       std::vector<std::string> patterns;
       patterns.push_back("COMMAND_NAME(?P<throwaway> (?P<target>.+))?");
-      patterns.push_back("COMMAND_NAME(?P<throwaway>//(?P<switch>add|remove)) (?P<target>.+)=(?P<power>.+)");
+      patterns.push_back("COMMAND_NAME(?P<throwaway>/(?P<switch>add|remove)) (?P<target>.+)=(?P<power>.+)");
       return patterns;
     }
 
@@ -58,7 +60,7 @@ namespace omush {
       targetString = tempTarget.plainText();
 
       if (targetString.length() == 0) {
-        targetString = "here";
+        targetString = "me";
       }
 
       std::shared_ptr<std::vector<std::shared_ptr<IDatabaseObject>>>
@@ -71,14 +73,18 @@ namespace omush {
                                        targetString,
                                        targetObjects)) {
         if (targetObjects->size() > 1) {
+          std::cout << "Too many" << std::endl;
           error = Strings::get("TARGET_MATCHER__TOO_MANY_MATCHES");
           return false;
         }
       }
       else {
-        return false;
         error = Strings::get("TARGET_MATCHER__NOT_FOUND");
+        return false;
       }
+
+      target = targetObjects->front();
+      std::cout << "HerE" << std::endl;
       return true;
     }
 

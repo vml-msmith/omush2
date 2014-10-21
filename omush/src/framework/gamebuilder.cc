@@ -18,6 +18,7 @@
 #include "omush/database/objectdefinitions/databaseobjectdefinitionroom.h"
 
 #include "omush/functions/functions/add.h"
+#include "omush/database/utilities.h"
 
 namespace omush {
   GameBuilder::GameBuilder() {
@@ -52,6 +53,19 @@ namespace omush {
     dptr->flags.addFlag(Flag("No_Gossip", 'G'));
     dptr->flags.addFlag(Flag("Haven", 'H'));
 
+    dptr->powers.add(Power("Unlimited Quota",
+                           "Privilege to build and create without quota restrictions"));
+    dptr->powers.add(Power("Unlimited Credits",
+                           "Privilege to execute actions without credit restrictions"));
+    dptr->powers.add(Power("Teleport Any Object",
+                           "Ability to @teleport any object"));
+    dptr->powers.add(Power("Teleport Anywhere",
+                           "Abiltiy to @teleport to any location"));
+    dptr->powers.add(Power("Modify",
+                           "Ability to modify other people's objects"));
+    dptr->powers.add(Power("Hide From Everyone",
+                           "Privilege to hide from everyone"));
+
     instance->database = dptr;
     DatabaseFactory factory;
 
@@ -67,8 +81,12 @@ namespace omush {
     factory.buildObject(DatabaseObjectDefinitionPlayer::getInstance(),
                         playerOne);
     playerOne->setName("One");
+    addPower(instance->database, playerOne, "Unlimited Quota");
+    addPower(instance->database, playerOne, "Unlimited Credits");
+    addPower(instance->database, playerOne, "Hide From Everyone");
+    addPower(instance->database, playerOne, "Modify Any Object", 3);
 
-// TODO(msmith): Abstract to a databasemove function.
+    // TODO(msmith): Abstract to a databasemove function.
     playerOne->setLocation(roomZero);
     roomZero->addContent(playerOne);
     instance->database->addObject(playerOne);

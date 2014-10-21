@@ -16,13 +16,17 @@ namespace omush {
     std::string tempString;
     tempString = target->getName();
 
+    if ((flags & POSSESSIVE) == POSSESSIVE) {
+      tempString = tempString + "'s";
+    }
 
     std::string endString = "";
-    if ((flags && DBREF) == DBREF) {
+
+    if ((flags & DBREF) == DBREF) {
       endString += "#0";
     }
 
-    if ((flags && FLAGS) == FLAGS) {
+    if ((flags & FLAGS) == FLAGS) {
       endString += "P";
     }
 
@@ -32,7 +36,7 @@ namespace omush {
 
     string = library::OString(tempString + endString);
 
-    if ((flags && COLORED) == COLORED) {
+    if ((flags & COLORED) == COLORED) {
       // Get the color.
       std::string color = "";
       switch (target->getType()) {

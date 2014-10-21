@@ -25,11 +25,12 @@ namespace omush {
   typedef struct PowerStruct {
     std::string name;
     std::vector<std::string> alias;
+    std::string description;
     uint64_t bit;
     bool sub;
 
     PowerStruct() {}
-    PowerStruct(std::string n) : name(n) {}
+  PowerStruct(std::string n, std::string desc) : name(n), description(desc) {}
   } Power;
 
   class PowerDirectory {

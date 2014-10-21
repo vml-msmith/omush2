@@ -28,7 +28,6 @@ namespace omush {
         pos = matchString.find("?P<");
       }
 
-
       std::regex rx(matchString, std::regex::icase);
       std::smatch what;
       if (std::regex_match(str, what, rx)) {

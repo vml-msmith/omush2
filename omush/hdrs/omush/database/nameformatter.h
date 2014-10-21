@@ -15,10 +15,11 @@ namespace omush {
   class NameFormatter {
    public:
     enum Flags {
-      COLORED = 0x01,
-      DBREF = 0x02,
-      FLAGS = 0x04,
-      IGNORE_HIDDEN = 0x08,
+      COLORED       = 0x0001,
+      DBREF         = 0x0002,
+      FLAGS         = 0x0004,
+      POSSESSIVE    = 0x0008,
+      IGNORE_HIDDEN = 0x0010,
     };
 
     static void inlineFormat(std::shared_ptr<ActionScope> scope,

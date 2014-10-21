@@ -29,6 +29,11 @@ namespace omush {
     virtual bool hasFlagByBit(uint64_t bit) const = 0;
     virtual void addFlagByBit(uint64_t bit) = 0;
     virtual void removeFlagByBit(uint64_t bit) = 0;
+    virtual bool hasPowerByBit(uint64_t bit) const = 0;
+    virtual bool hasPowerByBit(uint64_t bit, int level) const = 0;
+    virtual void addPowerByBit(uint64_t bit) = 0;
+    virtual void addPowerByBit(uint64_t bit, int level) = 0;
+    virtual void removePowerByBit(uint64_t bit) = 0;
   };
 }  // namespace omush
 

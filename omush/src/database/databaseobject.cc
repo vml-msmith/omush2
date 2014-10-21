@@ -80,6 +80,44 @@ namespace omush {
         flags_ = (flags_ ^ bit);
     }
   }
+  bool DatabaseObject::hasPowerByBit(uint64_t bit) const {
+    return hasPowerByBit(bit, 0);
+  }
+
+  bool DatabaseObject::hasPowerByBit(uint64_t bit, int level) const {
+    // TODO(msmith): Make these constants or something.
+    if (level < 0 || level > 5) {
+      return false;
+    }
+
+    return (powers_[level] & bit) == bit;
+  }
+
+  void DatabaseObject::addPowerByBit(uint64_t bit) {
+    return addPowerByBit(bit, 0);
+  }
+
+  void DatabaseObject::addPowerByBit(uint64_t bit, int level) {
+    // TODO(msmith): Make these constants or something.
+    if (level < 0 || level > 5) {
+      return;
+    }
+
+    removePowerByBit(bit);
+
+    powers_[level] = (powers_[level] | bit);
+    if (level != 0) {
+      powers_[0] = (powers_[0] | bit);
+    }
+  }
+
+  void DatabaseObject::removePowerByBit(uint64_t bit) {
+    for (int level = 0; level <= 5; ++level) {
+      if (hasPowerByBit(bit, level)) {
+        powers_[level] = (powers_[level] ^ bit);
+      }
+    }
+  }
 
   bool DatabaseObject::getAttribute(std::string attribute,
                                     std::string &str) {

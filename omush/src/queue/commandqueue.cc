@@ -19,6 +19,7 @@
 #include "omush/commands/commands/think.h"
 #include "omush/commands/commands/look.h"
 #include "omush/commands/commands/set.h"
+#include "omush/commands/commands/powers.h"
 
 namespace omush {
   CommandQueue::CommandQueue() {
@@ -33,6 +34,7 @@ namespace omush {
     commandParser_->registerCommand(CommandDefinitionPtr(new command::LookDefinition));
     commandParser_->registerCommand(CommandDefinitionPtr(new command::SetDefinition));
     commandParser_->registerCommand(CommandDefinitionPtr(new command::ThinkDefinition));
+    commandParser_->registerCommand(CommandDefinitionPtr(new command::PowersDefinition));
 
 
     commandParser_->registerMatcher(std::move(std::unique_ptr<ICommandMatcher>(new AbsoluteCommandMatcher)));

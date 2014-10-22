@@ -29,12 +29,15 @@ namespace omush {
       Powers();
       virtual bool execute(std::shared_ptr<CommandScope> scope) override;
      private:
-      bool _getTarget(std::shared_ptr<CommandScope> scope,
+      bool getTarget_(std::shared_ptr<CommandScope> scope,
                       std::string targetString,
                       std::shared_ptr<IDatabaseObject> looker,
                       std::shared_ptr<IDatabaseObject> &target,
                       library::OString &error);
-  };
+      void explodeInputToPowerStringAndLevel_(const std::string input,
+                                              std::string &powerString,
+                                              int &powerLevel);
+    };
   }  // namespace command
 }  // namespace omush
 

@@ -19,10 +19,12 @@ namespace omush {
       PowerGrant();
       void setTarget(std::shared_ptr<IDatabaseObject> object);
       void setPowerString(std::string powerString);
+      void setPowerLevel(int powerLevel);
       void enact(std::shared_ptr<ActionScope> scope) override;
      private:
       std::shared_ptr<IDatabaseObject> target_;
       std::string powerString_;
+      int powerLevel_;
     };
   }  // namespace actions
 }  // namespace omush

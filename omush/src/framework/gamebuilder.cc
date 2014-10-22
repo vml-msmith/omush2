@@ -54,17 +54,17 @@ namespace omush {
     dptr->flags.addFlag(Flag("Haven", 'H'));
 
     dptr->powers.add(Power("Unlimited Quota",
-                           "Privilege to build and create without quota restrictions"));
+                           "Privilege to build and create without quota restrictions", false));
     dptr->powers.add(Power("Unlimited Credits",
-                           "Privilege to execute actions without credit restrictions"));
+                           "Privilege to execute actions without credit restrictions", false));
     dptr->powers.add(Power("Teleport Any Object",
-                           "Ability to @teleport any object"));
+                           "Ability to @teleport any object", true));
     dptr->powers.add(Power("Teleport Anywhere",
-                           "Abiltiy to @teleport to any location"));
+                           "Abiltiy to @teleport to any location", true));
     dptr->powers.add(Power("Modify",
-                           "Ability to modify other people's objects"));
+                           "Ability to modify other people's objects", true));
     dptr->powers.add(Power("Hide From Everyone",
-                           "Privilege to hide from everyone"));
+                           "Privilege to hide from everyone", true));
 
     instance->database = dptr;
     DatabaseFactory factory;

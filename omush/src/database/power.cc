@@ -59,7 +59,8 @@ namespace omush {
         continue;
 
       if (p.length() > key.length()) {
-        std::string part = p.substr(p.length() - key.length(), key.length());
+        std::string part = p.substr(p.length() - key.length(),
+                                    key.length());
         if (library::string::iequals(part, key)) {
           return i;
         }

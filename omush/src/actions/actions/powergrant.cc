@@ -17,7 +17,7 @@
 
 namespace omush {
   namespace actions {
-    PowerGrant::PowerGrant() : target_(nullptr) {
+    PowerGrant::PowerGrant() : target_(nullptr), powerString_(""), powerLevel_(0) {
       static bool hasAddedStrings = false;
       setEnactor(nullptr);
       if (hasAddedStrings == false) {
@@ -38,6 +38,10 @@ namespace omush {
 
     void PowerGrant::setPowerString(std::string powerString) {
       powerString_ = powerString;
+    }
+
+    void PowerGrant::setPowerLevel(int level) {
+      powerLevel_ = level;
     }
 
     void PowerGrant::enact(std::shared_ptr<ActionScope> scope) {
@@ -65,7 +69,6 @@ namespace omush {
         return;
       }
 
-      std::string powerName = "";
       Power* p = scope->
         queueObject->
         gameInstance->
@@ -73,7 +76,6 @@ namespace omush {
         powers.getPower(powerString_);
 
       if (p == NULL) {
-        std::cout << "Power " << powerString_ << std::endl;
         Notifier::notify(NULL,
                          enactor_,
                          Strings::get("ACTION_POWERGRANT__INVALID_POWER",
@@ -82,13 +84,21 @@ namespace omush {
         return;
       }
 
+      if (powerLevel_ < 0 || powerLevel_ > 5) {
+        Notifier::notify(NULL,
+                         enactor_,
+                         Strings::get("ACTION_POWERGRANT__INVALID_LEVEL",
+                                      scope),
+                         scope);
+      }
+
 
       if (!isRootUser(scope->queueObject->gameInstance->database,
                       enactor_) &&
           !hasPowerByBit(scope->queueObject->gameInstance->database,
                          enactor_,
                          p->bit,
-                         0)) {
+                         powerLevel_)) {
         Notifier::notify(NULL,
                          enactor_,
                          Strings::get("ACTION_POWERGRANT__NO_PERMISSION",
@@ -97,6 +107,8 @@ namespace omush {
         return;
       }
 
+      addPowerByBit(target_, p->bit, powerLevel_);
+
       Notifier::notify(NULL,
                        enactor_,
                        library::OString(target_->getName() + " -- Power granted."),
@@ -104,7 +116,7 @@ namespace omush {
       std::string pName = scope->
         queueObject->
         gameInstance->
-        database->powers.powerToName(p, 0);
+        database->powers.powerToName(p, powerLevel_);
 
       Notifier::notify(NULL,
                        target_,

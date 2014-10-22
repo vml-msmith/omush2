@@ -21,8 +21,6 @@
 #include "omush/database/databaseobject.h"
 #include "omush/database/databasematcher.h"
 
-#include <iostream>
-
 namespace omush {
   namespace command {
 
@@ -50,7 +48,7 @@ namespace omush {
     Powers::Powers() {
     }
 
-    bool Powers::_getTarget(std::shared_ptr<CommandScope> scope,
+    bool Powers::getTarget_(std::shared_ptr<CommandScope> scope,
                             std::string targetString,
                             std::shared_ptr<IDatabaseObject> looker,
                             std::shared_ptr<IDatabaseObject> &target,
@@ -90,7 +88,6 @@ namespace omush {
       }
 
       target = targetObjects->front();
-      std::cout << "HerE" << std::endl;
       return true;
     }
 
@@ -116,7 +113,7 @@ namespace omush {
         scope->queueObject->getExecutorObject(looker);
         library::OString errorString;
         std::string targetString = args["target"];
-        if (!_getTarget(scope,
+        if (!getTarget_(scope,
                         targetString,
                         looker,
                         target,
@@ -137,6 +134,12 @@ namespace omush {
       }
       else {
         std::string switchString = "add";
+        std::string powerString = "";
+        int powerLevel = 0;
+        explodeInputToPowerStringAndLevel_(args["power"],
+                                           powerString,
+                                           powerLevel);
+
         if (args.find("switch") == args.end()) {
           switchString = args["switch"];
         }
@@ -145,14 +148,15 @@ namespace omush {
             actions::PowerGrant action;
             action.setEnactor(enactor);
             action.setTarget(target);
-            action.setPowerString(args["power"]);
+            action.setPowerLevel(powerLevel);
+            action.setPowerString(powerString);
             action.enact(makeActionScope(scope));
         }
         else {
             actions::PowerRevoke action;
             action.setEnactor(enactor);
             action.setTarget(target);
-            action.setPowerString(args["power"]);
+            action.setPowerString(powerString);
             action.enact(makeActionScope(scope));
         }
       }
@@ -160,6 +164,21 @@ namespace omush {
       return true;
     }
 
+    void Powers::explodeInputToPowerStringAndLevel_(const std::string input,
+                                                    std::string &powerString,
+                                                    int &powerLevel) {
+      powerLevel = 0;
+      size_t pos = input.find("/");
+      if (pos == std::string::npos) {
+        powerString = input;
+        return;
+      }
+      powerString = input.substr(0,pos);
+      powerLevel = atoi(input.substr(pos + 1).c_str());
+
+      if (powerLevel < 0)
+        powerLevel = 0;
+    }
 
   }  // namespace command
 }  // namespace omush

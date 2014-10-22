@@ -79,6 +79,9 @@ namespace omush {
                     std::shared_ptr<IDatabaseObject> object,
                     std::shared_ptr<IDatabaseObject> object2,
                     std::string name);
+
+  bool isRootUser(std::shared_ptr<IDatabase> db,
+                  std::shared_ptr<IDatabaseObject> object);
 }  // namespace omush
 
 

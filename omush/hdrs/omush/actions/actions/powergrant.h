@@ -8,6 +8,7 @@
 #define OMUSH_HDRS_OMUSH_ACTIONS_ACTIONS_POWERGRANT_H_
 
 #include "omush/actions/action.h"
+#include <string>
 #include "omush/scope.h"
 #include "omush/database/idatabaseobject.h"
 
@@ -21,6 +22,7 @@ namespace omush {
       void enact(std::shared_ptr<ActionScope> scope) override;
      private:
       std::shared_ptr<IDatabaseObject> target_;
+      std::string powerString_;
     };
   }  // namespace actions
 }  // namespace omush

@@ -45,7 +45,6 @@ namespace omush {
                                                      UuidToObjectMap()));
   }
 
-
   bool Database::getObjectByUUID(library::uuid uuid,
                                  std::shared_ptr<IDatabaseObject>& object)  {
     UuidToObjectMap::iterator iter = objectMap_.find(uuid);
@@ -56,5 +55,13 @@ namespace omush {
 
     object = iter->second;
     return true;
+  }
+
+  void Database::getRootUser(std::shared_ptr<IDatabaseObject> &object) {
+    object = rootUser_;
+  }
+
+  void Database::setRootUser(const std::shared_ptr<IDatabaseObject> object) {
+    rootUser_ = object;
   }
 }  // namespace omush

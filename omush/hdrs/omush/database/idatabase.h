@@ -26,6 +26,8 @@ namespace omush {
                                  std::shared_ptr<IDatabaseObject>& object) = 0;
     virtual bool getObjectsByType(DatabaseObjectType type,
                                   UuidToDbObjectMap *map) = 0;
+    virtual void getRootUser(std::shared_ptr<IDatabaseObject> &object) = 0;
+    virtual void setRootUser(const std::shared_ptr<IDatabaseObject> object) = 0;
     FlagDirectory flags;
     PowerDirectory powers;
   };

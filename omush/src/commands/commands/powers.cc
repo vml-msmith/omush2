@@ -123,13 +123,11 @@ namespace omush {
         }
       }
 
-
       if (args.find("power") == args.end()) {
         actions::PowerList action;
         action.setEnactor(enactor);
         action.setTarget(target);
         action.enact(makeActionScope(scope));
-        // Power list
       }
       else {
         std::string switchString = "add";

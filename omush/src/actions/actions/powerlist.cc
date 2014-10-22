@@ -51,7 +51,7 @@ namespace omush {
         Notifier::notify(NULL,
                          enactor_,
                          Strings::get("ACTION_POWERLIST__NO_PERMISSION",
-                                      scope_),
+                                      scope),
                          scope);
         return;
       }
@@ -104,9 +104,6 @@ namespace omush {
                        enactor_,
                        library::OString("--------------------------------------------------------------------------------"),
                        scope);
-
     }
-
-
   }  // namespace actions
 }  // namespace omush

@@ -9,6 +9,7 @@
 #include "omush/database/idatabase.h"
 #include "omush/database/databaseobject.h"
 
+
 namespace omush {
   bool hasFlag(std::shared_ptr<IDatabase> db,
                std::shared_ptr<IDatabaseObject> object,
@@ -158,5 +159,15 @@ namespace omush {
                     std::shared_ptr<IDatabaseObject> object2,
                     std::string name) {
     return true;
+  }
+
+  bool isRootUser(std::shared_ptr<IDatabase> db,
+                  std::shared_ptr<IDatabaseObject> object) {
+    std::shared_ptr<IDatabaseObject> rootUser;
+    db->getRootUser(rootUser);
+    if (object == rootUser) {
+      return true;
+    }
+    return false;
   }
 }  // namespace omush

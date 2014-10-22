@@ -90,6 +90,7 @@ namespace omush {
     playerOne->setLocation(roomZero);
     roomZero->addContent(playerOne);
     instance->database->addObject(playerOne);
+    instance->database->setRootUser(playerOne);
 
 
     std::shared_ptr<DatabaseObject> playerTwo;

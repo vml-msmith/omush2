@@ -20,7 +20,9 @@ namespace omush {
       virtual std::string name() override;
       virtual std::unique_ptr<ICommand> factory() override;
       virtual std::vector<std::string> patterns() override;
+      std::vector<std::string> getAliasList() override;
     };
+
 
     class Powers : public Command {
      public:

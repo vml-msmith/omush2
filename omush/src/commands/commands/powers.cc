@@ -34,6 +34,12 @@ namespace omush {
       return std::unique_ptr<ICommand>(new Powers);
     }
 
+    std::vector<std::string> PowersDefinition::getAliasList() {
+      std::vector<std::string> alias;
+      alias.push_back("@POWER");
+      return alias;
+    }
+
     std::vector<std::string> PowersDefinition::patterns() {
       std::vector<std::string> patterns;
       patterns.push_back("COMMAND_NAME(?P<throwaway> (?P<target>.+))?");

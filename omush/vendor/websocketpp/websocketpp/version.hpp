@@ -25,58 +25,36 @@
  *
  */
 
-#ifndef WEBSOCKETPP_COMMON_NETWORK_HPP
-#define WEBSOCKETPP_COMMON_NETWORK_HPP
+#ifndef WEBSOCKETPP_VERSION_HPP
+#define WEBSOCKETPP_VERSION_HPP
 
-// For ntohs and htons
-#if defined(_WIN32)
-    #include <winsock2.h>
-#else
-    //#include <arpa/inet.h>
-    #include <netinet/in.h>
-#endif
-
+/// Namespace for the WebSocket++ project
 namespace websocketpp {
-namespace lib {
-namespace net {
 
-inline bool is_little_endian() {
-    short int val = 0x1;
-    char *ptr = (char*)&val;
-    return (ptr[0] == 1);
-}
+/*
+ other places where version information is kept
+ - readme.md
+ - changelog.md
+ - Doxyfile
+ - CMakeLists.txt
+*/
 
-#define TYP_INIT 0
-#define TYP_SMLE 1
-#define TYP_BIGE 2
+/// Library major version number
+static int const major_version = 0;
+/// Library minor version number
+static int const minor_version = 4;
+/// Library patch version number
+static int const patch_version = 0;
+/// Library pre-release flag
+/**
+ * This is a textual flag indicating the type and number for pre-release
+ * versions (dev, alpha, beta, rc). This will be blank for release versions.
+ */
+static char const prerelease_flag[] = "dev";
 
-inline uint64_t _htonll(uint64_t src) {
-    static int typ = TYP_INIT;
-    unsigned char c;
-    union {
-        uint64_t ull;
-        unsigned char c[8];
-    } x;
-    if (typ == TYP_INIT) {
-        x.ull = 0x01;
-        typ = (x.c[7] == 0x01ULL) ? TYP_BIGE : TYP_SMLE;
-    }
-    if (typ == TYP_BIGE)
-        return src;
-    x.ull = src;
-    c = x.c[0]; x.c[0] = x.c[7]; x.c[7] = c;
-    c = x.c[1]; x.c[1] = x.c[6]; x.c[6] = c;
-    c = x.c[2]; x.c[2] = x.c[5]; x.c[5] = c;
-    c = x.c[3]; x.c[3] = x.c[4]; x.c[4] = c;
-    return x.ull;
-}
+/// Default user agent string
+static char const user_agent[] = "WebSocket++/0.4.0-dev";
 
-inline uint64_t _ntohll(uint64_t src) {
-    return _htonll(src);
-}
+} // namespace websocketpp
 
-} // net
-} // lib
-} // websocketpp
-
-#endif // WEBSOCKETPP_COMMON_NETWORK_HPP
+#endif // WEBSOCKETPP_VERSION_HPP

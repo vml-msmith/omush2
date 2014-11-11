@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Peter Thorson. All rights reserved.
+ * Copyright (c) 2014, Peter Thorson. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,58 +25,48 @@
  *
  */
 
-#ifndef WEBSOCKETPP_COMMON_NETWORK_HPP
-#define WEBSOCKETPP_COMMON_NETWORK_HPP
+#ifndef WEBSOCKETPP_CONFIG_MINIMAL_CLIENT_HPP
+#define WEBSOCKETPP_CONFIG_MINIMAL_CLIENT_HPP
 
-// For ntohs and htons
-#if defined(_WIN32)
-    #include <winsock2.h>
-#else
-    //#include <arpa/inet.h>
-    #include <netinet/in.h>
-#endif
+#include <websocketpp/config/minimal_server.hpp>
 
 namespace websocketpp {
-namespace lib {
-namespace net {
+namespace config {
 
-inline bool is_little_endian() {
-    short int val = 0x1;
-    char *ptr = (char*)&val;
-    return (ptr[0] == 1);
-}
+/// Client config with minimal dependencies
+/**
+ * This config strips out as many dependencies as possible. It is suitable for
+ * use as a base class for custom configs that want to implement or choose their
+ * own policies for components that even the core config includes.
+ *
+ * NOTE: this config stubs out enough that it cannot be used directly. You must
+ * supply at least a transport policy and a cryptographically secure random 
+ * number generation policy for a config based on `minimal_client` to do 
+ * anything useful.
+ *
+ * Present dependency list for minimal_server config:
+ *
+ * C++98 STL:
+ * <algorithm>
+ * <map>
+ * <sstream>
+ * <string>
+ * <vector>
+ *
+ * C++11 STL or Boost
+ * <memory>
+ * <functional>
+ * <system_error>
+ *
+ * Operating System:
+ * <stdint.h> or <boost/cstdint.hpp>
+ * <netinet/in.h> or <winsock2.h> (for ntohl.. could potentially bundle this)
+ *
+ * @since 0.4.0-dev
+ */
+typedef minimal_server minimal_client;
 
-#define TYP_INIT 0
-#define TYP_SMLE 1
-#define TYP_BIGE 2
+} // namespace config
+} // namespace websocketpp
 
-inline uint64_t _htonll(uint64_t src) {
-    static int typ = TYP_INIT;
-    unsigned char c;
-    union {
-        uint64_t ull;
-        unsigned char c[8];
-    } x;
-    if (typ == TYP_INIT) {
-        x.ull = 0x01;
-        typ = (x.c[7] == 0x01ULL) ? TYP_BIGE : TYP_SMLE;
-    }
-    if (typ == TYP_BIGE)
-        return src;
-    x.ull = src;
-    c = x.c[0]; x.c[0] = x.c[7]; x.c[7] = c;
-    c = x.c[1]; x.c[1] = x.c[6]; x.c[6] = c;
-    c = x.c[2]; x.c[2] = x.c[5]; x.c[5] = c;
-    c = x.c[3]; x.c[3] = x.c[4]; x.c[4] = c;
-    return x.ull;
-}
-
-inline uint64_t _ntohll(uint64_t src) {
-    return _htonll(src);
-}
-
-} // net
-} // lib
-} // websocketpp
-
-#endif // WEBSOCKETPP_COMMON_NETWORK_HPP
+#endif // WEBSOCKETPP_CONFIG_MINIMAL_CLIENT_HPP

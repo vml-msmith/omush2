@@ -25,58 +25,56 @@
  *
  */
 
-#ifndef WEBSOCKETPP_COMMON_NETWORK_HPP
-#define WEBSOCKETPP_COMMON_NETWORK_HPP
+#ifndef WEBSOCKETPP_PROCESSOR_HYBI08_HPP
+#define WEBSOCKETPP_PROCESSOR_HYBI08_HPP
 
-// For ntohs and htons
-#if defined(_WIN32)
-    #include <winsock2.h>
-#else
-    //#include <arpa/inet.h>
-    #include <netinet/in.h>
-#endif
+#include <websocketpp/processors/hybi13.hpp>
 
 namespace websocketpp {
-namespace lib {
-namespace net {
+namespace processor {
 
-inline bool is_little_endian() {
-    short int val = 0x1;
-    char *ptr = (char*)&val;
-    return (ptr[0] == 1);
-}
+/// Processor for Hybi Draft version 08
+/**
+ * The primary difference between 08 and 13 is a different origin header name
+ */
+template <typename config>
+class hybi08 : public hybi13<config> {
+public:
+    typedef hybi08<config> type;
+    typedef typename config::request_type request_type;
 
-#define TYP_INIT 0
-#define TYP_SMLE 1
-#define TYP_BIGE 2
+    typedef typename config::con_msg_manager_type::ptr msg_manager_ptr;
+    typedef typename config::rng_type rng_type;
 
-inline uint64_t _htonll(uint64_t src) {
-    static int typ = TYP_INIT;
-    unsigned char c;
-    union {
-        uint64_t ull;
-        unsigned char c[8];
-    } x;
-    if (typ == TYP_INIT) {
-        x.ull = 0x01;
-        typ = (x.c[7] == 0x01ULL) ? TYP_BIGE : TYP_SMLE;
+    explicit hybi08(bool secure, bool p_is_server, msg_manager_ptr manager, rng_type& rng)
+      : hybi13<config>(secure, p_is_server, manager, rng) {}
+
+    /// Fill in a set of request headers for a client connection request
+    /**
+     * The Hybi 08 processor only implements incoming connections so this will
+     * always return an error.
+     *
+     * @param [out] req  Set of headers to fill in
+     * @param [in] uri The uri being connected to
+     * @param [in] subprotocols The list of subprotocols to request
+     */
+    lib::error_code client_handshake_request(request_type &, uri_ptr,
+        std::vector<std::string> const &) const
+    {
+        return error::make_error_code(error::no_protocol_support);
     }
-    if (typ == TYP_BIGE)
-        return src;
-    x.ull = src;
-    c = x.c[0]; x.c[0] = x.c[7]; x.c[7] = c;
-    c = x.c[1]; x.c[1] = x.c[6]; x.c[6] = c;
-    c = x.c[2]; x.c[2] = x.c[5]; x.c[5] = c;
-    c = x.c[3]; x.c[3] = x.c[4]; x.c[4] = c;
-    return x.ull;
-}
 
-inline uint64_t _ntohll(uint64_t src) {
-    return _htonll(src);
-}
+    int get_version() const {
+        return 8;
+    }
 
-} // net
-} // lib
-} // websocketpp
+    const std::string& get_origin(request_type const & r) const {
+        return r.get_header("Sec-WebSocket-Origin");
+    }
+private:
+};
 
-#endif // WEBSOCKETPP_COMMON_NETWORK_HPP
+} // namespace processor
+} // namespace websocketpp
+
+#endif //WEBSOCKETPP_PROCESSOR_HYBI08_HPP

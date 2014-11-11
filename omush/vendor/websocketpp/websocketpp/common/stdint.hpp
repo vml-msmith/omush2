@@ -25,58 +25,49 @@
  *
  */
 
-#ifndef WEBSOCKETPP_COMMON_NETWORK_HPP
-#define WEBSOCKETPP_COMMON_NETWORK_HPP
+#ifndef WEBSOCKETPP_COMMON_STDINT_HPP
+#define WEBSOCKETPP_COMMON_STDINT_HPP
 
-// For ntohs and htons
-#if defined(_WIN32)
-    #include <winsock2.h>
-#else
-    //#include <arpa/inet.h>
-    #include <netinet/in.h>
+#ifndef __STDC_LIMIT_MACROS
+    #define __STDC_LIMIT_MACROS 1
 #endif
 
-namespace websocketpp {
-namespace lib {
-namespace net {
+#if defined (_WIN32) && defined (_MSC_VER) && (_MSC_VER < 1600)
+    #include <boost/cstdint.hpp>
 
-inline bool is_little_endian() {
-    short int val = 0x1;
-    char *ptr = (char*)&val;
-    return (ptr[0] == 1);
-}
+    using boost::int8_t;
+    using boost::int_least8_t;
+    using boost::int_fast8_t;
+    using boost::uint8_t;
+    using boost::uint_least8_t;
+    using boost::uint_fast8_t;
 
-#define TYP_INIT 0
-#define TYP_SMLE 1
-#define TYP_BIGE 2
+    using boost::int16_t;
+    using boost::int_least16_t;
+    using boost::int_fast16_t;
+    using boost::uint16_t;
+    using boost::uint_least16_t;
+    using boost::uint_fast16_t;
 
-inline uint64_t _htonll(uint64_t src) {
-    static int typ = TYP_INIT;
-    unsigned char c;
-    union {
-        uint64_t ull;
-        unsigned char c[8];
-    } x;
-    if (typ == TYP_INIT) {
-        x.ull = 0x01;
-        typ = (x.c[7] == 0x01ULL) ? TYP_BIGE : TYP_SMLE;
-    }
-    if (typ == TYP_BIGE)
-        return src;
-    x.ull = src;
-    c = x.c[0]; x.c[0] = x.c[7]; x.c[7] = c;
-    c = x.c[1]; x.c[1] = x.c[6]; x.c[6] = c;
-    c = x.c[2]; x.c[2] = x.c[5]; x.c[5] = c;
-    c = x.c[3]; x.c[3] = x.c[4]; x.c[4] = c;
-    return x.ull;
-}
+    using boost::int32_t;
+    using boost::int_least32_t;
+    using boost::int_fast32_t;
+    using boost::uint32_t;
+    using boost::uint_least32_t;
+    using boost::uint_fast32_t;
 
-inline uint64_t _ntohll(uint64_t src) {
-    return _htonll(src);
-}
+    #ifndef BOOST_NO_INT64_T
+    using boost::int64_t;
+    using boost::int_least64_t;
+    using boost::int_fast64_t;
+    using boost::uint64_t;
+    using boost::uint_least64_t;
+    using boost::uint_fast64_t;
+    #endif
+    using boost::intmax_t;
+    using boost::uintmax_t;
+#else
+    #include <stdint.h>
+#endif
 
-} // net
-} // lib
-} // websocketpp
-
-#endif // WEBSOCKETPP_COMMON_NETWORK_HPP
+#endif // WEBSOCKETPP_COMMON_STDINT_HPP

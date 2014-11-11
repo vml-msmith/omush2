@@ -25,58 +25,28 @@
  *
  */
 
-#ifndef WEBSOCKETPP_COMMON_NETWORK_HPP
-#define WEBSOCKETPP_COMMON_NETWORK_HPP
+#ifndef WEBSOCKETPP_COMMON_CONNECTION_HDL_HPP
+#define WEBSOCKETPP_COMMON_CONNECTION_HDL_HPP
 
-// For ntohs and htons
-#if defined(_WIN32)
-    #include <winsock2.h>
-#else
-    //#include <arpa/inet.h>
-    #include <netinet/in.h>
-#endif
+#include <websocketpp/common/memory.hpp>
 
 namespace websocketpp {
-namespace lib {
-namespace net {
 
-inline bool is_little_endian() {
-    short int val = 0x1;
-    char *ptr = (char*)&val;
-    return (ptr[0] == 1);
-}
+/// A handle to uniquely identify a connection.
+/**
+ * This type uniquely identifies a connection. It is implemented as a weak
+ * pointer to the connection in question. This provides uniqueness across
+ * multiple endpoints and ensures that IDs never conflict or run out.
+ *
+ * It is safe to make copies of this handle, store those copies in containers,
+ * and use them from other threads.
+ *
+ * This handle can be upgraded to a full shared_ptr using
+ * `endpoint::get_con_from_hdl()` from within a handler fired by the connection
+ * that owns the handler.
+ */
+typedef lib::weak_ptr<void> connection_hdl;
 
-#define TYP_INIT 0
-#define TYP_SMLE 1
-#define TYP_BIGE 2
+} // namespace websocketpp
 
-inline uint64_t _htonll(uint64_t src) {
-    static int typ = TYP_INIT;
-    unsigned char c;
-    union {
-        uint64_t ull;
-        unsigned char c[8];
-    } x;
-    if (typ == TYP_INIT) {
-        x.ull = 0x01;
-        typ = (x.c[7] == 0x01ULL) ? TYP_BIGE : TYP_SMLE;
-    }
-    if (typ == TYP_BIGE)
-        return src;
-    x.ull = src;
-    c = x.c[0]; x.c[0] = x.c[7]; x.c[7] = c;
-    c = x.c[1]; x.c[1] = x.c[6]; x.c[6] = c;
-    c = x.c[2]; x.c[2] = x.c[5]; x.c[5] = c;
-    c = x.c[3]; x.c[3] = x.c[4]; x.c[4] = c;
-    return x.ull;
-}
-
-inline uint64_t _ntohll(uint64_t src) {
-    return _htonll(src);
-}
-
-} // net
-} // lib
-} // websocketpp
-
-#endif // WEBSOCKETPP_COMMON_NETWORK_HPP
+#endif // WEBSOCKETPP_COMMON_CONNECTION_HDL_HPP

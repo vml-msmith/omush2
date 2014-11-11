@@ -25,58 +25,33 @@
  *
  */
 
-#ifndef WEBSOCKETPP_COMMON_NETWORK_HPP
-#define WEBSOCKETPP_COMMON_NETWORK_HPP
+#include "connection_tu2.hpp"
 
-// For ntohs and htons
-#if defined(_WIN32)
-    #include <winsock2.h>
-#else
-    //#include <arpa/inet.h>
-    #include <netinet/in.h>
-#endif
-
-namespace websocketpp {
-namespace lib {
-namespace net {
-
-inline bool is_little_endian() {
-    short int val = 0x1;
-    char *ptr = (char*)&val;
-    return (ptr[0] == 1);
+void echo_func(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
+    s->send(hdl, msg->get_payload(), msg->get_opcode());
 }
 
-#define TYP_INIT 0
-#define TYP_SMLE 1
-#define TYP_BIGE 2
-
-inline uint64_t _htonll(uint64_t src) {
-    static int typ = TYP_INIT;
-    unsigned char c;
-    union {
-        uint64_t ull;
-        unsigned char c[8];
-    } x;
-    if (typ == TYP_INIT) {
-        x.ull = 0x01;
-        typ = (x.c[7] == 0x01ULL) ? TYP_BIGE : TYP_SMLE;
-    }
-    if (typ == TYP_BIGE)
-        return src;
-    x.ull = src;
-    c = x.c[0]; x.c[0] = x.c[7]; x.c[7] = c;
-    c = x.c[1]; x.c[1] = x.c[6]; x.c[6] = c;
-    c = x.c[2]; x.c[2] = x.c[5]; x.c[5] = c;
-    c = x.c[3]; x.c[3] = x.c[4]; x.c[4] = c;
-    return x.ull;
+std::string run_server_test(std::string input) {
+    server test_server;
+    return run_server_test(test_server,input);
 }
 
-inline uint64_t _ntohll(uint64_t src) {
-    return _htonll(src);
+std::string run_server_test(server & s, std::string input) {
+    server::connection_ptr con;
+    std::stringstream output;
+
+    s.clear_access_channels(websocketpp::log::alevel::all);
+    s.clear_error_channels(websocketpp::log::elevel::all);
+
+    s.register_ostream(&output);
+
+    con = s.get_connection();
+    con->start();
+
+    std::stringstream channel;
+
+    channel << input;
+    channel >> *con;
+
+    return output.str();
 }
-
-} // net
-} // lib
-} // websocketpp
-
-#endif // WEBSOCKETPP_COMMON_NETWORK_HPP

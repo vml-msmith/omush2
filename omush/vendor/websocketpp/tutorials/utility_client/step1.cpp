@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Peter Thorson. All rights reserved.
+ * Copyright (c) 2014, Peter Thorson. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -22,61 +22,35 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
  */
 
-#ifndef WEBSOCKETPP_COMMON_NETWORK_HPP
-#define WEBSOCKETPP_COMMON_NETWORK_HPP
+// **NOTE:** This file is a snapshot of the WebSocket++ utility client tutorial.
+// Additional related material can be found in the tutorials/utility_client
+// directory of the WebSocket++ repository.
 
-// For ntohs and htons
-#if defined(_WIN32)
-    #include <winsock2.h>
-#else
-    //#include <arpa/inet.h>
-    #include <netinet/in.h>
-#endif
+#include <iostream>
+#include <string>
 
-namespace websocketpp {
-namespace lib {
-namespace net {
+int main() {
+    bool done = false;
+    std::string input;
 
-inline bool is_little_endian() {
-    short int val = 0x1;
-    char *ptr = (char*)&val;
-    return (ptr[0] == 1);
-}
+    while (!done) {
+        std::cout << "Enter Command: ";
+        std::getline(std::cin, input);
 
-#define TYP_INIT 0
-#define TYP_SMLE 1
-#define TYP_BIGE 2
-
-inline uint64_t _htonll(uint64_t src) {
-    static int typ = TYP_INIT;
-    unsigned char c;
-    union {
-        uint64_t ull;
-        unsigned char c[8];
-    } x;
-    if (typ == TYP_INIT) {
-        x.ull = 0x01;
-        typ = (x.c[7] == 0x01ULL) ? TYP_BIGE : TYP_SMLE;
+        if (input == "quit") {
+            done = true;
+        } else if (input == "help") {
+            std::cout 
+                << "\nCommand List:\n"
+                << "help: Display this help text\n"
+                << "quit: Exit the program\n"
+                << std::endl;
+        } else {
+            std::cout << "Unrecognized Command" << std::endl;
+        }
     }
-    if (typ == TYP_BIGE)
-        return src;
-    x.ull = src;
-    c = x.c[0]; x.c[0] = x.c[7]; x.c[7] = c;
-    c = x.c[1]; x.c[1] = x.c[6]; x.c[6] = c;
-    c = x.c[2]; x.c[2] = x.c[5]; x.c[5] = c;
-    c = x.c[3]; x.c[3] = x.c[4]; x.c[4] = c;
-    return x.ull;
+
+    return 0;
 }
-
-inline uint64_t _ntohll(uint64_t src) {
-    return _htonll(src);
-}
-
-} // net
-} // lib
-} // websocketpp
-
-#endif // WEBSOCKETPP_COMMON_NETWORK_HPP

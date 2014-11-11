@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Peter Thorson. All rights reserved.
+ * Copyright (c) 2014, Peter Thorson. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,58 +25,48 @@
  *
  */
 
-#ifndef WEBSOCKETPP_COMMON_NETWORK_HPP
-#define WEBSOCKETPP_COMMON_NETWORK_HPP
+ // This header defines WebSocket++ macros for C++11 compatibility based on the 
+ // Boost.Config library. This will correctly configure most target platforms
+ // simply by including this header before any other WebSocket++ header.
 
-// For ntohs and htons
-#if defined(_WIN32)
-    #include <winsock2.h>
-#else
-    //#include <arpa/inet.h>
-    #include <netinet/in.h>
+#ifndef WEBSOCKETPP_CONFIG_BOOST_CONFIG_HPP
+#define WEBSOCKETPP_CONFIG_BOOST_CONFIG_HPP
+
+#include <boost/config.hpp>
+
+//  _WEBSOCKETPP_CPP11_MEMORY_ and _WEBSOCKETPP_CPP11_FUNCTIONAL_ presently
+//  only work if either both or neither is defined.
+#if !defined BOOST_NO_CXX11_SMART_PTR && !defined BOOST_NO_CXX11_HDR_FUNCTIONAL
+    #define _WEBSOCKETPP_CPP11_MEMORY_
+    #define _WEBSOCKETPP_CPP11_FUNCTIONAL_
 #endif
 
-namespace websocketpp {
-namespace lib {
-namespace net {
+#ifdef BOOST_ASIO_HAS_STD_CHRONO
+    #define _WEBSOCKETPP_CPP11_CHRONO_
+#endif
 
-inline bool is_little_endian() {
-    short int val = 0x1;
-    char *ptr = (char*)&val;
-    return (ptr[0] == 1);
-}
+#ifndef BOOST_NO_CXX11_HDR_RANDOM
+    #define _WEBSOCKETPP_CPP11_RANDOM_DEVICE_
+#endif
 
-#define TYP_INIT 0
-#define TYP_SMLE 1
-#define TYP_BIGE 2
+#ifndef BOOST_NO_CXX11_HDR_REGEX
+    #define _WEBSOCKETPP_CPP11_REGEX_
+#endif
 
-inline uint64_t _htonll(uint64_t src) {
-    static int typ = TYP_INIT;
-    unsigned char c;
-    union {
-        uint64_t ull;
-        unsigned char c[8];
-    } x;
-    if (typ == TYP_INIT) {
-        x.ull = 0x01;
-        typ = (x.c[7] == 0x01ULL) ? TYP_BIGE : TYP_SMLE;
-    }
-    if (typ == TYP_BIGE)
-        return src;
-    x.ull = src;
-    c = x.c[0]; x.c[0] = x.c[7]; x.c[7] = c;
-    c = x.c[1]; x.c[1] = x.c[6]; x.c[6] = c;
-    c = x.c[2]; x.c[2] = x.c[5]; x.c[5] = c;
-    c = x.c[3]; x.c[3] = x.c[4]; x.c[4] = c;
-    return x.ull;
-}
+#ifndef BOOST_NO_CXX11_HDR_SYSTEM_ERROR
+    #define _WEBSOCKETPP_CPP11_SYSTEM_ERROR_
+#endif
 
-inline uint64_t _ntohll(uint64_t src) {
-    return _htonll(src);
-}
+#ifndef BOOST_NO_CXX11_HDR_THREAD
+    #define _WEBSOCKETPP_CPP11_THREAD_
+#endif
 
-} // net
-} // lib
-} // websocketpp
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+    #define _WEBSOCKETPP_INITIALIZER_LISTS_
+#endif
 
-#endif // WEBSOCKETPP_COMMON_NETWORK_HPP
+#define _WEBSOCKETPP_NOEXCEPT_TOKEN_  BOOST_NOEXCEPT
+#define _WEBSOCKETPP_CONSTEXPR_TOKEN_  BOOST_CONSTEXPR
+// TODO: nullptr support
+
+#endif // WEBSOCKETPP_CONFIG_BOOST_CONFIG_HPP

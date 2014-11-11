@@ -25,58 +25,60 @@
  *
  */
 
-#ifndef WEBSOCKETPP_COMMON_NETWORK_HPP
-#define WEBSOCKETPP_COMMON_NETWORK_HPP
-
-// For ntohs and htons
-#if defined(_WIN32)
-    #include <winsock2.h>
-#else
-    //#include <arpa/inet.h>
-    #include <netinet/in.h>
-#endif
+#ifndef WEBSOCKETPP_UTILITIES_IMPL_HPP
+#define WEBSOCKETPP_UTILITIES_IMPL_HPP
 
 namespace websocketpp {
-namespace lib {
-namespace net {
+namespace utility {
 
-inline bool is_little_endian() {
-    short int val = 0x1;
-    char *ptr = (char*)&val;
-    return (ptr[0] == 1);
+inline std::string to_lower(std::string const & in) {
+    std::string out = in;
+    std::transform(out.begin(),out.end(),out.begin(),::tolower);
+    return out;
 }
 
-#define TYP_INIT 0
-#define TYP_SMLE 1
-#define TYP_BIGE 2
+inline std::string to_hex(const std::string& input) {
+    std::string output;
+    std::string hex = "0123456789ABCDEF";
 
-inline uint64_t _htonll(uint64_t src) {
-    static int typ = TYP_INIT;
-    unsigned char c;
-    union {
-        uint64_t ull;
-        unsigned char c[8];
-    } x;
-    if (typ == TYP_INIT) {
-        x.ull = 0x01;
-        typ = (x.c[7] == 0x01ULL) ? TYP_BIGE : TYP_SMLE;
+    for (size_t i = 0; i < input.size(); i++) {
+        output += hex[(input[i] & 0xF0) >> 4];
+        output += hex[input[i] & 0x0F];
+        output += " ";
     }
-    if (typ == TYP_BIGE)
-        return src;
-    x.ull = src;
-    c = x.c[0]; x.c[0] = x.c[7]; x.c[7] = c;
-    c = x.c[1]; x.c[1] = x.c[6]; x.c[6] = c;
-    c = x.c[2]; x.c[2] = x.c[5]; x.c[5] = c;
-    c = x.c[3]; x.c[3] = x.c[4]; x.c[4] = c;
-    return x.ull;
+
+    return output;
 }
 
-inline uint64_t _ntohll(uint64_t src) {
-    return _htonll(src);
+inline std::string to_hex(const uint8_t* input,size_t length) {
+    std::string output;
+    std::string hex = "0123456789ABCDEF";
+
+    for (size_t i = 0; i < length; i++) {
+        output += hex[(input[i] & 0xF0) >> 4];
+        output += hex[input[i] & 0x0F];
+        output += " ";
+    }
+
+    return output;
 }
 
-} // net
-} // lib
-} // websocketpp
+inline std::string to_hex(const char* input,size_t length) {
+    return to_hex(reinterpret_cast<const uint8_t*>(input),length);
+}
 
-#endif // WEBSOCKETPP_COMMON_NETWORK_HPP
+inline std::string string_replace_all(std::string subject, const std::string&
+    search, const std::string& replace)
+{
+    size_t pos = 0;
+    while((pos = subject.find(search, pos)) != std::string::npos) {
+         subject.replace(pos, search.length(), replace);
+         pos += replace.length();
+    }
+    return subject;
+}
+
+} // namespace utility
+} // namespace websocketpp
+
+#endif // WEBSOCKETPP_UTILITIES_IMPL_HPP

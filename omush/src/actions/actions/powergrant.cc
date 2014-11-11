@@ -44,6 +44,33 @@ namespace omush {
       powerLevel_ = level;
     }
 
+    bool PowerGrant::hasPermission_(std::shared_ptr<ActionScope> scope,
+                                    Power* power,
+                                    int level) {
+      std::string requiredPower = "Power Grant";
+
+      if (!isRootUser(scope->queueObject->gameInstance->database,
+                      enactor_) &&
+          !hasPowerOver(scope->queueObject->gameInstance->database,
+                        enactor_,
+                        target_,
+                        requiredPower)) {
+        return false;
+      }
+
+      if (!isRootUser(scope->queueObject->gameInstance->database,
+                      enactor_) &&
+          !hasPowerByBit(scope->queueObject->gameInstance->database,
+                         enactor_,
+                         power->bit,
+                         powerLevel_)) {
+        return false;
+      }
+
+      return true;
+
+    }
+
     void PowerGrant::enact(std::shared_ptr<ActionScope> scope) {
       if (enactor_ == NULL || enactor_ == nullptr) {
         library::log("action::PowerGrant called without an enactor.");
@@ -55,19 +82,6 @@ namespace omush {
         return;
       }
 
-      if (!isRootUser(scope->queueObject->gameInstance->database,
-                      enactor_) &&
-          !hasPowerOver(scope->queueObject->gameInstance->database,
-                        enactor_,
-                        target_,
-                        "Power Grant")) {
-        Notifier::notify(NULL,
-                         enactor_,
-                         Strings::get("ACTION_POWERGRANT__NO_PERMISSION",
-                                      scope),
-                         scope);
-        return;
-      }
 
       Power* p = scope->
         queueObject->
@@ -92,31 +106,26 @@ namespace omush {
                          scope);
       }
 
-
-      if (!isRootUser(scope->queueObject->gameInstance->database,
-                      enactor_) &&
-          !hasPowerByBit(scope->queueObject->gameInstance->database,
-                         enactor_,
-                         p->bit,
-                         powerLevel_)) {
+      if (!hasPermission_(scope, p, powerLevel_)) {
         Notifier::notify(NULL,
                          enactor_,
                          Strings::get("ACTION_POWERGRANT__NO_PERMISSION",
                                       scope),
                          scope);
-        return;
       }
 
-      addPowerByBit(target_, p->bit, powerLevel_);
 
-      Notifier::notify(NULL,
-                       enactor_,
-                       library::OString(target_->getName() + " -- Power granted."),
-                       scope);
+      addPowerByBit(target_, p->bit, powerLevel_);
+      notifyEnactor_(scope, p);
+      notifyTarget_(scope, p);
+    }
+
+    void PowerGrant::notifyTarget_(std::shared_ptr<ActionScope> scope,
+                                   Power* power) {
       std::string pName = scope->
         queueObject->
         gameInstance->
-        database->powers.powerToName(p, powerLevel_);
+        database->powers.powerToName(power, powerLevel_);
 
       Notifier::notify(NULL,
                        target_,
@@ -124,6 +133,13 @@ namespace omush {
                        scope);
     }
 
+    void PowerGrant::notifyEnactor_(std::shared_ptr<ActionScope> scope,
+                                    Power* power) {
+      Notifier::notify(NULL,
+                       enactor_,
+                       library::OString(target_->getName() + " -- Power granted."),
+                       scope);
+    }
 
   }  // namespace actions
 }  // namespace omush

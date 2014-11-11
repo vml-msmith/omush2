@@ -22,6 +22,13 @@ namespace omush {
       void setPowerLevel(int powerLevel);
       void enact(std::shared_ptr<ActionScope> scope) override;
      private:
+      void notifyEnactor_(std::shared_ptr<ActionScope> scope,
+                          Power* power);
+      void notifyTarget_(std::shared_ptr<ActionScope> scope,
+                         Power* power);
+      bool hasPermission_(std::shared_ptr<ActionScope> scope,
+                          Power* power, int level);
+
       std::shared_ptr<IDatabaseObject> target_;
       std::string powerString_;
       int powerLevel_;

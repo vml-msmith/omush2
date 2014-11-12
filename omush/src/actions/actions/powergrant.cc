@@ -135,9 +135,14 @@ namespace omush {
 
     void PowerGrant::notifyEnactor_(std::shared_ptr<ActionScope> scope,
                                     Power* power) {
+      std::string pName = scope->
+        queueObject->
+        gameInstance->
+        database->powers.powerToName(power, powerLevel_);
+
       Notifier::notify(NULL,
                        enactor_,
-                       library::OString(target_->getName() + " -- Power granted."),
+                       library::OString(target_->getName() + " -- \"" + pName + "\" granted."),
                        scope);
     }
 

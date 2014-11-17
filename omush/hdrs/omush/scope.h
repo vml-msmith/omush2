@@ -7,7 +7,7 @@
 #ifndef OMUSH_HDRS_OMUSH_SCOPE_H_
 #define OMUSH_HDRS_OMUSH_SCOPE_H_
 
-//#include "omush/framework/igameinstance.h"
+#include <string>
 #include "omush/network/common.h"
 #include "omush/library/uuid.h"
 #include "omush/database/idatabaseobject.h"
@@ -15,9 +15,14 @@
 
 
 namespace omush {
+  /**
+   * Forward declaration of IGameInstance.
+   */
   class IGameInstance;
+
+  /*
   struct Scope {
-  public:
+   public:
     IGameInstance* gameInstance;
     DescriptorID descId;
     std::string originalString;
@@ -32,8 +37,11 @@ namespace omush {
       caller = library::generate_null_uuid();
     }
   };
+  */
 
-
+  /**
+   * Scope object for commands in the command "queue"s.
+   */
   struct QueueObject {
     IGameInstance* gameInstance;
     DescriptorID descId;
@@ -55,11 +63,22 @@ namespace omush {
     }
   };
 
+  /**
+   * Scope object once a command has moved from a "Queue" to a "Command".
+   *
+   * This scope includes the QueueObject it was created from.
+   */
   struct CommandScope {
     std::shared_ptr<QueueObject> queueObject;
     // Command specific things that do no perkalate.
   };
 
+  /**
+   * Scope object once a command has moved to an Action.
+   *
+   * This scope includes the QueueObject and the CommandScope that it was
+   * created from.
+   */
   struct ActionScope {
     std::shared_ptr<CommandScope> commandScope;
     std::shared_ptr<QueueObject> queueObject;
@@ -70,6 +89,13 @@ namespace omush {
   };
 
 
+  /**
+   * Scope object once an Action (or possibly command) needs to use execute
+   * code.
+   *
+   * This scope includes the QueueObject, CommandScope and ActionScope it was
+   * created from.
+   */
   struct FunctionScope {
     std::shared_ptr<ActionScope> actionScope;
     std::shared_ptr<CommandScope> commandScope;
@@ -77,13 +103,19 @@ namespace omush {
 
     int depth;
     bool trace;
-  FunctionScope() : depth(0) {}
+    FunctionScope() : depth(0) {}
   };
 
   struct FunctionResponse {
   };
 
-
+  /**
+   * Create an ActionScope shared_ptr from a CommandScope.
+   *
+   * @paramm scope - The CommandScope the ActionScope is created from.
+   *
+   * @return shared_ptr to a new ActionScope.
+   */
   inline std::shared_ptr<ActionScope>
     makeActionScope(std::shared_ptr<CommandScope> scope) {
     std::shared_ptr<ActionScope> aScope(new ActionScope());
@@ -92,6 +124,13 @@ namespace omush {
     return aScope;
   }
 
+  /**
+   * Create a FunctionScope shared_ptr from an ActionScope.
+   *
+   * @paramm scope - The ActionScope this FunctionScope is created from.
+   *
+   * @return shared_ptr to a new FunctionScope.
+   */
   inline std::shared_ptr<FunctionScope>
     makeFunctionScope(std::shared_ptr<ActionScope> scope) {
     std::shared_ptr<FunctionScope> fScope(new FunctionScope());
@@ -101,6 +140,6 @@ namespace omush {
 
     return fScope;
   }
-}  // namesapce omush
+}  // namespace omush
 
 #endif  // OMUSH_HDRS_OMUSH_SCOPE_H_

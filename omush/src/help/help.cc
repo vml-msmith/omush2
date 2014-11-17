@@ -130,4 +130,36 @@ namespace omush {
 
     return directory_.find(key)->second;
   }
+
+
+  bool HelpDb::find(std::string key, std::shared_ptr<HelpEntry> &entry) {
+    bool found = false;
+    std::string index = "";
+    std::string details = "";
+    if (library::string::iequals(key, "") || library::string::iequals(key, "") || library::string::iequals(key, "help")) {
+      found = true;
+      index = "Help";
+      details = "These are the help files.";
+    }
+    else if (library::string::iequals(key, "commands")) {
+      found = true;
+      index = "Commands";
+      details = "These are the commands.";
+    }
+    else {
+      printf(std::string("Not found: " + key  +"\n").c_str());
+    }
+
+    if (found) {
+      entry = std::shared_ptr<HelpEntry>(new HelpEntry);
+      entry->details = details;
+      entry->index = index;
+      printf("Found it not cached.\n");
+      return true;
+    }
+
+    entry = nullptr;
+    return false;
+  }
+
 }  // namespace omush

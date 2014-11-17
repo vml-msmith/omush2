@@ -10,7 +10,6 @@
 #include <queue>
 #include "omush/network/common.h"
 #include "omush/framework/igameinstance.h"
-//#include "omush/library/uuid.h"
 #include "omush/scope.h"
 
 namespace omush {
@@ -21,8 +20,17 @@ namespace omush {
   class ICommandQueue {
    public:
     ICommandQueue() {}
-    ~ICommandQueue() {};
-    virtual bool loop(IGameInstance* gameInstance, QueueObjectQueue *discard) = 0;
+    ~ICommandQueue() {}
+
+    /**
+     *
+     */
+    virtual bool loop(IGameInstance* gameInstance,
+                      QueueObjectQueue *discard) = 0;
+
+    /**
+     *
+     */
     virtual bool addQueueObject(std::shared_ptr<QueueObject> object) = 0;
   };
 }  // namespace omush

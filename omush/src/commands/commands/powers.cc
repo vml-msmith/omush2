@@ -41,7 +41,7 @@ namespace omush {
     std::vector<std::string> PowersDefinition::patterns() {
       std::vector<std::string> patterns;
       patterns.push_back("COMMAND_NAME(?P<throwaway> (?P<target>.+))?");
-      patterns.push_back("COMMAND_NAME(?P<throwaway>/(?P<switch>add|remove)) (?P<target>.+)=(?P<power>.+)");
+      patterns.push_back("COMMAND_NAME(?P<throwaway>/(?P<switch>add|remove|grant|revoke)) (?P<target>.+)=(?P<power>.+)");
       return patterns;
     }
 
@@ -144,7 +144,8 @@ namespace omush {
           switchString = args["switch"];
         }
 
-        if (library::string::iequals(switchString, "add")) {
+        if (library::string::iequals(switchString, "add") ||
+            library::string::iequals(switchString, "grant")) {
             actions::PowerGrant action;
             action.setEnactor(enactor);
             action.setTarget(target);

@@ -9,20 +9,12 @@ SET( PROJ_OUT_PATH   ${CMAKE_BINARY_DIR} )
 SET( PROJ_SOURCES    "" )
 SET( PROJ_HEADERS    "" )
 SET( PROJ_INCLUDES   "hdrs" "vendor" "lib" )
+SET( CMAKE_C_FLAGS "Test")
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -std=c++11 -D_WEBSOCKETPP_CPP11_STL_ -ggdb -fprofile-arcs -ftest-coverage" )
-set (CMAKE_EXE_LINKER_FLAGS "-fprofile-arcs -ftest-coverage --verbose")
+SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FALGS}")
+SET( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS}")
+message(STATUS "Here: ${CMAKE_CXX_FLAGS}")
 SET( PROJ_MAIN       "main.cc" )
-include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-if(COMPILER_SUPPORTS_CXX11)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-elseif(COMPILER_SUPPORTS_CXX0X)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-else()
-        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support.
-Please use a different C++ compiler.")
-endif()
 
 FILE( GLOB_RECURSE PROJ_SOURCES src/*.cc )
 FILE( GLOB_RECURSE PROJ_HEADERS hdrs/${PROJ_NAME}/*.h )
@@ -44,7 +36,7 @@ SET( PROJ_LIBRARIES ${PROJ_NAME}_lib ${Boost_LIBRARIES} ${SQLITE3_LIBRARY} )
 
 TARGET_LINK_LIBRARIES( ${PROJ_NAME} ${PROJ_LIBRARIES} )
 
-
+message(STATUS "Here: ${CMAKE_CXX_FLAGS}")
 ################################
 # Testing
 ################################

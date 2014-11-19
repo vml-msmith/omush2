@@ -24,10 +24,19 @@
 
 
 namespace omush {
-  Game::Game() : initialized_(false), isRebooting_(false) {
+  Game::Game() : initialized_(false), isRebooting_(false), isShutdown_(false) {
   }
 
   Game::~Game() {
+  }
+
+  void Game::close() {
+    if (isRebooting_) {
+      reboot_();
+    }
+    else {
+      instance_->network->shutdown();
+    }
   }
 
   bool Game::isInitialized() const {
@@ -67,7 +76,7 @@ namespace omush {
     loopNewMessages_();
     loopQueues_();
 
-    if (isRebooting_) {
+    if (isRebooting_ || isShutdown_) {
       return false;
     }
 
@@ -87,6 +96,11 @@ namespace omush {
   }
 
   void Game::shutdown() {
+    isShutdown_ = true;
+  }
+
+  void Game::reboot() {
+    isRebooting_ = true;
   }
 
   bool Game::getObjectUUIDFromDescriptor(DescriptorID id,
@@ -242,6 +256,23 @@ namespace omush {
   }
 
   void Game::createRebootFiles_() {
+
+    for (auto& item : connectedDescriptors_) {
+      try {
+        std::string serializedUUID = boost::lexical_cast<std::string>(item.first);
+        printf("UUID: %s:", serializedUUID.c_str());
+        sendNetworkMessageByDescriptor(item.first, "REBOOT_ID:" + serializedUUID);
+        //        std::ofstream ofs("reboot/" + serializedUUID);
+        //boost::archive::text_oarchive oa(ofs);
+        //oa << item.second;
+        instance_->network->poll();
+        instance_->network->closeConnection(item.first);
+      }
+      catch (std::exception &e) {
+        printf("Exception\n");
+      }
+    }
+
     /*
     boost::filesystem::path dir = "reboot";
     if (!exists(dir)) {
@@ -276,6 +307,7 @@ namespace omush {
 
   void Game::reboot_() {
     isRebooting_ = true;
+    createRebootFiles_();
     instance_->network->shutdown();
 
     pid_t pid = fork(); /* Create a child process */

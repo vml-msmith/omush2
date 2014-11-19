@@ -34,6 +34,21 @@ namespace omush {
 
     }
 
+    static void notifyAllOfType(std::shared_ptr<IDatabase> db,
+                                DatabaseObjectType type,
+                                NotifyCallback callback,
+                                std::shared_ptr<ActionScope> scope) {
+      // Create a map of listeners.
+      std::map<library::uuid, std::shared_ptr<IDatabaseObject>> listeners;
+      db->getObjectsByType(type, &listeners);
+      // Get object contents.
+      for (auto& it : listeners) {
+        library::OString str;
+        str = callback(it.second);
+        Notifier::notify(NULL, it.second, str, scope);
+      }
+    }
+
     static void notifySurroundings(IDatabase *db,
                                    std::shared_ptr<IDatabaseObject> object,
                                    NotifyCallback callback,

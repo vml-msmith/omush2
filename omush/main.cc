@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
     last_time = this_time;
   }
 
-  game->shutdown();
+  game->close();
 
   return EXIT_SUCCESS;
 }

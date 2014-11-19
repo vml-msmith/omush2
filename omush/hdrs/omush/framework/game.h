@@ -57,11 +57,13 @@ namespace omush {
 
     Game();
     virtual ~Game();
+    virtual void close() override;
     virtual bool isInitialized() const override;
     virtual bool initialize(IGameInstance* instance) override;
     virtual bool initialize(IGameInstance* instance, IGameBuilder* builder);
     virtual bool loop() override;
     virtual void shutdown() override;
+    virtual void reboot() override;
     virtual void sendNetworkMessageByDescriptor(DescriptorID id,
                                                 std::string message) override;
     virtual void sendNetworkMessage(std::shared_ptr<Connection> connection,
@@ -99,6 +101,7 @@ namespace omush {
 
     bool initialized_;
     bool isRebooting_;
+    bool isShutdown_;
     IGameInstance *instance_;
     DescriptorCommandQueue descriptorQueue_;
   };

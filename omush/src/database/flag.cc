@@ -15,16 +15,26 @@ namespace omush {
     highBit = 1;
   }
 
+  FlagBit FlagDirectory::addFlagWithBit(Flag f,
+                                        FlagBit bit) {
+    std::string name = f.name;
+    library::string::to_upper(name);
+    f.bit = bit;
+    flagMap.insert(std::pair<std::string,Flag>(name, f));
+    flagBitMap.insert(std::pair<FlagBit, Flag*>(highBit,
+                                                &(flagMap[name])));
+    if (bit > highBit) {
+      highBit = bit;
+    }
+  }
+
   FlagBit FlagDirectory::addFlag(Flag f) {
     std::string name = f.name;
     library::string::to_upper(name);
 
     if (flagMap.find(f.name) == flagMap.end()) {
       highBit = highBit << 1;
-      f.bit = highBit;
-      flagMap.insert(std::pair<std::string,Flag>(name, f));
-      flagBitMap.insert(std::pair<FlagBit, Flag*>(highBit,
-                                                  &(flagMap[name])));
+      addFlagWithBit(f, highBit);
     }
 
     return flagMap[name].bit;

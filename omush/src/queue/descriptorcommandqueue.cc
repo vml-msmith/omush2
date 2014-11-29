@@ -15,6 +15,7 @@
 #include "omush/commands/commands/welcome_screen.h"
 #include "omush/commands/absolutecommandmatcher.h"
 #include "omush/commands/patterncommandmatcher.h"
+#include "omush/commands/commands/reconnect.h"
 
 namespace omush {
   DescriptorCommandQueue::DescriptorCommandQueue() {
@@ -25,6 +26,7 @@ namespace omush {
     commandParser_->registerCommand(CommandDefinitionPtr(new command::WelcomeScreenDefinition));
     commandParser_->registerCommand(CommandDefinitionPtr(new command::HuhDefinition));
     commandParser_->registerCommand(CommandDefinitionPtr(new command::WhoDefinition));
+    commandParser_->registerCommand(CommandDefinitionPtr(new command::ReConnectDefinition));
 
     commandParser_->registerMatcher(std::move(std::unique_ptr<ICommandMatcher>(new AbsoluteCommandMatcher)));
     commandParser_->registerMatcher(std::move(std::unique_ptr<ICommandMatcher>(new PatternCommandMatcher)));

@@ -51,6 +51,7 @@ namespace omush {
     virtual void removePowerByBit(uint64_t bit) override;
     virtual bool getAttribute(std::string attribute, std::string &str) override;
     virtual void setAttribute(std::string attributeName, std::string attributeValue) override;
+    virtual void getAttributeList(std::vector<std::string> &list) override;
    protected:
     uint64_t flags_;
     std::vector<uint64_t> powers_;

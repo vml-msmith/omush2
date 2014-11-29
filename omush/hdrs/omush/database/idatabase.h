@@ -15,6 +15,23 @@
 
 namespace omush {
   enum DatabaseObjectType { THING = 0, PLAYER = 1, ROOM = 2 };
+  inline std::string DatabaseObjectTypeToString(DatabaseObjectType type) {
+    switch (type) {
+    case PLAYER:
+      return "PLAYER";
+      break;
+    case ROOM:
+      return "ROOM";
+      break;
+    default:
+    case THING:
+      return "THING";
+      break;
+    }
+
+    return "UNKNOWN";
+  }
+
   class IDatabaseObject;
   typedef std::map<library::uuid,std::shared_ptr<IDatabaseObject>> UuidToDbObjectMap;
 
@@ -26,6 +43,7 @@ namespace omush {
                                  std::shared_ptr<IDatabaseObject>& object) = 0;
     virtual bool getObjectsByType(DatabaseObjectType type,
                                   UuidToDbObjectMap *map) = 0;
+    virtual bool getObjects(UuidToDbObjectMap *map) = 0;
     virtual void getRootUser(std::shared_ptr<IDatabaseObject> &object) = 0;
     virtual void setRootUser(const std::shared_ptr<IDatabaseObject> object) = 0;
     FlagDirectory flags;

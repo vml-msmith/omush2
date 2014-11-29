@@ -39,6 +39,7 @@ namespace omush {
 
     PowerDirectory();
     uint64_t add(Power p);
+    uint64_t addWithBit(Power p, uint64_t bit);
     uint64_t getPowerBit(std::string p);
     Power* getPower(std::string p);
     int getLevelFromString(std::string p);

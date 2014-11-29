@@ -48,6 +48,8 @@ namespace omush {
     virtual void getDescriptorList(std::vector<DescriptorID> &descriptors) = 0;
     virtual bool descriptorIDToConnection_(DescriptorID id,
                                            std::shared_ptr<IGame::Connection> &connection) = 0;
+    virtual void reconnectConnectionById(DescriptorID descId,
+                                         std::string uid) = 0;
    private:
   };
 }  // namespace omush

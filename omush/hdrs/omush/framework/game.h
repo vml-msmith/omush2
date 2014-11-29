@@ -81,6 +81,8 @@ namespace omush {
     virtual bool descriptorIDToConnection_(
         DescriptorID id,
         std::shared_ptr<IGame::Connection> &connection);
+    virtual void reconnectConnectionById(DescriptorID descId,
+                                         std::string uid) override;
    private:
     virtual void loopNewMessages_();
     virtual void loopQueues_();

@@ -25,6 +25,7 @@ namespace omush {
     virtual bool getObjectByUUID(library::uuid uuid,
                                  std::shared_ptr<IDatabaseObject>& object)
       override;
+    virtual bool getObjects(UuidToDbObjectMap *map) override;
     virtual void getRootUser(std::shared_ptr<IDatabaseObject> &object) override;
     virtual void setRootUser(const std::shared_ptr<IDatabaseObject> object) override;
   private:

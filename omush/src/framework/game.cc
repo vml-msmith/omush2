@@ -22,6 +22,8 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
+#include "SQLiteCpp/SQLiteCpp.h"
+#include "omush/database/databasestorage.h"
 
 namespace omush {
   Game::Game() : initialized_(false), isRebooting_(false), isShutdown_(false) {
@@ -31,6 +33,10 @@ namespace omush {
   }
 
   void Game::close() {
+    // Shut down the DB.
+    DatabaseStorage dbStorage;
+    dbStorage.saveToDatabase("database", instance_->database);
+
     if (isRebooting_) {
       reboot_();
     }
@@ -85,6 +91,7 @@ namespace omush {
 
   void Game::sendNetworkMessageByDescriptor(DescriptorID id,
                                             std::string message) {
+    std::cout << "Message: " << message << std::endl;
     NetworkPacket outPacket = NetworkPacket(message);
     instance_->network->sendMessage(NetworkPacketDescriptorPair(outPacket,
                                                                 id));
@@ -159,7 +166,6 @@ namespace omush {
       std::tie(packet, id)  = message;
 
       std::shared_ptr<IGame::Connection> conn;
-      const std::string tmp = boost::lexical_cast<std::string>(id);
 
       if (!descriptorIDToConnection_(id, conn)) {
         newConnection_(id, conn);
@@ -248,61 +254,84 @@ namespace omush {
     std::shared_ptr<QueueObject> object(new QueueObject);
     object->gameInstance = instance_;
     object->descId = conn->id;
-    const std::string tmp = boost::lexical_cast<std::string>(connectedDescriptors_[id]->id);
     object->originalString = "WELCOME_SCREEN";
 
     descriptorQueue_.addQueueObject(object);
     return true;
   }
 
+  void Game::reconnectConnectionById(DescriptorID descId,
+                                     std::string uid) {
+    try {
+      SQLite::Database    db("reboot.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
+      // Compile a SQL query, containing one parameter (index 1)
+      SQLite::Statement   query(db, "SELECT * FROM reboot WHERE reboot_id = ?");
+
+      // Bind the integer value 6 to the first parameter of the SQL query
+      query.bind(1, uid);
+
+      // Loop to execute the query step by step, to get rows of result
+      //std::cout << "Try:  " << << std::endl;
+      while (query.executeStep()) {
+        // Demonstrate how to get some typed column value
+        int         id      = query.getColumn(0);
+        const char* reboot_uid   = query.getColumn(1);
+        const char* db_uid    = query.getColumn(2);
+
+        std::cout << "row: " << id << ", " << reboot_uid << ", " << db_uid << std::endl;
+        library::uuid db = boost::lexical_cast<library::uuid>(db_uid);
+
+        std::cout << "Its: " << db << std::endl;
+        addObjectUUIDForDescriptor(descId,
+                                   db);
+      }
+      SQLite::Statement   deleteQuery(db, "DELETE FROM reboot WHERE reboot_id = ?");
+      deleteQuery.bind(1, uid);
+      while (deleteQuery.executeStep()) {}
+    }
+    catch (std::exception& e) {
+      std::cout << "exception: " << e.what() << std::endl;
+    }
+  }
+
   void Game::createRebootFiles_() {
+    printf("Create reboot ID\n");
+    // Open a database file
+    try {
+      SQLite::Database db("reboot.db3", SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
 
-    for (auto& item : connectedDescriptors_) {
-      try {
-        std::string serializedUUID = boost::lexical_cast<std::string>(item.first);
-        printf("UUID: %s:", serializedUUID.c_str());
-        sendNetworkMessageByDescriptor(item.first, "REBOOT_ID:" + serializedUUID);
-        //        std::ofstream ofs("reboot/" + serializedUUID);
-        //boost::archive::text_oarchive oa(ofs);
-        //oa << item.second;
-        instance_->network->poll();
-        instance_->network->closeConnection(item.first);
+      db.exec("DROP TABLE IF EXISTS reboot");
+
+      // Begin transaction
+      SQLite::Transaction transaction(db);
+
+      db.exec("CREATE TABLE reboot (id INTEGER PRIMARY KEY AUTOINCREMENT, reboot_id TEXT, db_id TEXT)");
+
+      for (auto& item : connectedDescriptors_) {
+        try {
+          std::string serializedUUID = boost::lexical_cast<std::string>(item.first);
+          printf("UUID: %s:\n", serializedUUID.c_str());
+          DescriptorToUUIDMap::iterator dbit = descriptorsToDb_.find(item.first);
+          std::string serializedDBUUID = boost::lexical_cast<std::string>(dbit->second);
+          printf("DB UUID: %s\n", serializedDBUUID.c_str());
+          sendNetworkMessageByDescriptor(item.first, "REBOOT_ID:" + serializedUUID);
+
+          int nb = db.exec("INSERT INTO reboot VALUES (NULL, \""+serializedUUID+"\", \"" + serializedDBUUID + "\")");
+
+
+          instance_->network->poll();
+          instance_->network->closeConnection(item.first);
+        }
+        catch (std::exception &e) {
+          printf("Exception\n");
+        }
       }
-      catch (std::exception &e) {
-        printf("Exception\n");
-      }
+      // Commit transaction
+      transaction.commit();
     }
-
-    /*
-    boost::filesystem::path dir = "reboot";
-    if (!exists(dir)) {
-      printf("Create directory\n");
-      boost::filesystem::create_directory(dir);
+    catch (std::exception& e) {
+      std::cout << "exception: " << e.what() << std::endl;
     }
-
-    namespace fs = boost::filesystem;
-
-    boost::filesystem::directory_iterator it(dir), eod;
-
-    while (it!=eod) {
-      boost::filesystem::remove(*it);
-      it++;
-    }
-
-    for (auto& item : connectedDescriptors_) {
-      try {
-        std::string serializedUUID = boost::lexical_cast<std::string>(item.first);
-        sendNetworkMessageByDescriptor(item.first, "REBOOT_ID:" + serializedUUID);
-        std::ofstream ofs("reboot/" + serializedUUID);
-        boost::archive::text_oarchive oa(ofs);
-        oa << item.second;
-        instance_->network->poll();
-        instance_->network->closeConnection(item.first);
-      }
-      catch (std::exception &e) {
-        printf("Exception\n");
-      }
-    }*/
   }
 
   void Game::reboot_() {
@@ -311,7 +340,6 @@ namespace omush {
     instance_->network->shutdown();
 
     pid_t pid = fork(); /* Create a child process */
-
     switch (pid) {
     case -1: /* Error */
       printf("Uh-Oh! fork() failed.\n");

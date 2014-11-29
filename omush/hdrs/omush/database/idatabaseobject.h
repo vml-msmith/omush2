@@ -26,6 +26,7 @@ namespace omush {
     virtual void getContents(std::vector<std::shared_ptr<IDatabaseObject>> &contents) = 0;
     virtual bool getAttribute(std::string attribute, std::string &str) = 0;
     virtual void setAttribute(std::string attributeName, std::string attributeValue) = 0;
+    virtual void getAttributeList(std::vector<std::string> &list) = 0;
     virtual bool hasFlagByBit(uint64_t bit) const = 0;
     virtual void addFlagByBit(uint64_t bit) = 0;
     virtual void removeFlagByBit(uint64_t bit) = 0;

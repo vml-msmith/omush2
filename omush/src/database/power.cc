@@ -9,7 +9,7 @@
 #include <vector>
 #include <map>
 #include "omush/library/string.h"
-
+#include <iostream>
 namespace omush {
   PowerDirectory::PowerDirectory() {
     highBit = 1;
@@ -21,18 +21,28 @@ namespace omush {
     powerLevels_.push_back(" In Division, Lower Class");
   }
 
+  uint64_t PowerDirectory::addWithBit(Power p, uint64_t bit) {
+    std::string name = p.name;
+    library::string::to_upper(name);
+    p.bit = bit;
+    powerMap.insert(std::pair<std::string, Power>(name, p));
+    powerBitMap.insert(std::pair<uint64_t, Power*>(highBit, &(powerMap[name])));
+    uint64_t n = powerMap[name].bit;
+
+    if (bit > highBit) {
+      highBit = bit;
+    }
+
+    return n;
+  }
+
   uint64_t PowerDirectory::add(Power p) {
     std::string name = p.name;
     library::string::to_upper(name);
 
     if (powerMap.find(name) == powerMap.end()) {
       highBit = highBit << 1;
-
-      p.bit = highBit;
-
-      powerMap.insert(std::pair<std::string, Power>(name, p));
-
-      powerBitMap.insert(std::pair<uint64_t, Power*>(highBit, &(powerMap[name])));
+      addWithBit(p, highBit);
     }
 
     uint64_t n = powerMap[name].bit;

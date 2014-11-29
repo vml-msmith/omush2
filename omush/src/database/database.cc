@@ -27,6 +27,12 @@ namespace omush {
     return true;
   }
 
+  bool Database::getObjects(UuidToDbObjectMap *map) {
+    for (auto &iter : typedObjectMap_) {
+      map->insert(iter.second.begin(), iter.second.end());
+    }
+  }
+
   bool Database::addObject(std::shared_ptr<IDatabaseObject> object) {
     objectMap_.insert(UuidToObjectMapPair(object->getUuid(), object));
 

@@ -32,6 +32,7 @@ namespace omush {
     typedef std::map<FlagBit, Flag*> BitFlagPtrMap;
 
     FlagBit addFlag(Flag f);
+    FlagBit addFlagWithBit(Flag f, FlagBit bit);
     FlagBit getFlagBit(std::string f);
     Flag* getFlag(std::string f);
     FlagMap getAllFlags();

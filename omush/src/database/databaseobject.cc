@@ -130,6 +130,12 @@ namespace omush {
     return true;
   }
 
+  void DatabaseObject::getAttributeList(std::vector<std::string> &list) {
+    for (auto &iter : attributes_) {
+      list.push_back(iter.first);
+    }
+  }
+
   void DatabaseObject::setAttribute(std::string attributeName,
                                     std::string attributeValue)  {
     if (attributes_.find(attributeName) == attributes_.end()) {

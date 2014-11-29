@@ -25,6 +25,11 @@ namespace omush {
 
       return true;
     }
+
+    void setUuid(library::uuid uuid,
+                 std::shared_ptr<DatabaseObject>& newObject) {
+      newObject->uuid_ = uuid;
+    }
   };
 
 }  // namespace omush

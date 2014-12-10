@@ -92,17 +92,23 @@ namespace omush {
     std::map<library::uuid, std::shared_ptr<IDatabaseObject>> listeners;
     std::shared_ptr<IDatabaseObject> location = nullptr;
     looker->getLocation(location);
+    std::vector<std::shared_ptr<IDatabaseObject>> contents;
     if (location != nullptr) {
       listeners[location->getUuid()] = location;
 
       // Get location contents.
-      std::vector<std::shared_ptr<IDatabaseObject>> contents;
       location->getContents(contents);
       for (auto item : contents) {
         listeners[item->getUuid()] = item;
       }
 
       // TODO(msmith): Notifiy exits that are "open".
+    }
+
+    looker->getContents(contents);
+    for (auto item : contents) {
+      std::cout << item->getName() << std::endl;
+      listeners[item->getUuid()] = item;
     }
 
 

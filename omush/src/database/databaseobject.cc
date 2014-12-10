@@ -62,7 +62,9 @@ namespace omush {
 
   void DatabaseObject::getContents(
       std::vector<std::shared_ptr<IDatabaseObject>> &contents) {
+                                   printf("Get content\n");
     for (auto &item : contents_) {
+      printf("test\n");
       contents.push_back(item.second);
     }
   }

@@ -125,7 +125,7 @@ namespace omush {
         }
       }
       else {
-        Notifier::notify(NULL, looker, library::OString("Test"), makeActionScope(scope));
+        Notifier::notify(NULL, looker, library::OString("Can't find it"), makeActionScope(scope));
       }
 
       return true;

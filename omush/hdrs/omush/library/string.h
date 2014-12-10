@@ -39,7 +39,8 @@ namespace omush {
                                                         std::string sep,
                                                         int segments,
                                                         SplitStringOptions direction) {
-        if (segments < 0) {
+        str = trim(str, " ");
+        if (segments <= 0) {
           segments = 1000;
         }
 

@@ -10,6 +10,9 @@
 #include <string>
 #include "omush/database/idatabase.h"
 
+// TODO(msmith): Get rid of this from the header if we can.
+#include "SQLiteCpp/SQLiteCpp.h"
+
 namespace omush {
   class DatabaseStorage {
    public:
@@ -19,6 +22,14 @@ namespace omush {
     bool saveToDatabase(std::string databaseName,
                         std::shared_ptr<IDatabase> dptr);
    private:
+    void dropTables_(SQLite::Database &db) const;
+    void createTables_(SQLite::Database &db) const;
+    void populateFlagTable_(SQLite::Database &db,
+                              std::shared_ptr<IDatabase> dptr) const;
+    void populatePowerTable_(SQLite::Database &db,
+                               std::shared_ptr<IDatabase> dptr) const;
+    void populateObjectTable_(SQLite::Database &db,
+                                std::shared_ptr<IDatabase> dptr) const;
   };
 }  // namespace omush
 

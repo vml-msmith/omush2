@@ -42,7 +42,7 @@ namespace omush {
       override;
     virtual void getContents(std::vector<std::shared_ptr<IDatabaseObject>> &contents) override;
     virtual void getFlagMask(uint64_t &bit) const override;
-    virtual void setFlagMask(uint64_r maks) override;
+    virtual void setFlagMask(uint64_t maks) override;
     virtual bool hasFlagByBit(uint64_t bit) const override;
     virtual void addFlagByBit(uint64_t bit) override;
     virtual void removeFlagByBit(uint64_t bit) override;

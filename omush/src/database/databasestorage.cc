@@ -60,7 +60,7 @@ namespace omush {
         const char* name    = objectQuery.getColumn(1);
         int type            = objectQuery.getColumn(2);
         int flags           = objectQuery.getColumn(3);
-        const char* powers  = objectQuery.getColumn(4);
+        const char* powersList  = objectQuery.getColumn(4);
 
         // Switch the type.
         DatabaseObjectDefinition* definition;
@@ -80,6 +80,17 @@ namespace omush {
         factory.setUuid(boost::lexical_cast<library::uuid>(id),
                         dbObject);
         dbObject->setName(name);
+        dbObject->setFlagMask(flags);
+
+        std::vector<std::string> powers = library::string::splitIntoSegments(std::string(powersList),
+                                                                             " ");
+
+        for (auto iter : powers) {
+          std::cout << "POWER: " << iter << std::endl;
+          std::vector<std::string> bits = library::string::splitIntoSegments(iter, ":");
+          std::cout << "POWER: " << atoi(bits[0].c_str()) << "  -- " << atoi(bits[1].c_str()) << std::endl;
+          dbObject->setPowerMaskAtLevel(atoi(bits[1].c_str()), atoi(bits[0].c_str()));
+        }
         dptr->addObject(dbObject);
         // Need to add the powers & flags.
       }
@@ -116,7 +127,6 @@ namespace omush {
 
       SQLite::Statement attributeQuery(db, "SELECT * FROM attributes");
       while (attributeQuery.executeStep()) {
-        std::cout << "Attr " << std::endl;
         std::string id      = attributeQuery.getColumn(0);
         const char* name    = attributeQuery.getColumn(1);
         const char* value   = attributeQuery.getColumn(2);
@@ -141,67 +151,68 @@ namespace omush {
     }
   }
 
-  bool DatabaseStorage::saveToDatabase(std::string databaseName,
-                                       std::shared_ptr<IDatabase> dptr) {
-    try {
-      SQLite::Database db(databaseName,
-                          SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
+  void DatabaseStorage::dropTables_(SQLite::Database &db) const {
+    db.exec("DROP TABLE IF EXISTS flags");
+    db.exec("DROP TABLE IF EXISTS powers");
+    db.exec("DROP TABLE IF EXISTS objects");
+    db.exec("DROP TABLE IF EXISTS properties");
+    db.exec("DROP TABLE IF EXISTS attributes");
+  }
 
-      db.exec("DROP TABLE IF EXISTS flags");
-      db.exec("DROP TABLE IF EXISTS powers");
-      db.exec("DROP TABLE IF EXISTS objects");
-      db.exec("DROP TABLE IF EXISTS properties");
-      db.exec("DROP TABLE IF EXISTS attributes");
+  void DatabaseStorage::createTables_(SQLite::Database &db) const {
+    db.exec("CREATE TABLE flags ("       \
+            "id INTEGER PRIMARY KEY, "   \
+            "name TEXT, "                \
+            "alias TEXT, "               \
+            "letter TEXT"                \
+            ")");
 
-      SQLite::Transaction transaction(db);
+    db.exec("CREATE TABLE powers ("      \
+            "id INTEGER PRIMARY KEY, "   \
+            "name TEXT, "                \
+            "alias TEXT, "               \
+            "description TEXT, "         \
+            "isTiered INTEGER"           \
+            ")");
 
-      db.exec("CREATE TABLE flags (" \
-              "id INTEGER PRIMARY KEY, " \
-              "name TEXT, " \
-              "alias TEXT, " \
-              "letter TEXT" \
-              ")");
+    db.exec("CREATE TABLE objects ("  \
+            "id text PRIMARY KEY, "   \
+            "name TEXT, "             \
+            "type INTEGER, "          \
+            "flags INTEGER, "         \
+            "powers TEXT "            \
+            ")");
 
-      db.exec("CREATE TABLE powers (" \
-              "id INTEGER PRIMARY KEY, " \
-              "name TEXT, " \
-              "alias TEXT, " \
-              "description TEXT, " \
-              "isTiered INTEGER"  \
-              ")");
+    db.exec("CREATE TABLE properties ("         \
+            "id text, "                         \
+            "name TEXT, "                       \
+            "value TEXT"                        \
+            ")");
 
-      db.exec("CREATE TABLE objects (" \
-              "id text PRIMARY KEY, " \
-              "name TEXT, " \
-              "type INTEGER, " \
-              "flags INTEGER, " \
-              "powers TEXT " \
-              ")");
+    db.exec("CREATE TABLE attributes ("         \
+            "id text, "                         \
+            "name TEXT, "                       \
+            "value TEXT"                        \
+            ")");
+  }
 
-      db.exec("CREATE TABLE properties (" \
-              "id text, " \
-              "name TEXT, " \
-              "value TEXT" \
-              ")");
+  void DatabaseStorage::populateFlagTable_(SQLite::Database &db,
+                                           std::shared_ptr<IDatabase> dptr) const {
+    for (auto &iter : dptr->flags.getAllFlags()) {
+      std::string alias = "";
+      std::string stmt = "INSERT INTO flags VALUES (" +
+        std::to_string(iter.second.bit) + ", " +
+        "\"" + iter.second.name + "\", " +
+        "\"" + "bleh" + "\", " +
+        "\"" + iter.second.letter + "\"" +
+        ")";
+      std::cout << stmt << std::endl;
+      int nb = db.exec(stmt);
+    }
+  }
 
-      db.exec("CREATE TABLE attributes (" \
-              "id text, " \
-              "name TEXT, " \
-              "value TEXT" \
-              ")");
-
-
-      for (auto &iter : dptr->flags.getAllFlags()) {
-        std::string alias = "";
-        std::string stmt = "INSERT INTO flags VALUES (" +
-          std::to_string(iter.second.bit) + ", " +
-          "\"" + iter.second.name + "\", " +
-          "\"" + "bleh" + "\", " +
-          "\"" + iter.second.letter + "\"" +
-          ")";
-        std::cout << stmt << std::endl;
-        int nb = db.exec(stmt);
-      }
+  void DatabaseStorage::populatePowerTable_(SQLite::Database &db,
+                                            std::shared_ptr<IDatabase> dptr) const {
 
       for (auto &iter : dptr->powers.getAllPowers()) {
         std::string alias = "";
@@ -216,67 +227,89 @@ namespace omush {
         int nb = db.exec(stmt);
       }
 
-      std::map<library::uuid, std::shared_ptr<IDatabaseObject>> map;
-      dptr->getObjects(&map);
-      for (auto &iter : map) {
-        std::string uuid = boost::lexical_cast<std::string>(iter.first);
-        int type = iter.second->getType();
-        std::string name = iter.second->getName();
-        std::string flags = "";
-        std::string powers = "";
+  }
+  void DatabaseStorage::populateObjectTable_(SQLite::Database &db,
+                                             std::shared_ptr<IDatabase> dptr) const {
+    std::map<library::uuid, std::shared_ptr<IDatabaseObject>> map;
+    dptr->getObjects(&map);
+    for (auto &iter : map) {
+      std::string uuid = boost::lexical_cast<std::string>(iter.first);
+      int type = iter.second->getType();
+      std::string name = iter.second->getName();
+      uint64_t flagMask;;
+      iter.second->getFlagMask(flagMask);
+      std::string flags = std::to_string(flagMask);
+      std::string powers;
+      iter.second->getPowerListAsString(powers);
+
+      std::string stmt = "INSERT INTO objects VALUES (\"" +
+        uuid + "\", " +
+        "\"" + name + "\", " +
+        std::to_string(type)  + ", " +
+        flags + ", " +
+        "\"" + powers + "\" " +
+        ")";
+      std::cout << stmt << std::endl;
+      int nb = db.exec(stmt);
+
+      std::map<std::string,std::string> properties;
 
 
-        std::string stmt = "INSERT INTO objects VALUES (\"" +
+      std::shared_ptr<IDatabaseObject> loc;
+      iter.second->getLocation(loc);
+      std::shared_ptr<IDatabaseObject> owner;
+
+      iter.second->getOwner(owner);
+
+      if (loc) {
+        properties.insert(std::pair<std::string,std::string>("location",
+                                                             boost::lexical_cast<std::string>(loc->getUuid())));
+      }
+      if (owner) {
+        properties.insert(std::pair<std::string,std::string>("owner",
+                                                             boost::lexical_cast<std::string>(owner->getUuid())));
+      }
+
+      for (auto &prop : properties) {
+        stmt = "INSERT INTO properties VALUES(\"" +
           uuid + "\", " +
-          "\"" + name + "\", " +
-          std::to_string(type)  + ", " +
-          "\"" + flags + "\", " +
-          "\"" + powers + "\" " +
+          "\"" + prop.first + "\", " +
+          "\"" + prop.second + "\" " +
           ")";
         std::cout << stmt << std::endl;
         int nb = db.exec(stmt);
-
-        std::map<std::string,std::string> properties;
-
-
-        std::shared_ptr<IDatabaseObject> loc;
-        iter.second->getLocation(loc);
-        std::shared_ptr<IDatabaseObject> owner;
-
-        iter.second->getOwner(owner);
-
-        if (loc) {
-          properties.insert(std::pair<std::string,std::string>("location",
-                                                             boost::lexical_cast<std::string>(loc->getUuid())));
-        }
-        if (owner) {
-        properties.insert(std::pair<std::string,std::string>("owner", boost::lexical_cast<std::string>(owner->getUuid())));
-        }
-
-        for (auto &prop : properties) {
-          stmt = "INSERT INTO properties VALUES(\"" +
-            uuid + "\", " +
-            "\"" + prop.first + "\", " +
-            "\"" + prop.second + "\" " +
-            ")";
-          std::cout << stmt << std::endl;
-          int nb = db.exec(stmt);
-        }
-
-        std::vector<std::string> attributes;
-        iter.second->getAttributeList(attributes);
-        for (auto attributeName : attributes) {
-          std::string value;
-          iter.second->getAttribute(attributeName, value);
-          stmt = "INSERT INTO attributes VALUES(\"" +
-            uuid + "\", " +
-            "\"" + attributeName + "\", " +
-            "\"" + value + "\" " +
-            ")";
-          std::cout << stmt << std::endl;
-          int nb = db.exec(stmt);
-        }
       }
+
+      std::vector<std::string> attributes;
+      iter.second->getAttributeList(attributes);
+      for (auto attributeName : attributes) {
+        std::string value;
+        iter.second->getAttribute(attributeName, value);
+        stmt = "INSERT INTO attributes VALUES(\"" +
+          uuid + "\", " +
+          "\"" + attributeName + "\", " +
+          "\"" + value + "\" " +
+          ")";
+        std::cout << stmt << std::endl;
+        int nb = db.exec(stmt);
+      }
+    }
+  }
+
+  bool DatabaseStorage::saveToDatabase(std::string databaseName,
+                                       std::shared_ptr<IDatabase> dptr) {
+    try {
+      SQLite::Database db(databaseName,
+                          SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE);
+      dropTables_(db);
+
+      SQLite::Transaction transaction(db);
+
+      createTables_(db);
+      populateFlagTable_(db, dptr);
+      populatePowerTable_(db, dptr);
+      populateObjectTable_(db, dptr);
+
 
       transaction.commit();
       return true;

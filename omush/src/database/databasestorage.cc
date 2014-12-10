@@ -86,9 +86,7 @@ namespace omush {
                                                                              " ");
 
         for (auto iter : powers) {
-          std::cout << "POWER: " << iter << std::endl;
           std::vector<std::string> bits = library::string::splitIntoSegments(iter, ":");
-          std::cout << "POWER: " << atoi(bits[0].c_str()) << "  -- " << atoi(bits[1].c_str()) << std::endl;
           dbObject->setPowerMaskAtLevel(atoi(bits[1].c_str()), atoi(bits[0].c_str()));
         }
         dptr->addObject(dbObject);
@@ -131,15 +129,12 @@ namespace omush {
         const char* name    = attributeQuery.getColumn(1);
         const char* value   = attributeQuery.getColumn(2);
 
-        std::cout << "Attr (" << id <<  ") " << name << " = " << value << std::endl;
-
         std::shared_ptr<IDatabaseObject> dbObject;
         dptr->getObjectByUUID(boost::lexical_cast<library::uuid>(id),
                               dbObject);
 
         if (dbObject) {
           dbObject->setAttribute(name, value);
-          std::cout << "Set " << std::endl;
         }
       }
 
@@ -206,7 +201,6 @@ namespace omush {
         "\"" + "bleh" + "\", " +
         "\"" + iter.second.letter + "\"" +
         ")";
-      std::cout << stmt << std::endl;
       int nb = db.exec(stmt);
     }
   }
@@ -223,7 +217,6 @@ namespace omush {
           "\"" + iter.second.description + "\", " +
           std::to_string(iter.second.isTiered) +
           ")";
-        std::cout << stmt << std::endl;
         int nb = db.exec(stmt);
       }
 
@@ -249,7 +242,7 @@ namespace omush {
         flags + ", " +
         "\"" + powers + "\" " +
         ")";
-      std::cout << stmt << std::endl;
+
       int nb = db.exec(stmt);
 
       std::map<std::string,std::string> properties;
@@ -276,7 +269,7 @@ namespace omush {
           "\"" + prop.first + "\", " +
           "\"" + prop.second + "\" " +
           ")";
-        std::cout << stmt << std::endl;
+
         int nb = db.exec(stmt);
       }
 
@@ -290,7 +283,6 @@ namespace omush {
           "\"" + attributeName + "\", " +
           "\"" + value + "\" " +
           ")";
-        std::cout << stmt << std::endl;
         int nb = db.exec(stmt);
       }
     }

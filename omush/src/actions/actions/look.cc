@@ -95,9 +95,27 @@ namespace omush {
 
     library::OString Look::contentsLine_(
       std::shared_ptr<ActionScope> scope) {
+
+      library::OString response;
+
       // TODO(msmith): Add @conformat.
 
-      return std::string("");
+      std::map<library::uuid, std::shared_ptr<IDatabaseObject>> objects;
+
+      std::vector<std::shared_ptr<IDatabaseObject>> contents;
+      target_->getContents(contents);
+      for (auto item : contents) {
+        objects[item->getUuid()] = item;
+        library::OString name;
+        NameFormatter::format(scope,
+                              enactor_,
+                              item,
+                              NameFormatter::Flags::COLORED,
+                              name);
+        response += library::OString("\n") + name;
+      }
+
+      return response;
     }
 
   }  // namespace actions

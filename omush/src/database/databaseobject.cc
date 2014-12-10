@@ -73,6 +73,14 @@ namespace omush {
     return (flags_ & bit) == bit;
   }
 
+  void DatabaseObject::getFlagMask(uint64_t &bit) const {
+    bit = flags_;
+  }
+
+  void DatabaseObject::setFlagMask(uint64_t mask) {
+    flags_ = mask;
+  }
+
   void DatabaseObject::addFlagByBit(uint64_t bit) {
     flags_ = (flags_ | bit);
   }
@@ -119,6 +127,17 @@ namespace omush {
         powers_[level] = (powers_[level] ^ bit);
       }
     }
+  }
+
+  void DatabaseObject::getPowerListAsString(std::string &list) const {
+    list = "";
+    for (int level = 0; level <= 5; ++level) {
+      list += std::to_string(level) + ":" + std::to_string(powers_[level]) + " ";
+    }
+  }
+
+  void DatabaseObject::setPowerMaskAtLevel(uint64_t bit, int level)  {
+    powers_[level] = bit;
   }
 
   bool DatabaseObject::getAttribute(std::string attribute,

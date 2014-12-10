@@ -41,6 +41,8 @@ namespace omush {
     virtual void getOwner(std::shared_ptr<IDatabaseObject> &owner)
       override;
     virtual void getContents(std::vector<std::shared_ptr<IDatabaseObject>> &contents) override;
+    virtual void getFlagMask(uint64_t &bit) const override;
+    virtual void setFlagMask(uint64_r maks) override;
     virtual bool hasFlagByBit(uint64_t bit) const override;
     virtual void addFlagByBit(uint64_t bit) override;
     virtual void removeFlagByBit(uint64_t bit) override;
@@ -49,9 +51,11 @@ namespace omush {
     virtual void addPowerByBit(uint64_t bit, int level) override;
     virtual void addPowerByBit(uint64_t bit) override;
     virtual void removePowerByBit(uint64_t bit) override;
+    virtual void getPowerListAsString(std::string &list) const override;
     virtual bool getAttribute(std::string attribute, std::string &str) override;
     virtual void setAttribute(std::string attributeName, std::string attributeValue) override;
     virtual void getAttributeList(std::vector<std::string> &list) override;
+    virtual void setPowerMaskAtLevel(uint64_t bit, int level) override;
    protected:
     uint64_t flags_;
     std::vector<uint64_t> powers_;

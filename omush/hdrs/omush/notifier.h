@@ -26,10 +26,12 @@ namespace omush {
                        std::shared_ptr<IDatabaseObject> who,
                        library::OString message,
                        std::shared_ptr<ActionScope> scope) {
-      DescriptorID id;
-      if (scope->queueObject->gameInstance->game->getDescriptorFromObjectUUID(who->getUuid(), id)) {
-        scope->queueObject->gameInstance->game->sendNetworkMessageByDescriptor(id,
-                                                                               message.outString());
+      std::vector<DescriptorID> descriptors;
+      if (scope->queueObject->gameInstance->game->getDescriptorsFromObjectUUID(who->getUuid(), descriptors)) {
+        for (auto it : descriptors) {
+          scope->queueObject->gameInstance->game->sendNetworkMessageByDescriptor(it,
+                                                                                 message.outString());
+        }
      }
 
     }

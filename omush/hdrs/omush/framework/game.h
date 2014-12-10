@@ -70,8 +70,8 @@ namespace omush {
                                     std::string message);
     virtual bool getObjectUUIDFromDescriptor(library::uuid uid,
                                              DescriptorID &id) override;
-    virtual bool getDescriptorFromObjectUUID(library::uuid uid,
-                                             DescriptorID &id) override;
+    virtual bool getDescriptorsFromObjectUUID(library::uuid uid,
+                                              std::vector<DescriptorID> &descriptors) override;
     virtual void addObjectUUIDForDescriptor(DescriptorID id,
                                             library::uuid uid) override;
     virtual void removeObjectUUIDForDescriptor(DescriptorID id,

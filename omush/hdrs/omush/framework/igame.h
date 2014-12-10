@@ -39,8 +39,8 @@ namespace omush {
                                                 std::string message) = 0;
     virtual bool getObjectUUIDFromDescriptor(DescriptorID id,
                                              library::uuid &uid) = 0;
-    virtual bool getDescriptorFromObjectUUID(library::uuid uid,
-                                             DescriptorID &id) = 0;
+    virtual bool getDescriptorsFromObjectUUID(library::uuid uid,
+                                              std::vector<DescriptorID> &descriptors) = 0;
     virtual void addObjectUUIDForDescriptor(DescriptorID id,
                                             library::uuid uid) = 0;
     virtual void removeObjectUUIDForDescriptor(DescriptorID id,

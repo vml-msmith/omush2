@@ -122,16 +122,18 @@ namespace omush {
     return true;
   }
 
-  bool Game::getDescriptorFromObjectUUID(library::uuid uid,
-                                         DescriptorID &id) {
+  bool Game::getDescriptorsFromObjectUUID(library::uuid uid,
+                                          std::vector<DescriptorID> &descriptors) {
     for (auto& it : descriptorsToDb_) {
       if (it.second == uid) {
-        id = it.first;
-        return true;
+        descriptors.push_back(it.first);
       }
     }
 
-    return false;
+    if (descriptors.empty())
+      return false;
+
+    return true;
   }
 
   void Game::addObjectUUIDForDescriptor(DescriptorID id,

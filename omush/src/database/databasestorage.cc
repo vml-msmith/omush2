@@ -17,6 +17,7 @@
 #include "omush/database/objectdefinitions/databaseobjectdefinitionplayer.h"
 #include "omush/database/objectdefinitions/databaseobjectdefinitionroom.h"
 #include "omush/database/objectdefinitions/databaseobjectdefinitionthing.h"
+#include "omush/database/objectdefinitions/databaseobjectdefinitionexit.h"
 #include "omush/library/string.h"
 
 namespace omush {
@@ -57,10 +58,11 @@ namespace omush {
       while (objectQuery.executeStep()) {
         std::shared_ptr<DatabaseObject> dbObject;
         std::string id      = objectQuery.getColumn(0);
-        const char* name    = objectQuery.getColumn(1);
-        int type            = objectQuery.getColumn(2);
-        int flags           = objectQuery.getColumn(3);
-        const char* powersList  = objectQuery.getColumn(4);
+        int dbref           = objectQuery.getColumn(1);
+        const char* name    = objectQuery.getColumn(2);
+        int type            = objectQuery.getColumn(3);
+        int flags           = objectQuery.getColumn(4);
+        const char* powersList  = objectQuery.getColumn(5);
 
         // Switch the type.
         DatabaseObjectDefinition* definition;
@@ -73,12 +75,18 @@ namespace omush {
           factory.buildObject(DatabaseObjectDefinitionRoom::getInstance(),
                               dbObject);
           break;
+        case EXIT:
+          factory.buildObject(DatabaseObjectDefinitionExit::getInstance(),
+                              dbObject);
+          break;
         default:
           factory.buildObject(DatabaseObjectDefinitionThing::getInstance(),
                               dbObject);
         }
         factory.setUuid(boost::lexical_cast<library::uuid>(id),
                         dbObject);
+
+        dbObject->setDbref(dbref);
         dbObject->setName(name);
         dbObject->setFlagMask(flags);
 
@@ -172,6 +180,7 @@ namespace omush {
 
     db.exec("CREATE TABLE objects ("  \
             "id text PRIMARY KEY, "   \
+            "dbref INTEGER, "         \
             "name TEXT, "             \
             "type INTEGER, "          \
             "flags INTEGER, "         \
@@ -237,6 +246,7 @@ namespace omush {
 
       std::string stmt = "INSERT INTO objects VALUES (\"" +
         uuid + "\", " +
+        std::to_string(iter.second->getDbref()) + ", " +
         "\"" + name + "\", " +
         std::to_string(type)  + ", " +
         flags + ", " +

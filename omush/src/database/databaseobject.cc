@@ -17,6 +17,14 @@ namespace omush {
     name_ = name;
   }
 
+  Dbref DatabaseObject::getDbref() const  {
+    return dbref_;
+  }
+
+  void DatabaseObject::setDbref(Dbref dbref) {
+    dbref_ = dbref;
+  }
+
   library::uuid DatabaseObject::getUuid() const {
     return uuid_;
   }
@@ -42,6 +50,15 @@ namespace omush {
     contents_[content->getUuid()] = content;
   }
 
+  void DatabaseObject::removeContent(
+      std::shared_ptr<IDatabaseObject> content) {
+    if (contents_.find(content->getUuid()) == contents_.end()) {
+      return;
+    }
+
+    contents_.erase(content->getUuid());
+  }
+
   void DatabaseObject::getLocation(
       std::shared_ptr<IDatabaseObject> &location) {
     if (location_ == nullptr) {
@@ -49,6 +66,10 @@ namespace omush {
     }
 
     location = location_;
+  }
+
+  void DatabaseObject::setOwner(std::shared_ptr<IDatabaseObject> owner)  {
+    owner_ = owner;
   }
 
   void DatabaseObject::getOwner(
@@ -60,11 +81,23 @@ namespace omush {
     owner = owner_;
   }
 
+  void DatabaseObject::setHome(std::shared_ptr<IDatabaseObject> home)  {
+    home_ = home;
+  }
+
+  void DatabaseObject::getHome(
+      std::shared_ptr<IDatabaseObject> &home) {
+    if (home_ == nullptr) {
+      return;
+    }
+
+    home = home_;
+  }
+
   void DatabaseObject::getContents(
       std::vector<std::shared_ptr<IDatabaseObject>> &contents) {
                                    printf("Get content\n");
     for (auto &item : contents_) {
-      printf("test\n");
       contents.push_back(item.second);
     }
   }

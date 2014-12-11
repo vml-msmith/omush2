@@ -9,7 +9,7 @@
 #include <boost/uuid/uuid_io.hpp>
 
 namespace omush {
-  Database::Database() {
+  Database::Database() : topDbref_(0) {
   }
 
   bool Database::getObjectsByType(DatabaseObjectType type, UuidToDbObjectMap *map) {
@@ -42,8 +42,15 @@ namespace omush {
       this->createNewObjectTypeMap(type);
       iter = typedObjectMap_.find(type);
     }
+
     iter->second.insert(UuidToObjectMapPair(object->getUuid(), object));
 
+
+    dbrefToUuidMap_.insert(DbrefToUuidMapPair(object->getDbref(), object->getUuid()));
+
+    if (object->getDbref() >= topDbref_) {
+      topDbref_ = object->getDbref();
+    }
   }
 
   void Database::createNewObjectTypeMap(const DatabaseObjectType type) {
@@ -63,11 +70,27 @@ namespace omush {
     return true;
   }
 
+
+  bool Database::getObjectByDbref(Dbref dbref,
+                                  std::shared_ptr<IDatabaseObject>& object) {
+    DbrefToUuidMap::iterator iter = dbrefToUuidMap_.find(dbref);
+    if (iter == dbrefToUuidMap_.end()) {
+      object = nullptr;
+      return false;
+    }
+
+    return getObjectByUUID(iter->second, object);
+  }
+
   void Database::getRootUser(std::shared_ptr<IDatabaseObject> &object) {
     object = rootUser_;
   }
 
   void Database::setRootUser(const std::shared_ptr<IDatabaseObject> object) {
     rootUser_ = object;
+  }
+
+  Dbref Database::getNextDbref() {
+    return topDbref_ + 1;
   }
 }  // namespace omush

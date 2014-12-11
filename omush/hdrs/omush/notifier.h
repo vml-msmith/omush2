@@ -81,7 +81,7 @@ namespace omush {
       for (auto& it : listeners) {
         library::OString str;
         str = callback(it.second);
-        printf("Final\n");
+        printf("Final %s\n", it.second->getName().c_str());
         Notifier::notify(NULL, it.second, str, scope);
       }
     }

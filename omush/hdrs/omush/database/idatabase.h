@@ -14,7 +14,10 @@
 #include "omush/database/power.h"
 
 namespace omush {
-  enum DatabaseObjectType { THING = 0, PLAYER = 1, ROOM = 2 };
+  typedef int Dbref;
+
+  enum DatabaseObjectType { THING = 0, PLAYER = 1, ROOM = 2, EXIT = 3 };
+
   inline std::string DatabaseObjectTypeToString(DatabaseObjectType type) {
     switch (type) {
     case PLAYER:
@@ -22,6 +25,9 @@ namespace omush {
       break;
     case ROOM:
       return "ROOM";
+      break;
+    case EXIT:
+      return "EXIT";
       break;
     default:
     case THING:
@@ -41,11 +47,15 @@ namespace omush {
     virtual bool addObject(std::shared_ptr<IDatabaseObject> object) = 0;
     virtual bool getObjectByUUID(library::uuid uuid,
                                  std::shared_ptr<IDatabaseObject>& object) = 0;
+    virtual bool getObjectByDbref(Dbref dbref,
+                                  std::shared_ptr<IDatabaseObject>& object) = 0;
     virtual bool getObjectsByType(DatabaseObjectType type,
                                   UuidToDbObjectMap *map) = 0;
     virtual bool getObjects(UuidToDbObjectMap *map) = 0;
     virtual void getRootUser(std::shared_ptr<IDatabaseObject> &object) = 0;
     virtual void setRootUser(const std::shared_ptr<IDatabaseObject> object) = 0;
+    virtual Dbref getNextDbref() = 0;
+
     FlagDirectory flags;
     PowerDirectory powers;
   };

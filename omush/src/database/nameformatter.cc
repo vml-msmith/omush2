@@ -23,11 +23,23 @@ namespace omush {
     std::string endString = "";
 
     if ((flags & DBREF) == DBREF) {
-      endString += "#0";
+      endString += "#" + std::to_string(target->getDbref());
     }
 
     if ((flags & FLAGS) == FLAGS) {
-      endString += "P";
+      switch (target->getType()) {
+      case DatabaseObjectType::PLAYER:
+        endString += "P";
+        break;
+      case DatabaseObjectType::ROOM:
+        endString += "R";
+        break;
+      case DatabaseObjectType::EXIT:
+        endString += "E";
+        break;
+      default:
+        endString += "T";
+      }
     }
 
     if (endString.length() > 0) {
@@ -45,6 +57,9 @@ namespace omush {
         break;
       case DatabaseObjectType::ROOM:
         color = "green";
+        break;
+      case DatabaseObjectType::EXIT:
+        color = "cyan";
         break;
       default:
         color = "blue";

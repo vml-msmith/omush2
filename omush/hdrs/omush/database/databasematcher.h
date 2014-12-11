@@ -18,6 +18,10 @@ namespace omush {
 #define SEARCH_INVENTORY  0x20U
 #define SEARCH_SELF       0x40U
 #define SEARCH_REMOTE     0x80U
+  class DatabaseMatcherOptions {
+   public:
+
+  };
 
   class DatabaseMatcher {
    public:
@@ -25,13 +29,6 @@ namespace omush {
 
     DatabaseMatcher(const std::shared_ptr<IDatabase> &db,
                     const std::shared_ptr<IDatabaseObject> &looker);
-    /*
-    void type();
-    void setSearchFlags(uint64_t searchFlags);
-    bool match(std::string matchString,
-               std::shared_ptr<DBMatchList>);
-    */
-
     static bool findPlayer(IDatabase *db,
                            std::string lookupString,
                            std::shared_ptr<IDatabaseObject> &object);

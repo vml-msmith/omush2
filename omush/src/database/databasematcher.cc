@@ -9,6 +9,7 @@
 #include "omush/library/string.h"
 #include "omush/library/regex.h"
 #include "omush/library/log.h"
+#include <iostream>
 
 namespace omush {
   DatabaseMatcher::DatabaseMatcher(const std::shared_ptr<IDatabase> &db,
@@ -67,6 +68,7 @@ namespace omush {
                                     std::shared_ptr<IDatabaseObject> &looker,
                                     std::string lookupString,
                                     std::shared_ptr<std::vector<std::shared_ptr<IDatabaseObject>>>& objects) {
+    std::cout << "Find " << lookupString << std::endl;
     if (library::string::iequals(lookupString, "here")) {
       std::shared_ptr<IDatabaseObject> loc;
       looker->getLocation(loc);
@@ -79,8 +81,16 @@ namespace omush {
       return true;
     }
 
-    if (library::string::iequals(lookupString.substr(0,1),"#")) {
-      // DBref.
+    if (library::string::iequals(lookupString.substr(0,1), "#")) {
+      std::string theRest = lookupString.substr(1,lookupString.length());
+      Dbref ref = atoi(theRest.c_str());
+
+      std::shared_ptr<IDatabaseObject> object;
+      if (db->getObjectByDbref(ref, object)) {
+        objects->push_back(object);
+        return true;
+      }
+
       return false;
     }
 

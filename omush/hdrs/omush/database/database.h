@@ -24,10 +24,16 @@ namespace omush {
                                   UuidToDbObjectMap *map) override;
     virtual bool getObjectByUUID(library::uuid uuid,
                                  std::shared_ptr<IDatabaseObject>& object)
+
+      override;
+    virtual bool getObjectByDbref(Dbref dbref,
+                                  std::shared_ptr<IDatabaseObject>& object)
       override;
     virtual bool getObjects(UuidToDbObjectMap *map) override;
     virtual void getRootUser(std::shared_ptr<IDatabaseObject> &object) override;
     virtual void setRootUser(const std::shared_ptr<IDatabaseObject> object) override;
+    virtual Dbref getNextDbref() override;
+
   private:
     typedef std::map<library::uuid, std::shared_ptr<IDatabaseObject>>
       UuidToObjectMap;
@@ -39,6 +45,12 @@ namespace omush {
     typedef std::pair<DatabaseObjectType, UuidToObjectMap>
       TypeToUuidToObjectMapPair;
     TypeToUuidToObjectMap typedObjectMap_;
+    Dbref topDbref_;
+    typedef std::map<Dbref, library::uuid>
+      DbrefToUuidMap;
+    typedef std::pair<Dbref, library::uuid>
+      DbrefToUuidMapPair;
+    DbrefToUuidMap dbrefToUuidMap_;
     std::shared_ptr<IDatabaseObject> rootUser_;
     void createNewObjectTypeMap(const DatabaseObjectType type);
   };

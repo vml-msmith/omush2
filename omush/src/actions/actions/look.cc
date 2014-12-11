@@ -65,7 +65,9 @@ namespace omush {
       NameFormatter::format(scope,
                             enactor_,
                             target_,
-                            NameFormatter::Flags::COLORED,
+                              NameFormatter::Flags::COLORED |
+                              NameFormatter::Flags::DBREF |
+                              NameFormatter::Flags::FLAGS,
                             name);
       return name;
     }
@@ -110,7 +112,9 @@ namespace omush {
         NameFormatter::format(scope,
                               enactor_,
                               item,
-                              NameFormatter::Flags::COLORED,
+                              NameFormatter::Flags::COLORED |
+                              NameFormatter::Flags::DBREF |
+                              NameFormatter::Flags::FLAGS,
                               name);
         response += library::OString("\n") + name;
       }

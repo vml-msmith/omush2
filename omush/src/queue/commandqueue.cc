@@ -22,6 +22,8 @@
 #include "omush/commands/commands/powers.h"
 #include "omush/commands/commands/shutdown.h"
 #include "omush/commands/commands/create.h"
+#include "omush/commands/commands/open.h"
+#include "omush/commands/commands/go.h"
 
 namespace omush {
   CommandQueue::CommandQueue() {
@@ -39,6 +41,8 @@ namespace omush {
     commandParser_->registerCommand(CommandDefinitionPtr(new command::PowersDefinition));
     commandParser_->registerCommand(CommandDefinitionPtr(new command::ShutdownDefinition));
     commandParser_->registerCommand(CommandDefinitionPtr(new command::CreateDefinition));
+    commandParser_->registerCommand(CommandDefinitionPtr(new command::OpenDefinition));
+    commandParser_->registerCommand(CommandDefinitionPtr(new command::GoDefinition));
 
     commandParser_->registerMatcher(std::move(std::unique_ptr<ICommandMatcher>(new AbsoluteCommandMatcher)));
     commandParser_->registerMatcher(std::move(std::unique_ptr<ICommandMatcher>(new PatternCommandMatcher)));

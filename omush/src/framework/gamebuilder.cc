@@ -81,10 +81,21 @@ instance->database = dptr;
       std::shared_ptr<DatabaseObject> roomZero;
       factory.buildObject(DatabaseObjectDefinitionRoom::getInstance(),
                           roomZero);
+      roomZero->setDbref(instance->database->getNextDbref());
       roomZero->setName("Room Zero");
       roomZero->setAttribute("description",
-                             "This is the global room. Hah%R%n%R%B--.");
+                             "This is room zero..");
       instance->database->addObject(roomZero);
+
+
+      std::shared_ptr<DatabaseObject> masterRoom;
+      factory.buildObject(DatabaseObjectDefinitionRoom::getInstance(),
+                          masterRoom);
+      masterRoom->setDbref(instance->database->getNextDbref());
+      masterRoom->setName("Master");
+      masterRoom->setAttribute("description",
+                             "This is the master room");
+      instance->database->addObject(masterRoom);
 
       std::shared_ptr<DatabaseObject> playerOne;
       factory.buildObject(DatabaseObjectDefinitionPlayer::getInstance(),
@@ -96,21 +107,12 @@ instance->database = dptr;
       addPower(instance->database, playerOne, "Modify Any Object", 3);
 
       // TODO(msmith): Abstract to a databasemove function.
+      playerOne->setDbref(instance->database->getNextDbref());
       playerOne->setLocation(roomZero);
       roomZero->addContent(playerOne);
       instance->database->addObject(playerOne);
       instance->database->setRootUser(playerOne);
 
-
-      std::shared_ptr<DatabaseObject> playerTwo;
-      factory.buildObject(DatabaseObjectDefinitionPlayer::getInstance(),
-                        playerTwo);
-      playerTwo->setName("Two");
-
-      // TODO(msmith): Abstract to a databasemove function.
-      playerTwo->setLocation(roomZero);
-      roomZero->addContent(playerTwo);
-      instance->database->addObject(playerTwo);
     }
 
 

@@ -38,4 +38,10 @@ namespace omush {
     return false;
   }
 
+  void Command::registerStrings_(Strings::ReplaceMap strings) {
+    for (auto& item : strings) {
+      Strings::addStringIfNotPresent(item.first, item.second);
+    }
+  }
+
 }  // namespace omush

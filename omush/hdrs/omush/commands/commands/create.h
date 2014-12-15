@@ -20,14 +20,28 @@ namespace omush {
      */
     class CreateDefinition : public ICommandDefinition {
      public:
+      /**
+       * @CREATE
+       */
       virtual std::string name() override;
+
+      /**
+       * @return command::Create
+       */
       virtual std::unique_ptr<ICommand> factory() override;
+
+      /**
+       * Define the command patterns available.
+       *
+       *  - @create <object name> 
+       *
+       * @return vector - List of regex defining the patterns above.
+       */
       virtual std::vector<std::string> patterns() override;
-      std::vector<std::string> getAliasList() override;
     };
 
     /**
-     * The @create command.
+     * The @create command is used to create a new objet of type THING.
      */
     class Create : public Command {
      public:

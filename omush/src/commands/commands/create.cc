@@ -30,12 +30,6 @@ namespace omush {
       return std::unique_ptr<ICommand>(new Create);
     }
 
-    std::vector<std::string> CreateDefinition::getAliasList() {
-      std::vector<std::string> alias;
-
-      return alias;
-    }
-
     std::vector<std::string> CreateDefinition::patterns() {
       std::vector<std::string> patterns;
       patterns.push_back("COMMAND_NAME(?P<throwaway> (?P<name>.+))?");
@@ -61,10 +55,10 @@ namespace omush {
       }
 
       if (args.find("name") == args.end()) {
-        // TODO(msmith): Should never get here.
+        library::log("command::Create called without a 'name' match.",
+                     library::LogLevel::ERROR);
         return false;
       }
-
 
       actions::Create action;
       action.setEnactor(enactor);
@@ -73,7 +67,5 @@ namespace omush {
 
       return true;
     }
-
-
   }  // namespace command
 }  // namespace omush

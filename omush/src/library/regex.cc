@@ -19,6 +19,7 @@ namespace omush {
       std::queue<std::string> groupNames;
       groupNames.push("whole_string");
       pos = matchString.find("?P<");
+
       while (pos != std::string::npos) {
         start = pos;
         std::size_t end = matchString.find(">", pos + 1);

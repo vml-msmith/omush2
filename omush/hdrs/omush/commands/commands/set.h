@@ -10,7 +10,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "omush/commands/icommand.h"
+#include "omush/commands/command.h"
 
 
 namespace omush {
@@ -23,7 +23,7 @@ namespace omush {
       virtual std::vector<std::string> patterns() override;
     };
 
-    class Set : public ICommand {
+    class Set : public Command {
      public:
       Set();
       virtual bool execute(std::shared_ptr<CommandScope> scope) override;

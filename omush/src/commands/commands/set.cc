@@ -17,6 +17,7 @@
 #include "omush/database/databasematcher.h"
 #include "omush/notifier.h"
 #include "omush/actions/actions/setflag.h"
+#include "omush/actions/actions/setattribute.h"
 
 
 namespace omush {
@@ -34,7 +35,9 @@ namespace omush {
 
     std::vector<std::string> SetDefinition::patterns() {
       std::vector<std::string> patterns;
-      patterns.push_back("@set (.+)=(.+)");
+
+      patterns.push_back("COMMAND_NAME (?P<object>[^=]+)=(?P<attribute>[^:]+):(?P<value>.+)");
+      patterns.push_back("COMMAND_NAME (?P<object>[^=]+)=(?P<value>.+)");
       return patterns;
     }
 
@@ -42,70 +45,60 @@ namespace omush {
     }
 
     bool Set::execute(std::shared_ptr<CommandScope> scope) {
+      std::shared_ptr<IDatabaseObject> enactor;
+      if (!getEnactor_(scope, enactor)) {
+        return true;
+      }
+
       SetDefinition def;
       std::shared_ptr<QueueObject> queueObject(scope->queueObject);
 
       std::string target = "";
       std::string value = "";
 
-      std::vector<std::string> patterns = def.patterns();
-      for (auto p : patterns) {
-        try {
-          std::regex rx(p.c_str(), std::regex::icase);
-          std::smatch what;
-          if (std::regex_match(queueObject->originalString, what, rx)) {
-            for (size_t i = 0; i < what.size(); ++i) {
-              std::ssub_match sub_match = what[i];
-              std::string piece = sub_match.str();
-            }
-            target = what[1];
-            if (what.size() > 2) {
-              value = what[2];
-            }
-            break;
-          }
-        } catch (std::regex_error &e) {
-          library::log(std::string(e.what()) +
-                       " " +
-                       library::parseRegexErrorCode(e.code()));
-        }
-      }
+      std::map<std::string, std::string> args;
+      unpackArgs_(scope, def, args);
 
-      std::shared_ptr<IDatabaseObject> looker;
-      if (!scope->queueObject->gameInstance->database->getObjectByUUID(scope->queueObject->executor,
-                                                                      looker)) {
-        // Log.
-        return false;
-      }
-
+      target = args["object"];
+      value = args["value"];
 
       std::shared_ptr<std::vector<std::shared_ptr<IDatabaseObject>>> targetObjects(new std::vector<std::shared_ptr<IDatabaseObject>>);
       std::shared_ptr<IDatabaseObject> targetObject;
       if (DatabaseMatcher::findTargets(queueObject->gameInstance->database.get(),
-                                       looker,
+                                       enactor,
                                        target,
                                        targetObjects)) {
        if (targetObjects->size() > 1) {
           // Too many.
           Notifier::notify(NULL,
-                           looker,
+                           enactor,
                            library::OString(Strings::get("Too many pattern matches")),
                            makeActionScope(scope));
         }
         else {
 
-          actions::SetFlag setAction;
-          setAction.setPlayer(looker);
-          setAction.setTarget(targetObjects->front());
-          setAction.setValue(value);
-          setAction.enact(makeActionScope(scope));
+          if (args.find("attribute") == args.end()) {
+            actions::SetFlag setAction;
+            setAction.setEnactor(enactor);
+            setAction.setTarget(targetObjects->front());
+            setAction.setValue(value);
+            setAction.enact(makeActionScope(scope));
+          }
+          else {
+            actions::SetAttribute setAction;
+            setAction.setEnactor(enactor);
+            setAction.setTarget(targetObjects->front());
+            setAction.setAttribute(args["attribute"]);
+            setAction.setValue(value);
+            setAction.enact(makeActionScope(scope));
+          }
 
         }
       }
       else {
         Notifier::notify(NULL,
-                         looker,
-                         library::OString("I don't see that here."),
+                         enactor,
+                         library::OString(Strings::get("I don't see that here.")),
                          makeActionScope(scope));
       }
 

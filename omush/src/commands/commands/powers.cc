@@ -94,7 +94,7 @@ namespace omush {
     bool Powers::execute(std::shared_ptr<CommandScope> scope) {
       PowersDefinition def;
       std::map<std::string,std::string> args;
-      _unpackArgs(scope, def, args);
+      unpackArgs_(scope, def, args);
 
 
       std::shared_ptr<IDatabaseObject> enactor;

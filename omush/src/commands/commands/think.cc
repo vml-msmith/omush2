@@ -46,7 +46,7 @@ namespace omush {
     bool Think::execute(std::shared_ptr<CommandScope> scope) {
       ThinkDefinition def;
       std::map<std::string,std::string> args;
-      _unpackArgs(scope, def, args);
+      unpackArgs_(scope, def, args);
 
       if (args.find("arg1") == args.end()) {
         return true;

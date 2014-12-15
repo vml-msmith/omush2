@@ -39,7 +39,7 @@ namespace omush {
     bool ReConnect::execute(std::shared_ptr<CommandScope> scope) {
       ReConnectDefinition def;
       std::map<std::string,std::string> args;
-      _unpackArgs(scope, def, args);
+      unpackArgs_(scope, def, args);
 
 
       std::cout <<  "Reboot " << args["id"] << std::endl;

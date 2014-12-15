@@ -13,6 +13,7 @@
 #include <string>
 #include "omush/scope.h"
 #include "omush/framework/strings.h"
+#include "omush/database/idatabaseobject.h"
 
 namespace omush {
   class Command : public ICommand {
@@ -33,7 +34,7 @@ namespace omush {
     *                  arguments.
     *
     */
-    bool _unpackArgs(std::shared_ptr<CommandScope> scope,
+    bool unpackArgs_(std::shared_ptr<CommandScope> scope,
                      ICommandDefinition& def,
                      std::map<std::string,std::string>& matches);
     /**
@@ -42,6 +43,9 @@ namespace omush {
      * @param strings - map of std::string => library::OString to register.
      */
     void registerStrings_(Strings::ReplaceMap strings);
+
+    bool getEnactor_(std::shared_ptr<CommandScope> scope,
+                     std::shared_ptr<IDatabaseObject> &enactor);
   };
 
 }  // namespace omush

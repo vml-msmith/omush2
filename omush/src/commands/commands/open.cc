@@ -66,7 +66,7 @@ namespace omush {
     bool Open::execute(std::shared_ptr<CommandScope> scope) {
       OpenDefinition def;
       std::map<std::string,std::string> args;
-      _unpackArgs(scope, def, args);
+      unpackArgs_(scope, def, args);
       std::shared_ptr<QueueObject> queueObject(scope->queueObject);
       std::shared_ptr<IDatabaseObject> enactor;
       if (!scope->

@@ -27,9 +27,9 @@ namespace omush {
 
     std::vector<std::string> ConnectDefinition::patterns() {
       std::vector<std::string> patterns;
-      patterns.push_back("COMMAND_NAME (?P<name>([^[:space:]]+))");
-      patterns.push_back("COMMAND_NAME \"(?P<name>([^\"]+))\"[[:space:]]+([^[:space:]]+)");
-      patterns.push_back("COMMAND_NAME (?P<name>([^[:space:]]+))[[:space:]]([^[:space:]]+)");
+      patterns.push_back("COMMAND_NAME (?P<name>[^[:space:]]+)");
+      patterns.push_back("COMMAND_NAME \"(?P<name>[^\"]+)\"[[:space:]]+([^[:space:]]+)");
+      patterns.push_back("COMMAND_NAME (?P<name>[^[:space:]]+)[[:space:]]([^[:space:]]+)");
       return patterns;
     }
 
@@ -48,7 +48,7 @@ namespace omush {
       ConnectDefinition def;
       std::shared_ptr<QueueObject> queueObject(scope->queueObject);
       std::map<std::string, std::string> args;
-      _unpackArgs(scope, def, args);
+      unpackArgs_(scope, def, args);
 
       std::string userName = args["name"];
       std::string password = "";

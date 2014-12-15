@@ -11,9 +11,9 @@
 #include "omush/library/log.h"
 
 namespace omush {
-  bool Command::_unpackArgs(std::shared_ptr<CommandScope> scope,
+  bool Command::unpackArgs_(std::shared_ptr<CommandScope> scope,
                             ICommandDefinition& def,
-                            std::map<std::string,std::string>& matches) {
+                            std::map<std::string, std::string>& matches) {
     std::shared_ptr<QueueObject> queueObject(scope->queueObject);
     std::vector<std::string> patterns = def.patterns();
     std::vector<std::string> names = def.getAliasList();
@@ -26,6 +26,7 @@ namespace omush {
           if (library::regex_named_match(queueObject->originalString,
                                          pat.c_str(),
                                          matches)) {
+            std::cout << "Matched " << pat << std::endl;
             return true;
           }
         } catch (std::regex_error &e) {
@@ -36,6 +37,19 @@ namespace omush {
       }
     }
     return false;
+  }
+
+  bool Command::getEnactor_(std::shared_ptr<CommandScope> scope,
+                            std::shared_ptr<IDatabaseObject> &enactor) {
+    if (!scope->
+        queueObject->
+        gameInstance->
+        database->
+        getObjectByUUID(scope->queueObject->executor,
+                        enactor)) {
+      return false;
+    }
+    return true;
   }
 
   void Command::registerStrings_(Strings::ReplaceMap strings) {

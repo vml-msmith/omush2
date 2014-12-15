@@ -48,7 +48,7 @@ namespace omush {
     bool Create::execute(std::shared_ptr<CommandScope> scope) {
       CreateDefinition def;
       std::map<std::string,std::string> args;
-      _unpackArgs(scope, def, args);
+      unpackArgs_(scope, def, args);
 
       std::shared_ptr<IDatabaseObject> enactor;
       if (!scope->

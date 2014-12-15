@@ -7,13 +7,21 @@
 #ifndef OMUHS_HDRS_OMUSH_LIBRARY_LOG_H_
 #define OMUHS_HDRS_OMUSH_LIBRARY_LOG_H_
 
-#include <stdio.h>
+#include <string>
 
 namespace omush {
   namespace library {
-    inline void log(std::string str) {
-      printf("%s\n", str.c_str());
-    }
+    enum LogLevel { 
+      INFO = 0x01,
+      WARNING = 0x02, 
+      ERROR = 0x04,
+      NOTICE = 0x08,
+      CRASH = 0x002,
+    };
+    
+    void log(std::string str, LogLevel level);
+
+    void log(std::string str);
   }  // namespace log
 }  // namespace omush
 

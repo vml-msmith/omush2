@@ -8,11 +8,8 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "omush/framework/strings.h"
 #include "omush/framework/igame.h"
-#include "omush/library/regex.h"
 #include "omush/library/log.h"
-#include "omush/library/string.h"
 #include "omush/notifier.h"
 #include "omush/actions/actions/create.h"
 #include "omush/functions/iexpressionengine.h"

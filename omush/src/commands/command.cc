@@ -26,7 +26,6 @@ namespace omush {
           if (library::regex_named_match(queueObject->originalString,
                                          pat.c_str(),
                                          matches)) {
-            std::cout << "Matched " << pat << std::endl;
             return true;
           }
         } catch (std::regex_error &e) {

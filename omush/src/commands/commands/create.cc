@@ -14,7 +14,6 @@
 #include "omush/actions/actions/create.h"
 #include "omush/functions/iexpressionengine.h"
 #include "omush/database/databaseobject.h"
-#include "omush/database/databasematcher.h"
 
 namespace omush {
   namespace command {

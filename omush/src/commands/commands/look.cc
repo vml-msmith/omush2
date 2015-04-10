@@ -105,11 +105,11 @@ namespace omush {
 
       std::shared_ptr<std::vector<std::shared_ptr<IDatabaseObject>>> targetObjects(new std::vector<std::shared_ptr<IDatabaseObject>>);
       std::shared_ptr<IDatabaseObject> targetObject;
-      if (DatabaseMatcher::findTargets(queueObject->gameInstance->database.get(),
-                                       looker,
-                                       target,
-                                       targetObjects)) {
-       if (targetObjects->size() > 1) {
+      
+      DatabaseMatcher dbMatcher(queueObject->gameInstance->database,
+                                looker);
+      if (dbMatcher.find(target, targetObjects)) {
+        if (targetObjects->size() > 1) {
           // Too many.
           Notifier::notify(NULL,
                            looker,

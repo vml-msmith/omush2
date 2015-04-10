@@ -17,7 +17,6 @@
 #include "omush/actions/actions/shutdown.h"
 #include "omush/functions/iexpressionengine.h"
 #include "omush/database/databaseobject.h"
-#include "omush/database/databasematcher.h"
 
 namespace omush {
   namespace command {

@@ -16,6 +16,7 @@
 #include "omush/database/databaseobject.h"
 #include "omush/database/databasematcher.h"
 #include "omush/notifier.h"
+#include "omush/actions/actionsystem.h"
 #include "omush/actions/actions/go.h"
 #include "omush/functions/iexpressionengine.h"
 
@@ -91,10 +92,16 @@ namespace omush {
         }
         else {
           // Found one.
+          actions::ActionSystem system;
+          std::shared_ptr<actions::Action> a;
+          system.provision<actions::Go>(a);
+          std::shared_ptr<actions::Go> go =
+            std::dynamic_pointer_cast<actions::Go>(a);
+
           actions::Go action;
-          action.setEnactor(looker);
-          action.setTarget(targetObjects->front());
-          action.enact(aScope);
+          go->setEnactor(looker);
+          go->setTarget(targetObjects->front());
+          go->enact(aScope);
         }
       }
       else {

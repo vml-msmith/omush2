@@ -19,9 +19,21 @@ namespace omush {
   class Command : public ICommand {
    public:
     Command() {}
-    virtual bool execute(std::shared_ptr<CommandScope> scope) override {}
-   protected:
+    virtual bool execute(std::shared_ptr<CommandScope> scope) override {
+      // TODO(msmith): Why does this need a body here?
+      // Undefined symbols for architecture x86_64:
+      //   "typeinfo for omush::Command", referenced from:
+      //       typeinfo for omush::command::Set in libomush_lib.a(set.cc.o)
+      //       typeinfo for omush::command::Go in libomush_lib.a(go.cc.o)
+      //       typeinfo for omush::command::Open in libomush_lib.a(open.cc.o)
+      //       typeinfo for omush::command::Think in libomush_lib.a(think.cc.o)
+      //       typeinfo for omush::command::Create in libomush_lib.a(create.cc.o)
+      //       typeinfo for omush::command::Powers in libomush_lib.a(powers.cc.o)
+      //       typeinfo for omush::command::Connect in libomush_lib.a(connect.cc.o)
+      return true;
+    };
 
+   protected:
    /**
     * Parse the patterns of the command into a map of arguments.
     *

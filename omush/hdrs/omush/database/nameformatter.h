@@ -9,7 +9,7 @@
 
 #include "omush/scope.h"
 #include "omush/library/string.h"
-#include "omush/database/IDatabaseObject.h"
+#include "omush/database/idatabaseobject.h"
 
 namespace omush {
   class NameFormatter {

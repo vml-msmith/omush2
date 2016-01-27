@@ -1,0 +1,51 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/Users/msmith/git/omush/proving_grounds/build/test/CMakeFiles/gmock"
+		},
+		
+		{
+			"file" : "/Users/msmith/git/omush/proving_grounds/build/test/CMakeFiles/gmock.rule"
+		},
+		
+		{
+			"file" : "/Users/msmith/git/omush/proving_grounds/build/test/CMakeFiles/gmock-complete.rule"
+		},
+		
+		{
+			"file" : "/Users/msmith/git/omush/proving_grounds/build/test/gmock/src/gmock-stamp/gmock-install.rule"
+		},
+		
+		{
+			"file" : "/Users/msmith/git/omush/proving_grounds/build/test/gmock/src/gmock-stamp/gmock-mkdir.rule"
+		},
+		
+		{
+			"file" : "/Users/msmith/git/omush/proving_grounds/build/test/gmock/src/gmock-stamp/gmock-download.rule"
+		},
+		
+		{
+			"file" : "/Users/msmith/git/omush/proving_grounds/build/test/gmock/src/gmock-stamp/gmock-update.rule"
+		},
+		
+		{
+			"file" : "/Users/msmith/git/omush/proving_grounds/build/test/gmock/src/gmock-stamp/gmock-patch.rule"
+		},
+		
+		{
+			"file" : "/Users/msmith/git/omush/proving_grounds/build/test/gmock/src/gmock-stamp/gmock-configure.rule"
+		},
+		
+		{
+			"file" : "/Users/msmith/git/omush/proving_grounds/build/test/gmock/src/gmock-stamp/gmock-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "gmock" ],
+		"name" : "gmock"
+	}
+}

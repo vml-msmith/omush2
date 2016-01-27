@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblibomushnetwork.a  CMakeFiles/libomushnetwork.dir/server.cc.o
+/usr/bin/ranlib liblibomushnetwork.a

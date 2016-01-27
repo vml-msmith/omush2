@@ -1,0 +1,13 @@
+# Target labels
+ gtest
+# Source files and their labels
+/Users/msmith/git/omush/proving_grounds/test/build/CMakeFiles/gtest
+/Users/msmith/git/omush/proving_grounds/test/build/CMakeFiles/gtest.rule
+/Users/msmith/git/omush/proving_grounds/test/build/CMakeFiles/gtest-complete.rule
+/Users/msmith/git/omush/proving_grounds/test/build/gtest/src/gtest-stamp/gtest-install.rule
+/Users/msmith/git/omush/proving_grounds/test/build/gtest/src/gtest-stamp/gtest-mkdir.rule
+/Users/msmith/git/omush/proving_grounds/test/build/gtest/src/gtest-stamp/gtest-download.rule
+/Users/msmith/git/omush/proving_grounds/test/build/gtest/src/gtest-stamp/gtest-update.rule
+/Users/msmith/git/omush/proving_grounds/test/build/gtest/src/gtest-stamp/gtest-patch.rule
+/Users/msmith/git/omush/proving_grounds/test/build/gtest/src/gtest-stamp/gtest-configure.rule
+/Users/msmith/git/omush/proving_grounds/test/build/gtest/src/gtest-stamp/gtest-build.rule

@@ -1,0 +1,1 @@
+/Applications/Xcode.app/Contents/Developer/usr/bin/g++    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/testfoo.dir/main.o CMakeFiles/testfoo.dir/test.o  -o testfoo  ../gtest/src/gtest-build/libgtest.a ../gmock/src/gmock-build/libgmock.a 

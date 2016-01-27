@@ -1,0 +1,1 @@
+/Applications/Xcode.app/Contents/Developer/usr/bin/g++    -O0 -D_WEBSOCKETPP_CPP11_STL_ -ggdb -std=c++11 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/testfoo.dir/main.cc.o CMakeFiles/testfoo.dir/test.cc.o  -o testfoo  ../gtest/src/gtest-build/libgtest.a ../gmock/src/gmock-build/libgmock.a 

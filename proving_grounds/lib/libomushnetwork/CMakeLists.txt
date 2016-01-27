@@ -1,6 +1,9 @@
 set(libomushnetwork_SRCS
     server.h
     server.cc
+    websocketserver.cc
+    websocketserver.h
+    isocketserver.h
     iserver.h
 )
 

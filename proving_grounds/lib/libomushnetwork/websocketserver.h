@@ -11,6 +11,32 @@
 
 namespace omush {
   class WebSocketServer : public ISocketServer {
+   public:
+    explicit WebSocketServer(int port);
+    /**
+     * Return the port the server is set to listen on.
+     *
+     * @return int - Port the server is listening on.
+     */
+    int getPort() override;
+
+    /**
+     * Starts the server listening for new connections and messages.
+     *
+     * TODO(msmith): This should throw an exception of it can't listen. I don't
+     * know of any reason it can't listen as of yet. But there will likey be
+     * a reason.
+     */
+    void startListening() override;
+
+    /**
+     * Execute a poll  and store new messages in an internal buffer.
+     *
+     * New messages can be retrieved by calling getNetMessage().
+     */
+    void poll() override;
+   private:
+    int port_;
   };
 }  // namesapce omush
 

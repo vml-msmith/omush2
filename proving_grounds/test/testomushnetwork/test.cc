@@ -1,17 +1,23 @@
 #include "gtest/gtest.h"
-#include "isocketserver.h"
+#include "websocketserver.h"
 
-class MyTest : public ::testing::Test {
-protected:
-  MyTest() {
-  };
-  ~MyTest() {
-  };
+class SocketServerTest : public ::testing::Test {
+ protected:
+  SocketServerTest() {
+  }
+  ~SocketServerTest() {
+  }
 };
 
 
-TEST_F(MyTest, ISocketServerExists) {
+TEST_F(SocketServerTest, ISocketServerExists) {
   // Test for the existance of a web socket server that can be created.
   omush::ISocketServer* server = new omush::ISocketServer();
+  delete server;
+}
+
+TEST_F(SocketServerTest, WebSocketServerExists) {
+  // Test for the existance of a web socket server that can be created.
+  omush::ISocketServer* server = new omush::WebSocketServer();
   delete server;
 }

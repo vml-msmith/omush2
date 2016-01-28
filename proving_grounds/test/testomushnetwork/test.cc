@@ -2,10 +2,21 @@
 #include "websocketserver.h"
 
 class SocketServerTest : public ::testing::Test {
- protected:
+ public:
   SocketServerTest() {
   }
+
   ~SocketServerTest() {
+  }
+
+  omush::ISocketServer* server_;
+
+  virtual void SetUp() {
+    server_ = new omush::WebSocketServer(9999);
+  }
+
+  virtual void TearDown() {
+    delete server_;
   }
 };
 
@@ -17,34 +28,15 @@ TEST_F(SocketServerTest, WebSocketServerPortReturnsCorrectPort) {
   delete server;
 }
 
-TEST_F(SocketServerTest, WebSocketHasStartListeningMethod) {
-  int port = 9999;
-
-  omush::ISocketServer* server = new omush::WebSocketServer(port);
-  server->startListening();
-
-  delete server;
-}
-
 TEST_F(SocketServerTest, WebSocketStartListeningDiesIfAlreadyListening) {
-  int port = 9999;
-
-  omush::ISocketServer* server = new omush::WebSocketServer(port);
-  server->startListening();
-  ASSERT_DEATH(server->startListening(), "");
-
-  delete server;
+  server_->startListening();
+  ASSERT_DEATH(server_->startListening(), "");
 }
 
 
 TEST_F(SocketServerTest, WebSocketCanNotPollWhenListenerNotStarted) {
-  int port = 9999;
+  ASSERT_DEATH(server_->poll(), "");
 
-  omush::ISocketServer* server = new omush::WebSocketServer(port);
-  ASSERT_DEATH(server->poll(), "");
-
-  server->startListening();
-  server->poll();
-
-  delete server;
+  server_->startListening();
+  server_->poll();
 }

@@ -12,7 +12,7 @@
 namespace omush {
   class WebSocketServer : public ISocketServer {
    public:
-    explicit WebSocketServer(int port);
+    explicit WebSocketServer();
 
     /**
      * Return the port the server is set to listen on.
@@ -28,7 +28,7 @@ namespace omush {
      * know of any reason it can't listen as of yet. But there will likey be
      * a reason.
      */
-    void startListening() override;
+    void startListening(int port) override;
 
     /**
      * Execute a poll  and store new messages in an internal buffer.

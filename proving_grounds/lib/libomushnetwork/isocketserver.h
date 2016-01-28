@@ -24,7 +24,7 @@ namespace omush {
      * know of any reason it can't listen as of yet. But there will likey be
      * a reason.
      */
-    virtual void startListening() = 0;
+    virtual void startListening(int port) = 0;
 
     /**
      * Execute a poll  and store new messages in an internal buffer.

@@ -12,7 +12,7 @@ class SocketServerTest : public ::testing::Test {
   omush::ISocketServer* server_;
 
   virtual void SetUp() {
-    server_ = new omush::WebSocketServer(9999);
+    server_ = new omush::WebSocketServer();
   }
 
   virtual void TearDown() {
@@ -22,21 +22,18 @@ class SocketServerTest : public ::testing::Test {
 
 TEST_F(SocketServerTest, WebSocketServerPortReturnsCorrectPort) {
   int port = 9999;
-
-  omush::ISocketServer* server = new omush::WebSocketServer(port);
-  ASSERT_EQ(port, server->getPort());
-  delete server;
+  server_->startListening(port);
+  ASSERT_EQ(port, server_->getPort());
 }
 
 TEST_F(SocketServerTest, WebSocketStartListeningDiesIfAlreadyListening) {
-  server_->startListening();
-  ASSERT_DEATH(server_->startListening(), "");
+  server_->startListening(9999);
+  ASSERT_DEATH(server_->startListening(9999), "");
 }
-
 
 TEST_F(SocketServerTest, WebSocketCanNotPollWhenListenerNotStarted) {
   ASSERT_DEATH(server_->poll(), "");
 
-  server_->startListening();
+  server_->startListening(9999);
   server_->poll();
 }

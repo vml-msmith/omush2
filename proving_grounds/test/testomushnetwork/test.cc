@@ -26,6 +26,16 @@ TEST_F(SocketServerTest, WebSocketHasStartListeningMethod) {
   delete server;
 }
 
+TEST_F(SocketServerTest, WebSocketStartListeningDiesIfAlreadyListening) {
+  int port = 9999;
+
+  omush::ISocketServer* server = new omush::WebSocketServer(port);
+  server->startListening();
+  ASSERT_DEATH(server->startListening(), "");
+
+  delete server;
+}
+
 
 TEST_F(SocketServerTest, WebSocketCanNotPollWhenListenerNotStarted) {
   int port = 9999;

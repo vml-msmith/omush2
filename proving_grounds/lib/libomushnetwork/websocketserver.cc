@@ -18,6 +18,7 @@ namespace omush {
   }
 
   void WebSocketServer::startListening() {
+    assert(this->isListening_ == false);
     this->isListening_ = true;
   }
 

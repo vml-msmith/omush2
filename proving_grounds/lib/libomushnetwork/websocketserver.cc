@@ -17,14 +17,14 @@ namespace omush {
     return this->port_;
   }
 
-  void WebSocketServer::startListening(int port) {
-    port_ = port;
-
+  void WebSocketServer::startListening(unsigned int port) {
     assert(this->isListening_ == false);
+
+    port_ = port;
     this->isListening_ = true;
   }
 
   void WebSocketServer::poll() {
     assert(this->isListening_);
   }
-}
+}  // namespace omush

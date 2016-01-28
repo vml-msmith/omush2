@@ -22,13 +22,15 @@ namespace omush {
     int getPort() override;
 
     /**
-     * Starts the server listening for new connections and messages.
+     * Starts the server listening on port for new connections and messages.
+     *
+     * @param int port - The port number to listen for new connections on.
      *
      * TODO(msmith): This should throw an exception of it can't listen. I don't
      * know of any reason it can't listen as of yet. But there will likey be
      * a reason.
      */
-    void startListening(int port) override;
+    void startListening(unsigned int port) override;
 
     /**
      * Execute a poll  and store new messages in an internal buffer.
@@ -36,8 +38,9 @@ namespace omush {
      * New messages can be retrieved by calling getNetMessage().
      */
     void poll() override;
+
    private:
-    int port_;
+    unsigned int port_;
     bool isListening_;
   };
 }  // namesapce omush

@@ -32,6 +32,7 @@ namespace omush {
      * New messages can be retrieved by calling getNetMessage().
      */
     virtual void poll() = 0;
+
   };
 }  // namesapce omush
 

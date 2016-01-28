@@ -5,6 +5,7 @@
  */
 
 #include "websocketserver.h"
+#include <assert.h>
 
 namespace omush {
 
@@ -20,5 +21,6 @@ namespace omush {
   }
 
   void WebSocketServer::poll() {
+    assert(false);
   }
 }

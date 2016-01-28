@@ -10,7 +10,7 @@
 namespace omush {
 
   WebSocketServer::WebSocketServer(int port)
-    :port_(port) {
+    :port_(port), isListening_(false) {
   }
 
   int WebSocketServer::getPort() {
@@ -18,9 +18,10 @@ namespace omush {
   }
 
   void WebSocketServer::startListening() {
+    this->isListening_ = true;
   }
 
   void WebSocketServer::poll() {
-    assert(false);
+    assert(this->isListening_);
   }
 }

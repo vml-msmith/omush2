@@ -26,6 +26,7 @@ TEST_F(SocketServerTest, WebSocketHasStartListeningMethod) {
   delete server;
 }
 
+
 TEST_F(SocketServerTest, WebSocketCanNotPollWhenListenerNotStarted) {
   int port = 9999;
 

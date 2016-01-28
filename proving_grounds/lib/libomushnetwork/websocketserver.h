@@ -13,6 +13,7 @@ namespace omush {
   class WebSocketServer : public ISocketServer {
    public:
     explicit WebSocketServer(int port);
+
     /**
      * Return the port the server is set to listen on.
      *
@@ -37,6 +38,7 @@ namespace omush {
     void poll() override;
    private:
     int port_;
+    bool isListening_;
   };
 }  // namesapce omush
 

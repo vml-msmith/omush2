@@ -33,6 +33,7 @@ namespace omush {
      */
     virtual void poll() = 0;
 
+    ~ISocketServer() {};
   };
 }  // namesapce omush
 

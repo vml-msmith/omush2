@@ -33,13 +33,14 @@ else()
 endif()
 
 
-#set(Boost_USE_STATIC_LIBS        ON) # only find static libs
-#set(Boost_USE_MULTITHREADED      ON)
-#FIND_PACKAGE( Boost 1.55 COMPONENTS system filesystem serialization thread regex REQUIRED)
+set(Boost_USE_STATIC_LIBS        ON) # only find static libs
+set(Boost_USE_MULTITHREADED      ON)
+##FIND_PACKAGE( Boost 1.55 COMPONENTS system filesystem serialization thread regex REQUIRED)
+FIND_PACKAGE( Boost 1.55 COMPONENTS system REQUIRED)
 
-#INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
-#SET( PROJ_LIBRARIES  "${Boost_LIBRARIES}" )
-#INCLUDE_DIRECTORIES( ${PROJ_INCLUDES} )
+INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
+SET( PROJ_LIBRARIES  "${Boost_LIBRARIES}" )
+INCLUDE_DIRECTORIES( ${PROJ_INCLUDES} )
 
 ADD_LIBRARY( ${PROJ_NAME}_lib ${PROJ_SOURCES} )
 ADD_EXECUTABLE( ${PROJ_NAME} ${PROJ_MAIN} )

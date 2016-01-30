@@ -1,0 +1,2 @@
+/usr/bin/ar qc libomush_lib.a  CMakeFiles/omush_lib.dir/src/main.cc.o
+/usr/bin/ranlib libomush_lib.a

@@ -7,6 +7,8 @@
 #ifndef OMUSH_HDRS_OMUSH_NETWORK_ISOCKETSERVER_H_
 #define OMUSH_HDRS_OMUSH_NETWORK_ISOCKETSERVER_H_
 
+#include "common.h"
+
 namespace omush {
   class ISocketServer {
   public:
@@ -18,7 +20,9 @@ namespace omush {
     virtual int getPort() = 0;
 
     /**
-     * Starts the server listening for new connections and messages.
+     * Starts the server listening on port for new connections and messages.
+     *
+     * @param int port - The port number to listen for new connections on.
      *
      * TODO(msmith): This should throw an exception of it can't listen. I don't
      * know of any reason it can't listen as of yet. But there will likey be
@@ -33,6 +37,10 @@ namespace omush {
      */
     virtual void poll() = 0;
 
+    /**
+     * Get the next message off the message buffer.
+     */
+    virtual bool getNextMessage(NetworkPacketDescriptorPair messagePair) = 0;
     ~ISocketServer() {};
   };
 }  // namesapce omush

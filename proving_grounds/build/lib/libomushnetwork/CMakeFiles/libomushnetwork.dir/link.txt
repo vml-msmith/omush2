@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblibomushnetwork.a  CMakeFiles/libomushnetwork.dir/server.cc.o CMakeFiles/libomushnetwork.dir/websocketserver.cc.o
+/usr/bin/ranlib liblibomushnetwork.a

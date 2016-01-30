@@ -14,30 +14,10 @@ namespace omush {
    public:
     explicit WebSocketServer();
 
-    /**
-     * Return the port the server is set to listen on.
-     *
-     * @return int - Port the server is listening on.
-     */
     int getPort() override;
-
-    /**
-     * Starts the server listening on port for new connections and messages.
-     *
-     * @param int port - The port number to listen for new connections on.
-     *
-     * TODO(msmith): This should throw an exception of it can't listen. I don't
-     * know of any reason it can't listen as of yet. But there will likey be
-     * a reason.
-     */
     void startListening(unsigned int port) override;
-
-    /**
-     * Execute a poll  and store new messages in an internal buffer.
-     *
-     * New messages can be retrieved by calling getNetMessage().
-     */
     void poll() override;
+    bool getNextMessage(NetworkPacketDescriptorPair messagePair) override;
 
    private:
     unsigned int port_;

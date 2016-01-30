@@ -27,4 +27,8 @@ namespace omush {
   void WebSocketServer::poll() {
     assert(this->isListening_);
   }
+
+  bool WebSocketServer::getNextMessage(NetworkPacketDescriptorPair messagePair) {
+    return false;
+  }
 }  // namespace omush

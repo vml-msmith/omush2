@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/msmith/git/omush/proving_grounds/lib/libomushnetwork/common.h
+boost/uuid/uuid.hpp
+-
+boost/uuid/uuid_generators.hpp
+-
+networkpacket.h
+/Users/msmith/git/omush/proving_grounds/lib/libomushnetwork/networkpacket.h
+tuple
+-
+
+/Users/msmith/git/omush/proving_grounds/lib/libomushnetwork/isocketserver.h
+common.h
+/Users/msmith/git/omush/proving_grounds/lib/libomushnetwork/common.h
+
+/Users/msmith/git/omush/proving_grounds/lib/libomushnetwork/networkpacket.h
+string
+-
+
+/Users/msmith/git/omush/proving_grounds/lib/libomushnetwork/server.cc
+
+/Users/msmith/git/omush/proving_grounds/lib/libomushnetwork/websocketserver.cc
+websocketserver.h
+/Users/msmith/git/omush/proving_grounds/lib/libomushnetwork/websocketserver.h
+assert.h
+-
+
+/Users/msmith/git/omush/proving_grounds/lib/libomushnetwork/websocketserver.h
+isocketserver.h
+/Users/msmith/git/omush/proving_grounds/lib/libomushnetwork/isocketserver.h
+

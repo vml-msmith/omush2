@@ -10,6 +10,7 @@
 #include "isocketserver.h"
 
 namespace omush {
+  namespace network {
   class WebSocketServer : public ISocketServer {
    public:
     explicit WebSocketServer();
@@ -23,6 +24,7 @@ namespace omush {
     unsigned int port_;
     bool isListening_;
   };
+  }
 }  // namesapce omush
 
 #endif  // OMUSH_HDRS_OMUSH_NETWORK_WEBSOCKETSERVER_H_

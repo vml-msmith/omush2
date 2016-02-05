@@ -13,14 +13,16 @@
 #include <tuple>
 
 namespace omush {
-  typedef boost::uuids::uuid DescriptorID;
-  typedef std::tuple<NetworkPacket, DescriptorID> NetworkPacketDescriptorPair;
+namespace network {
+typedef boost::uuids::uuid DescriptorID;
+typedef std::tuple<NetworkPacket, DescriptorID> NetworkPacketDescriptorPair;
 
   /*
     inline DescriptorID createNewDescriptorID() {
     return boost::uuids::random_generator()();
     }
   */
-} // omush
+}  // namespace network
+}  // omush
 
 #endif //  OMUSH_HDRS_OMUSH_NETWORK_COMMON_H_

@@ -4,10 +4,11 @@
  * Copyright 2014 Michael Smith
  */
 
-#include "websocketserver.h"
+#include "include/omushnetwork/websocketserver.h"
 #include <assert.h>
 
 namespace omush {
+  namespace network {
   WebSocketServer::~WebSocketServer() {
   }
 
@@ -33,4 +34,5 @@ namespace omush {
   bool WebSocketServer::getNextMessage(NetworkPacketDescriptorPair messagePair) {
     return false;
   }
+}  // namespace network
 }  // namespace omush

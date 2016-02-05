@@ -10,6 +10,7 @@
 #include <string>
 
 namespace omush {
+  namespace network {
   struct NetworkPacket {
     std::string text;
 
@@ -19,7 +20,7 @@ namespace omush {
     explicit NetworkPacket(std::string str)
       : text(str) {}
   };
-
+  }
 } // omush
 
 #endif //  OMUSH_HDRS_OMUSH_NETWORK_NETWORKPACKET_H_

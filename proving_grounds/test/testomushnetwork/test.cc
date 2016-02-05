@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "websocketserver.h"
-#include "common.h"
+#include "include/omushnetwork/websocketserver.h"
+//#include "common.h"
 
 class SocketServerTest : public ::testing::Test {
  public:
@@ -10,10 +10,10 @@ class SocketServerTest : public ::testing::Test {
   ~SocketServerTest() {
   }
 
-  omush::ISocketServer* server_;
+  omush::network::ISocketServer* server_;
 
   virtual void SetUp() {
-    server_ = new omush::WebSocketServer();
+    server_ = new omush::network::WebSocketServer();
   }
 
   virtual void TearDown() {
@@ -41,7 +41,7 @@ TEST_F(SocketServerTest, CanNotPollWhenListenerNotStarted) {
 }
 
 TEST_F(SocketServerTest, GetNextMessageReturnsFalseWithNoMessagesInbuffer) {
-  omush::NetworkPacketDescriptorPair message;
+  omush::network::NetworkPacketDescriptorPair message;
   ASSERT_FALSE(server_->getNextMessage(message));
 }
 

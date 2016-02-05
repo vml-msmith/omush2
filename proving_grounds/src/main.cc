@@ -7,6 +7,8 @@
 #include "framework/timer.h"
 #include "signal/signalhandler.h"
 #include "yaml-cpp/yaml.h"
+#include "omushnetwork/networkmanager.h"
+#include "omushnetwork/websocketserver.h"
 
 /**
  * Dcoumentation
@@ -35,6 +37,10 @@ int main(int argc, char** argv) {
   GameSignalDelegate signal;
   SignalHandler::setupSignalHandling();
   SignalHandler::registerDelegate(&signal, SIGINT);
+
+// Setup the network.
+std::shared_ptr<omush::network::INetworkManager> ptr(new omush::network::NetworkManager);
+ptr->addServer(new omush::network::WebSocketServer());
 
 
   return EXIT_SUCCESS;

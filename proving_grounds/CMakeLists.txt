@@ -5,7 +5,7 @@ SET( PROJ_OUT_PATH   ${CMAKE_BINARY_DIR} )
 
 SET( PROJ_SOURCES    "" )
 SET( PROJ_HEADERS    "${PROJ_HEADERS}" "lib/yaml-cpp/include" )
-SET( PROJ_INCLUDES   "hdrs" "lib" "lib/yaml-cpp/include")
+SET( PROJ_INCLUDES   "hdrs" "lib" "lib/yaml-cpp/include" "lib/libomushnetwork/include")
 
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -D_WEBSOCKETPP_CPP11_STL_")
 SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FALGS}")
@@ -24,6 +24,7 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 add_subdirectory(lib)
 add_subdirectory(lib/yaml-cpp)
 
+
 ## Add the C++11 flags for the compiler.
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
@@ -37,7 +38,6 @@ else()
 endif()
 
 
-set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
 ##FIND_PACKAGE( Boost 1.55 COMPONENTS system filesystem serialization thread regex REQUIRED)
 FIND_PACKAGE( Boost 1.55 COMPONENTS system REQUIRED)
@@ -49,7 +49,7 @@ INCLUDE_DIRECTORIES( ${PROJ_INCLUDES} )
 ADD_LIBRARY( ${PROJ_NAME}_lib ${PROJ_SOURCES} )
 ADD_EXECUTABLE( ${PROJ_NAME} ${PROJ_MAIN} )
 
-SET( PROJ_LIBRARIES ${PROJ_NAME}_lib ${Boost_LIBRARIES} "yaml-cpp")
+SET( PROJ_LIBRARIES  "yaml-cpp" "libomushnetwork" ${PROJ_NAME}_lib ${Boost_LIBRARIES})
 
 
 TARGET_LINK_LIBRARIES( ${PROJ_NAME} ${PROJ_LIBRARIES} )

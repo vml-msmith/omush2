@@ -1,9 +1,8 @@
+#include <ctime>
 #include "gtest/gtest.h"
 #include "framework/timer.h"
-#include <ctime>
 
-class SimpleTest : public ::testing::Test {
-public:
+class TimerTest : public ::testing::Test {
 };
 
 template<typename TimeT = std::chrono::nanoseconds>
@@ -20,7 +19,7 @@ struct measure
   }
 };
 
-TEST_F(SimpleTest, TimerWaitsApprorateTime) {
+TEST_F(TimerTest, TimerWaitsApprorateTime) {
   int sleepNanoSeconds = 1000000;
   omush::ITimer *timer = new omush::Timer();
   timer->start(sleepNanoSeconds);
@@ -37,7 +36,7 @@ TEST_F(SimpleTest, TimerWaitsApprorateTime) {
   delete timer;
 }
 
-TEST_F(SimpleTest, CallSleepBeforeStartWillNotBreak) {
+TEST_F(TimerTest, CallSleepBeforeStartWillNotBreak) {
   omush::ITimer *timer = new omush::Timer();
   timer->sleep();
   delete timer;

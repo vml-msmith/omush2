@@ -17,17 +17,17 @@ namespace omush {
    * calling start() will not break anything. It'll just sleep for 0
    * nanoseconds.
    */
-  GameTimer::GameTimer() {
+  Timer::Timer() {
     this->loopNanoSeconds_ = std::chrono::nanoseconds(0);
   }
 
-  void GameTimer::start(unsigned int cylceTimeInNanoseconds) {
+  void Timer::start(unsigned int cylceTimeInNanoseconds) {
     loopNanoSeconds_ = std::chrono::nanoseconds(cylceTimeInNanoseconds);
     thisTime_ = std::chrono::high_resolution_clock::now();
     lastTime_ = this->thisTime_;;
   }
 
-  void GameTimer::sleep() {
+  void Timer::sleep() {
     this->thisTime_ = std::chrono::high_resolution_clock::now();
     std::chrono::nanoseconds duration = this->thisTime_ - this->lastTime_;
     if (duration < this->loopNanoSeconds_) {

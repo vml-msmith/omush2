@@ -4,16 +4,16 @@
  * Copyright 2016 Michael Smith
  */
 
-#ifndef OMUSH_HDRS_OMUSH_FRAMEWORK_GAMETIMER_H_
-#define OMUSH_HDRS_OMUSH_FRAMEWORK_GAMETIMER_H_
+#ifndef OMUSH_HDRS_OMUSH_FRAMEWORK_TIMER_H_
+#define OMUSH_HDRS_OMUSH_FRAMEWORK_TIMER_H_
 
 #include "framework/igametimer.h"
 #include <chrono>
 
 namespace omush {
-  class GameTimer : public IGameTimer {
+  class Timer : public ITimer {
    public:
-    explicit GameTimer();
+    explicit Timer();
     void sleep() override;
     void start(unsigned int cylceTimeInNanoseconds) override;
 
@@ -36,4 +36,4 @@ namespace omush {
   };
 }  // namespace omush
 
-#endif  // OMUSH_HDRS_OMUSH_FRAMEWORK_GAMETIMER_H_
+#endif  // OMUSH_HDRS_OMUSH_FRAMEWORK_TIMER_H_

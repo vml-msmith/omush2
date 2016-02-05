@@ -4,17 +4,17 @@
  * Copyright 2016 Michael Smith
  */
 
-#ifndef OMUSH_HDRS_OMUSH_FRAMEWORK_IGAMETIMER_H_
-#define OMUSH_HDRS_OMUSH_FRAMEWORK_IGAMETIMER_H_
+#ifndef OMUSH_HDRS_OMUSH_FRAMEWORK_ITIMER_H_
+#define OMUSH_HDRS_OMUSH_FRAMEWORK_ITIMER_H_
 
 
 namespace omush {
-  class IGameTimer {
+  class ITimer {
   public:
     /**
      * Default constructor.
      */
-    explicit IGameTimer(int);
+    explicit ITimer(int);
 
     /**
      *
@@ -29,10 +29,10 @@ namespace omush {
     /**
      *
      */
-    virtual ~IGameTimer() {};
+    virtual ~ITimer() {};
   protected:
-    IGameTimer() {};
+    ITimer() {};
   };
 }  // namespace omush
 
-#endif  // OMUSH_HDRS_OMUSH_FRAMEWORK_IGAMETIMER_H_
+#endif  // OMUSH_HDRS_OMUSH_FRAMEWORK_ITIMER_H_

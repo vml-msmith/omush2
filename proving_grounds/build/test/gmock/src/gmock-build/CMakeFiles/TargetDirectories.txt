@@ -1,4 +1,0 @@
-/Users/msmith/git/omush/proving_grounds/build/test/gmock/src/gmock-build/CMakeFiles/gmock.dir
-/Users/msmith/git/omush/proving_grounds/build/test/gmock/src/gmock-build/CMakeFiles/gmock_main.dir
-/Users/msmith/git/omush/proving_grounds/build/test/gmock/src/gmock-build/gtest/CMakeFiles/gtest_main.dir
-/Users/msmith/git/omush/proving_grounds/build/test/gmock/src/gmock-build/gtest/CMakeFiles/gtest.dir

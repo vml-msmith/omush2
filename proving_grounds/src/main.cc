@@ -1,10 +1,12 @@
 /**
  * \file main.cc
+ *
+ * Copyright 2014 Michael Smith
  */
+#include <signal.h>
 #include "framework/timer.h"
 #include "signal/signalhandler.h"
 #include "yaml-cpp/yaml.h"
-#include <iostream>
 
 /**
  * Dcoumentation

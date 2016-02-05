@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-#include "gtest/gmock.h"
 #include "websocketserver.h"
 #include "common.h"
 
@@ -22,11 +21,6 @@ class SocketServerTest : public ::testing::Test {
   }
 };
 
-class MockWebSocketServer : public omush::WebSocketSever {
-  void mockAddMessage() {
-
-  }
-};
 
 TEST_F(SocketServerTest, PortReturnsCorrectPort) {
   int port = 9999;

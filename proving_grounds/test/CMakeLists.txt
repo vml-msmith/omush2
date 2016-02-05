@@ -50,3 +50,4 @@ set_target_properties(libgmock PROPERTIES
 include_directories("${source_dir}/include")
 
 add_subdirectory(testomushnetwork)
+add_subdirectory(testomush)

@@ -41,7 +41,8 @@ namespace omush {
      * Get the next message off the message buffer.
      */
     virtual bool getNextMessage(NetworkPacketDescriptorPair messagePair) = 0;
-    ~ISocketServer() {};
+
+    virtual ~ISocketServer() {}
   };
 }  // namesapce omush
 

@@ -13,7 +13,7 @@ namespace omush {
   class WebSocketServer : public ISocketServer {
    public:
     explicit WebSocketServer();
-
+    ~WebSocketServer() override;
     int getPort() override;
     void startListening(unsigned int port) override;
     void poll() override;

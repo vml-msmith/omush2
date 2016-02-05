@@ -8,6 +8,8 @@
 #include <assert.h>
 
 namespace omush {
+  WebSocketServer::~WebSocketServer() {
+  }
 
   WebSocketServer::WebSocketServer()
     :port_(0), isListening_(false) {

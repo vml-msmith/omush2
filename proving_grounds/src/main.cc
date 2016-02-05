@@ -3,7 +3,7 @@
  */
 #include "framework/timer.h"
 #include "signal/signalhandler.h"
-
+#include "yaml-cpp/yaml.h"
 #include <iostream>
 
 /**
@@ -35,8 +35,5 @@ int main(int argc, char** argv) {
   SignalHandler::registerDelegate(&signal, SIGINT);
 
 
-  while (!signal.caughtInterupt) {
-    printf("Print\n");
-  }
   return EXIT_SUCCESS;
 }

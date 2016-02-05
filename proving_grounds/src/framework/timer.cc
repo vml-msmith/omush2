@@ -4,7 +4,7 @@
  * Copyright 2014 Michael Smith
  */
 
-#include "framework/gametimer.h"
+#include "framework/timer.h"
 #include <thread>
 
 // DEBUG:

@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "framework/gametimer.h"
+#include "framework/timer.h"
 #include <ctime>
 
 class SimpleTest : public ::testing::Test {
@@ -20,11 +20,11 @@ struct measure
   }
 };
 
-TEST_F(SimpleTest, GameTimerWaitsApprorateTime) {
+TEST_F(SimpleTest, TimerWaitsApprorateTime) {
   int sleepNanoSeconds = 1000000;
-  omush::IGameTimer *timer = new omush::GameTimer();
+  omush::ITimer *timer = new omush::Timer();
   timer->start(sleepNanoSeconds);
-  auto func = [] (omush::IGameTimer *t) { t->sleep(); };
+  auto func = [] (omush::ITimer *t) { t->sleep(); };
   std::chrono::milliseconds::rep firstLoopExecuteTime =
     measure<>::execution(func, timer);
   std::chrono::milliseconds::rep secondLoopExecuteTime =
@@ -39,7 +39,7 @@ TEST_F(SimpleTest, GameTimerWaitsApprorateTime) {
 
 
 TEST_F(SimpleTest, CallSleepBeforeStartWillNotBreak) {
-  omush::IGameTimer *timer = new omush::GameTimer();
+  omush::ITimer *timer = new omush::Timer();
   timer->sleep();
   delete timer;
 }

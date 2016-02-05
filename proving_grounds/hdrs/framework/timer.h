@@ -7,7 +7,7 @@
 #ifndef OMUSH_HDRS_OMUSH_FRAMEWORK_TIMER_H_
 #define OMUSH_HDRS_OMUSH_FRAMEWORK_TIMER_H_
 
-#include "framework/igametimer.h"
+#include "framework/itimer.h"
 #include <chrono>
 
 namespace omush {

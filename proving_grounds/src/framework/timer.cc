@@ -7,10 +7,6 @@
 #include "framework/timer.h"
 #include <thread>
 
-// DEBUG:
-#include <stdio.h>
-#include <iostream>
-
 namespace omush {
   /**
    * Initially set loopNanoSeconds_ to 0 so that calling sleep() without first

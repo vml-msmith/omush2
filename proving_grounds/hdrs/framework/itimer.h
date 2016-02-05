@@ -10,11 +10,11 @@
 
 namespace omush {
   class ITimer {
-  public:
+   public:
     /**
      * Default constructor.
      */
-    explicit ITimer(int);
+    explicit ITimer() {}
 
     /**
      * Sleep the current thread for the remainder of the time in current loop.
@@ -24,7 +24,7 @@ namespace omush {
      * whichever is greater.
      *
      * Note: The thread sleep routines can not gurantee that the thread will
-     * sleep for exactly the specified time due to the OS having control of 
+     * sleep for exactly the specified time due to the OS having control of
      * it's own resource. All this method gurantees is that we will sleep for
      * at LEAST the time specified. In practice, this turns out to be pretty
      * consistent under 1 millisecond. For example: Looping for 1 millisecond
@@ -39,13 +39,11 @@ namespace omush {
      * \param - unsigned int
      */
     virtual void start(unsigned int cylceTimeInNanoseconds) = 0;
-    
+
     /**
      *
      */
-    virtual ~ITimer() {};
-  protected:
-    ITimer() {};
+    virtual ~ITimer() {}
   };
 }  // namespace omush
 

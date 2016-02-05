@@ -7,8 +7,8 @@
 #ifndef OMUSH_HDRS_OMUSH_FRAMEWORK_TIMER_H_
 #define OMUSH_HDRS_OMUSH_FRAMEWORK_TIMER_H_
 
-#include "framework/itimer.h"
 #include <chrono>
+#include "framework/itimer.h"
 
 namespace omush {
   class Timer : public ITimer {
@@ -23,12 +23,12 @@ namespace omush {
      * Duration of each loop of the timer.
      */
     std::chrono::nanoseconds loopNanoSeconds_;
-    
+
     /**
      * The current time of the loop.
      */
     hrc::time_point thisTime_;
-    
+
     /**
      * The time of the last loop.
      */

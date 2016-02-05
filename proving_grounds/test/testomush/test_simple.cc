@@ -37,7 +37,6 @@ TEST_F(SimpleTest, TimerWaitsApprorateTime) {
   delete timer;
 }
 
-
 TEST_F(SimpleTest, CallSleepBeforeStartWillNotBreak) {
   omush::ITimer *timer = new omush::Timer();
   timer->sleep();

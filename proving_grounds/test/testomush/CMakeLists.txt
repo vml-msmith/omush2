@@ -4,6 +4,7 @@ ADD_EXECUTABLE(testomush ${SRCS})
 INSTALL(TARGETS testomush DESTINATION ${CMAKE_BINARY_DIR}/tests)
 
 TARGET_LINK_LIBRARIES(testomush
+  omush_lib
   libgtest
   libgmock
 )

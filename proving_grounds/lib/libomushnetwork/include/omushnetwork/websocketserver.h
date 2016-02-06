@@ -18,7 +18,7 @@ namespace omush {
     int getPort() override;
     void startListening(unsigned int port) override;
     void poll() override;
-    bool getNextMessage(NetworkPacketDescriptorPair messagePair) override;
+    bool getNextMessage(NetworkPacketDescriptorPair *messagePair) override;
 
    private:
     unsigned int port_;

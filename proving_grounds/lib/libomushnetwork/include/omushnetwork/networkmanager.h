@@ -18,12 +18,15 @@ class NetworkManager : public INetworkManager {
   NetworkManager();
   virtual bool addServer(ISocketServer* server) override;
   virtual void poll() const override;
+  /*
   void flush() const override;
   bool start();
   bool shutdown();
   bool sendMessage(NetworkPacketDescriptorPair message) const override;
   bool closeConnection(DescriptorID id) const override;
+  */
   bool getNextMessage(NetworkPacketDescriptorPair* message) const override;
+
  protected:
   typedef std::vector<std::shared_ptr<ISocketServer> > ServerList;
   ServerList servers_;

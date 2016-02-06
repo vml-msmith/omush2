@@ -42,7 +42,7 @@ class ISocketServer {
   /**
    * Get the next message off the message buffer.
    */
-  virtual bool getNextMessage(NetworkPacketDescriptorPair messagePair) = 0;
+  virtual bool getNextMessage(NetworkPacketDescriptorPair *messagePair) = 0;
 
   virtual ~ISocketServer() {}
 };

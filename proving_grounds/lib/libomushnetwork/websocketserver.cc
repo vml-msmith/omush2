@@ -31,7 +31,7 @@ namespace omush {
     assert(this->isListening_);
   }
 
-  bool WebSocketServer::getNextMessage(NetworkPacketDescriptorPair messagePair) {
+  bool WebSocketServer::getNextMessage(NetworkPacketDescriptorPair *messagePair) {
     return false;
   }
 }  // namespace network

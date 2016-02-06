@@ -42,7 +42,7 @@ TEST_F(SocketServerTest, CanNotPollWhenListenerNotStarted) {
 
 TEST_F(SocketServerTest, GetNextMessageReturnsFalseWithNoMessagesInbuffer) {
   omush::network::NetworkPacketDescriptorPair message;
-  ASSERT_FALSE(server_->getNextMessage(message));
+  ASSERT_FALSE(server_->getNextMessage(&message));
 }
 
 TEST_F(SocketServerTest, GetNextMessageReturnsTrueWithMessageInbuffer) {
